@@ -1,8 +1,7 @@
-from abc import ABC, abstractmethod
+from application import Application
 from collections import deque
 
 
-class Application(ABC):
-    @abstractmethod
+class Sort(Application):
     def exec(self, args: list, out: deque) -> deque:
         pass
