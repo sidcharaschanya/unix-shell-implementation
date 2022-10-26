@@ -4,5 +4,5 @@ from collections import deque
 
 class Application(ABC):
     @abstractmethod
-    def exec(self, args: list, input_: deque, out: deque) -> deque:
+    def exec(self, args: list, input_: deque, out: deque) -> None:
         pass
