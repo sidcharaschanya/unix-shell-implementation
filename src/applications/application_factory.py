@@ -1,4 +1,4 @@
-from applications import *
+from . import *
 
 
 class ApplicationFactory:
