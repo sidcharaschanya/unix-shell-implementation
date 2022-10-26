@@ -3,5 +3,5 @@ from collections import deque
 
 
 class Echo(Application):
-    def exec(self, args: list, out: deque) -> deque:
+    def exec(self, args: list, input_: deque, out: deque) -> deque:
         pass
