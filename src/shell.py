@@ -3,10 +3,10 @@ import sys
 import os
 from collections import deque
 from glob import glob
-from application_factory import ApplicationFactory
+from applications.application_factory import ApplicationFactory
 
 
-def eval(cmdline, out):
+def eval(cmdline: str, out: deque) -> None:
     raw_commands = []
     for m in re.finditer("([^\"';]+|\"[^\"]*\"|'[^']*')", cmdline):
         if m.group(0):

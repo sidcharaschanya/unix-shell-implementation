@@ -1,4 +1,5 @@
 __all__ = [
+    "application",
     "cat",
     "cd",
     "cut",

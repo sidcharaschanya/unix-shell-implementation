@@ -18,5 +18,5 @@ class ApplicationFactory:
     }
 
     @staticmethod
-    def by_name(name: str):
+    def by_name(name: str) -> application.Application:
         return ApplicationFactory.apps[name]
