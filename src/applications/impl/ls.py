@@ -1,4 +1,4 @@
-from .application import Application
+from ..application import Application
 from collections import deque
 from typing import Optional
 import os

@@ -1,4 +1,6 @@
-from . import *
+from .application import Application
+from .impl import *
+from .unsafe_decorator import UnsafeDecorator
 
 
 class ApplicationFactory:
@@ -18,8 +20,8 @@ class ApplicationFactory:
     }
 
     @staticmethod
-    def by_name(name: str) -> application.Application:
+    def by_name(name: str) -> Application:
         if name[0] == "_":
-            return unsafe_decorator.UnsafeDecorator(ApplicationFactory.apps[name[1:]])
+            return UnsafeDecorator(ApplicationFactory.apps[name[1:]])
 
         return ApplicationFactory.apps[name]
