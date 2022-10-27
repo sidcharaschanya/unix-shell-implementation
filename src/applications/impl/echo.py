@@ -5,4 +5,4 @@ from typing import Optional
 
 class Echo(Application):
     def exec(self, args: list, input_: Optional[list], out: deque) -> None:
-        pass
+        out.append(' '.join(args) + '\n')
