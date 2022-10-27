@@ -6,7 +6,7 @@ from typing import Optional
 class Cat(Application):
     def exec(self, args: list, input_: Optional[list], out: deque) -> None:
         if len(args) == 0:
-            if not input_ or len(input_) == 0:
+            if not input_:
                 raise ValueError("stdin not provided")
 
             args.extend(input_)
