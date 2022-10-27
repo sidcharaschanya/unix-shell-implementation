@@ -19,4 +19,7 @@ class ApplicationFactory:
 
     @staticmethod
     def by_name(name: str) -> application.Application:
+        if name[0] == "_":
+            return unsafe_decorator.UnsafeDecorator(ApplicationFactory.apps[name[1:]])
+
         return ApplicationFactory.apps[name]
