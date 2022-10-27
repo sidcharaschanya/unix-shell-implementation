@@ -4,5 +4,5 @@ from typing import Optional
 
 
 class Cd(Application):
-    def exec(self, args: list, input_: Optional[deque], out: deque) -> None:
+    def exec(self, args: list, input_: Optional[list], out: deque) -> None:
         pass
