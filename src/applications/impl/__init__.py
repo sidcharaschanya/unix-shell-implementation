@@ -10,5 +10,6 @@ __all__ = [
     "pwd",
     "sort",
     "tail",
-    "uniq"
+    "uniq",
+    "unsafe_decorator"
 ]
