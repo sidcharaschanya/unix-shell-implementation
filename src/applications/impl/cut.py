@@ -4,5 +4,5 @@ from typing import Optional
 
 
 class Cut(Application):
-    def exec(self, args: list, input_: Optional[list], out: deque) -> None:
+    def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         pass

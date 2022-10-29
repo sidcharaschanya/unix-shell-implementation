@@ -5,7 +5,7 @@ import os
 
 
 class Ls(Application):
-    def exec(self, args: list, input_: Optional[list], out: deque) -> None:
+    def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) > 1:
             raise ValueError("wrong number of command line arguments")
 
