@@ -6,4 +6,7 @@ import os
 
 class Pwd(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
+        if len(args) > 0:
+            raise ValueError("wrong number of command line arguments")
+
         out.append(os.getcwd())
