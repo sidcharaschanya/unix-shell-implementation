@@ -20,7 +20,7 @@ class TestShell(unittest.TestCase):
     def cat_stdin(self):
         pass
 
-    def test_cat_zero_args(self):
+    def test_cat_zero_args_invalid(self):
         self.assertRaises(ValueError, eval, "cat", deque())
 
     def test_cd(self):
@@ -29,7 +29,7 @@ class TestShell(unittest.TestCase):
         self.assertEqual(os.getcwd(), os.path.join(cwd, "dir1"))
         os.chdir(cwd)
 
-    def test_cd_zero_args(self):
+    def test_cd_zero_args_invalid(self):
         self.assertRaises(ValueError, eval, "cd", deque())
 
     def test_echo(self):
@@ -71,14 +71,14 @@ class TestShell(unittest.TestCase):
         eval("find dir2 -name *.py", out)
         self.assertEqual(len(out), 0)
 
-    def test_find_zero_args(self):
+    def test_find_zero_args_invalid(self):
         self.assertRaises(ValueError, eval, "find", deque())
 
     def test_find_two_args_invalid(self):
-        self.assertRaises(ValueError, eval, "find arg1 arg2", deque())
+        self.assertRaises(ValueError, eval, "find arg0 arg1", deque())
 
     def test_find_three_args_invalid(self):
-        self.assertRaises(ValueError, eval, "find arg1 arg2 arg3", deque())
+        self.assertRaises(ValueError, eval, "find arg0 arg1 arg2", deque())
 
     def test_grep(self):
         out = deque()
@@ -101,6 +101,47 @@ class TestShell(unittest.TestCase):
         eval("grep aa dir1/test1.txt", out)
         self.assertEqual(len(out), 0)
 
+    def test_head(self):
+        out = deque()
+        eval("head dir1/test3.txt", out)
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(9)])
+
+    def test_head_num_lines(self):
+        out = deque()
+        eval("head -n 5 dir1/test3.txt", out)
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(5)])
+
+    def test_head_stdin(self):
+        pass
+
+    def test_head_stdin_num_lines(self):
+        pass
+
+    def test_head_empty_file(self):
+        out = deque()
+        eval("head dir1/empty_file.txt", out)
+        self.assertEqual(len(out), 0)
+
+    def test_head_zero_lines(self):
+        out = deque()
+        eval("head -n 0 dir1/test3.txt", out)
+        self.assertEqual(len(out), 0)
+
+    def test_head_zero_args_invalid(self):
+        self.assertRaises(ValueError, eval, "head", deque())
+
+    def test_head_two_args_wrong_flags(self):
+        self.assertRaises(ValueError, eval, "head arg0 arg1", deque())
+
+    def test_head_two_args_no_stdin(self):
+        self.assertRaises(ValueError, eval, "head -n arg1", deque())
+
+    def test_head_three_args_invalid(self):
+        self.assertRaises(ValueError, eval, "head arg0 arg1 arg2", deque())
+
+    def test_head_four_args_invalid(self):
+        self.assertRaises(ValueError, eval, "head arg0 arg1 arg2 arg3", deque())
+
     def test_ls(self):
         cwd = os.getcwd()
         os.chdir("dir2")
@@ -119,8 +160,8 @@ class TestShell(unittest.TestCase):
         eval("ls empty_dir", out)
         self.assertEqual(len(out), 0)
 
-    def test_ls_two_args(self):
-        self.assertRaises(ValueError, eval, "ls arg1 arg2", deque())
+    def test_ls_two_args_invalid(self):
+        self.assertRaises(ValueError, eval, "ls arg0 arg1", deque())
 
     def test_pwd(self):
         out = deque()
@@ -142,6 +183,47 @@ class TestShell(unittest.TestCase):
         eval("sort -r dir1/sort_test_file.txt", out)
         result = list(out)
         self.assertEqual(result, ["hello world\n", "aaa\n"])
+
+    def test_tail(self):
+        out = deque()
+        eval("tail dir1/test3.txt", out)
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(9)])
+
+    def test_tail_num_lines(self):
+        out = deque()
+        eval("tail -n 5 dir1/test3.txt", out)
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(4, 9)])
+
+    def test_tail_stdin(self):
+        pass
+
+    def test_tail_stdin_num_lines(self):
+        pass
+
+    def test_tail_empty_file(self):
+        out = deque()
+        eval("tail dir1/empty_file.txt", out)
+        self.assertEqual(len(out), 0)
+
+    def test_tail_zero_lines(self):
+        out = deque()
+        eval("tail -n 0 dir1/test3.txt", out)
+        self.assertEqual(len(out), 0)
+
+    def test_tail_zero_args_invalid(self):
+        self.assertRaises(ValueError, eval, "tail", deque())
+
+    def test_tail_two_args_wrong_flags(self):
+        self.assertRaises(ValueError, eval, "tail arg0 arg1", deque())
+
+    def test_tail_two_args_no_stdin(self):
+        self.assertRaises(ValueError, eval, "tail -n arg1", deque())
+
+    def test_tail_three_args_invalid(self):
+        self.assertRaises(ValueError, eval, "tail arg0 arg1 arg2", deque())
+
+    def test_tail_four_args_invalid(self):
+        self.assertRaises(ValueError, eval, "tail arg0 arg1 arg2 arg3", deque())
 
     def test_uniq(self):
         out = deque()

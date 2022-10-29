@@ -17,11 +17,11 @@ class Tail(Application):
             with open(args[0]) as file:
                 Tail.lines(10, file.readlines(), out)
         elif len(args) == 2:
-            if not input_:
-                raise ValueError("stdin not provided")
-
             if args[0] != "-n":
                 raise ValueError("wrong flags")
+
+            if not input_:
+                raise ValueError("stdin not provided")
 
             Tail.lines(int(args[1]), [i + "\n" for i in input_.split("\n")], out)
         else:
