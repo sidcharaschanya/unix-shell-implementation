@@ -3,6 +3,7 @@ from collections import deque
 from typing import Optional
 import re
 
+# grep 'A..' pattern left for quoting
 class Grep(Application):
     def exec(self, args: list, input_: Optional[list], out: deque) -> None:
         if len(args)<1:

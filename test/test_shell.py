@@ -37,13 +37,13 @@ class TestShell(unittest.TestCase):
 
     def test_sort(self):
         out=deque()
-        eval("sort test2",out)
+        eval("sort sortTestFile",out)
         result=list(out)
         self.assertEqual(result,["aaa\n","hello world\n"])
 
     def test_sort_r(self):
         out=deque()
-        eval("sort -r test2",out)
+        eval("sort -r sortTestFile",out)
         result=list(out)
         self.assertEqual(result,["hello world\n","aaa\n"])
 
