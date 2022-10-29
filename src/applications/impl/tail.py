@@ -32,7 +32,7 @@ class Tail(Application):
                 Tail.lines(int(args[1]), file.readlines(), out)
 
     @staticmethod
-    def lines(num_lines: int, input_lines: list[str], out: deque) -> None:
+    def lines(num_lines: int, input_lines: list, out: deque) -> None:
         display_length = min(len(input_lines), num_lines)
 
         for i in range(0, display_length):
