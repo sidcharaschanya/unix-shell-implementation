@@ -12,7 +12,7 @@ class Find(Application):
 
         if len(args) == 2:
             if args[0] != "-name":
-                raise ValueError("invalid arguments")
+                raise ValueError("wrong flags")
 
             pattern = args[1]
 
@@ -20,7 +20,7 @@ class Find(Application):
                 out.append(relative_path + "\n")
         else:
             if args[1] != "-name":
-                raise ValueError("invalid arguments")
+                raise ValueError("wrong flags")
 
             path = args[0]
             pattern = args[2]
