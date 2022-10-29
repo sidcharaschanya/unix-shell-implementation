@@ -2,7 +2,7 @@ import re
 import sys
 import os
 from collections import deque
-from glob import glob
+# from glob import glob
 from applications.application_factory import ApplicationFactory
 
 
@@ -18,11 +18,11 @@ def eval(cmdline: str, out: deque) -> None:
                 quoted = m.group(0)
                 tokens.append(quoted[1:-1])
             else:
-                globbing = glob(m.group(0))
-                if globbing:
-                    tokens.extend(globbing)
-                else:
-                    tokens.append(m.group(0))
+                # globbing = glob(m.group(0))
+                # if globbing:
+                #     tokens.extend(globbing)
+                # else:
+                tokens.append(m.group(0))
         app = ApplicationFactory.by_name(tokens[0])
         args = tokens[1:]
         app.exec(args, None, out)
