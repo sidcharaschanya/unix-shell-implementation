@@ -48,6 +48,28 @@ class TestShell(unittest.TestCase):
         self.assertEqual(result,["hello world\n","aaa\n"])
 
 
+    def test_uniq(self):
+        out=deque()
+        eval("uniq uniqTestFile",out)
+        result=list(out)
+        self.assertEqual(result,["aaa\n","AAA\n","aaa\n"])
+
+    def test_uniq_i(self):
+        out=deque()
+        eval("uniq -i uniqTestFile",out)
+        result=list(out)
+        self.assertEqual(result,["aaa\n"])
+
+    def test_uniq_emptyFile(self):
+        out=deque()
+        eval("uniq EmptyFile",out)
+        result=list(out)
+        self.assertEqual(len(result),0)
+
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
