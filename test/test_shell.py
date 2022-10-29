@@ -17,11 +17,11 @@ class TestShell(unittest.TestCase):
         self.assertEqual(out.popleft(), "")
         self.assertEqual(len(out), 0)
 
+    def cat_stdin(self):
+        pass
+
     def test_cat_zero_args(self):
         self.assertRaises(ValueError, eval, "cat", deque())
-
-    def test_cat_stdin(self):
-        pass
 
     def test_cd(self):
         cwd = os.getcwd()
@@ -44,8 +44,41 @@ class TestShell(unittest.TestCase):
         self.assertEqual(out.popleft(), "\n")
         self.assertEqual(len(out), 0)
 
+    def test_find(self):
+        out = deque()
+        eval("find -name dir2/file.txt", out)
+        self.assertEqual(out.popleft(), "dir2/file.txt\n")
+        self.assertEqual(len(out), 0)
+
+    def test_find_pattern(self):
+        out = deque()
+        eval("find -name *.py", out)
+        self.assertEqual(out.popleft(), "test_shell.py\n")
+        self.assertEqual(len(out), 0)
+
+    def test_find_path(self):
+        out = deque()
+        eval("find dir2 -name *.txt", out)
+        self.assertEqual(list(out), ["dir2/file.txt\n", "dir2/sub_dir/sub_file.txt\n"])
+
+    def test_find_empty_dir(self):
+        out = deque()
+        eval("find empty_dir -name *", out)
+        self.assertEqual(len(out), 0)
+
+    def test_find_no_matches(self):
+        out = deque()
+        eval("find dir2 -name *.py", out)
+        self.assertEqual(len(out), 0)
+
     def test_find_zero_args(self):
         self.assertRaises(ValueError, eval, "find", deque())
+
+    def test_find_two_args_invalid(self):
+        self.assertRaises(ValueError, eval, "find arg1 arg2", deque())
+
+    def test_find_three_args_invalid(self):
+        self.assertRaises(ValueError, eval, "find arg1 arg2 arg3", deque())
 
     def test_grep(self):
         out = deque()
@@ -67,6 +100,27 @@ class TestShell(unittest.TestCase):
         out = deque()
         eval("grep aa dir1/test1.txt", out)
         self.assertEqual(len(out), 0)
+
+    def test_ls(self):
+        cwd = os.getcwd()
+        os.chdir("dir2")
+        out = deque()
+        eval("ls", out)
+        self.assertEqual(list(out), ["file.txt\n", "sub_dir\n"])
+        os.chdir(cwd)
+
+    def test_ls_path(self):
+        out = deque()
+        eval("ls dir2", out)
+        self.assertEqual(list(out), ["file.txt\n", "sub_dir\n"])
+
+    def test_ls_empty_dir(self):
+        out = deque()
+        eval("ls empty_dir", out)
+        self.assertEqual(len(out), 0)
+
+    def test_ls_two_args(self):
+        self.assertRaises(ValueError, eval, "ls arg1 arg2", deque())
 
     def test_pwd(self):
         out = deque()
@@ -106,6 +160,11 @@ class TestShell(unittest.TestCase):
         eval("uniq dir1/empty_file.txt", out)
         result = list(out)
         self.assertEqual(len(result), 0)
+
+    def test_unsafe_ls(self):
+        out = deque()
+        eval("_ls dir0", out)
+        self.assertEqual(len(out), 0)
 
 
 if __name__ == "__main__":
