@@ -5,12 +5,12 @@ from typing import Optional
 
 class Cat(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        if len(args) == 0:
+        if len(args) == 0 and not input_:
             if not input_:
                 raise ValueError("stdin not provided")
 
-            args.extend(input_)
-
-        for arg in args:
-            with open(arg) as file:
-                out.append(file.read())
+            out.append(input_)
+        else:
+            for arg in args:
+                with open(arg) as file:
+                    out.append(file.read())

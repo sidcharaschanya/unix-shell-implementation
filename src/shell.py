@@ -26,15 +26,7 @@ def eval(cmdline: str, out: deque) -> None:
         app = ApplicationFactory.by_name(tokens[0])
         args = tokens[1:]
         app.exec(args, None, out)
-        # if app == "pwd":
-        #     out.append(os.getcwd())
-        # elif app == "cd":
-        #     if len(args) == 0 or len(args) > 1:
-        #         raise ValueError("wrong number of command line arguments")
-        #     os.chdir(args[0])
-        # elif app == "echo":
-        #     out.append(" ".join(args) + "\n")
-        # elif app == "head":
+        # if app == "head":
         #     if len(args) != 1 and len(args) != 3:
         #         raise ValueError("wrong number of command line arguments")
         #     if len(args) == 1:
@@ -81,8 +73,6 @@ def eval(cmdline: str, out: deque) -> None:
         #                         out.append(f"{file}:{line}")
         #                     else:
         #                         out.append(line)
-        # else:
-        #     raise ValueError(f"unsupported application {app}")
 
 
 if __name__ == "__main__":
