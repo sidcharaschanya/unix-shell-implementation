@@ -13,13 +13,12 @@ class Uniq(Application):
         if len(args) == 1 and args[0] == "-i" and input_ is None:
             raise ValueError("wrong number of arguments")
 
-        if len(args) == 0:
-            filename = input_[0]
+        if input_ is not None:
+            if len(args)==1 and args[0]=='-i':
+                ignore_case=True
+                args.pop(0)
 
-        elif len(args) == 1 and args[0] == "-i":
-            filename = input_[0]
-            ignore_case = True
-            args.pop(0)
+            filename=input_
 
         elif len(args) == 2 and args[0] == "-i":
             filename = args[1]

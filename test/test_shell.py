@@ -100,6 +100,9 @@ class TestShell(unittest.TestCase):
         eval("grep aa resources/dir1/test1.txt", out)
         self.assertEqual(len(out), 0)
 
+    def test_grep_stdin(self):
+        pass
+
     def test_head(self):
         out = deque()
         eval("head resources/dir1/test3.txt", out)
@@ -182,6 +185,9 @@ class TestShell(unittest.TestCase):
         eval("sort -r resources/dir1/sort_test_file.txt", out)
         result = set(out)
         self.assertEqual(result, {"hello world\n", "aaa\n"})
+
+    def test_sort_stdin(self):
+        pass
 
     def test_tail(self):
         out = deque()

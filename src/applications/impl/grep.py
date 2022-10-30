@@ -13,11 +13,11 @@ class Grep(Application):
             raise ValueError("wrong number of command line arguments")
 
         elif len(args) == 1 and input_ is not None:
-            args.extend(input_)
+            args.append(input_)
             pattern = args[0]
-            inputData = args[1:]
+            input_data = args[1]
 
-            for item in inputData:
+            for item in input_data:
                 if re.match(pattern, item):
                     out.append(item)
 
