@@ -5,8 +5,8 @@ from typing import Optional
 
 class Sort(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        filename=""
         reverse=False
+        result = []
 
         if len(args) == 0 and input_ is None:
             raise ValueError("wrong number of arguments")
@@ -15,14 +15,22 @@ class Sort(Application):
             raise ValueError("wrong number of arguments")
 
         if input_ is not None:
+            if len(args)==1 and args[0]!="-r":
+                raise ValueError("wrong flag provided")
+
             if len(args) == 1 and args[0] == "-r":
                 args.pop(0)
                 reverse=True
 
-            filename=input_
+            lines=[i + "\n" for i in input_.split("\n")]
+            result=self.sort_file_contents(lines,reverse)
 
         else:
-            if args[0] == "-r":
+            filename=""
+            if len(args)==2 and args[0]!="-r":
+                raise ValueError("wrong flag provided")
+
+            elif args[0] == "-r":
                 filename = args[1]
                 reverse=True
                 args.pop(0)
@@ -32,18 +40,19 @@ class Sort(Application):
                 filename = args[0]
                 args.pop(0)
 
-        result=self.sort_file_contents(filename,reverse)
+            with open(filename) as f:
+                result=self.sort_file_contents(f.readlines(),reverse)
+
+
         args.extend(result)
 
         for arg in args:
             out.append(arg)
 
-    def sort_file_contents(self, filename, reversed=False):
+    def sort_file_contents(self, lines, reversed=False):
         file_contents = []
-        with open(filename) as f:
-            lines = f.readlines()
-            for line in lines:
-                file_contents.append(line)
+        for line in lines:
+            file_contents.append(line)
 
         file_contents.sort(reverse=reversed)
         return file_contents
