@@ -10,10 +10,10 @@ class Ls(Application):
             raise ValueError("wrong number of command line arguments")
 
         if len(args) == 0:
-            ls_directory = os.getcwd()
+            directory_name = os.getcwd()
         else:
-            ls_directory = args[0]
+            directory_name = args[0]
 
-        for file_name in os.listdir(ls_directory):
+        for file_name in os.listdir(directory_name):
             if not file_name.startswith("."):
                 out.append(file_name + "\n")

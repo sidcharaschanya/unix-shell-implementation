@@ -276,29 +276,49 @@ class TestShell(unittest.TestCase):
 
     def test_uniq(self):
         out = deque()
-        eval("uniq resources/dir1/uniq_test_file.txt", out)
-        result = set(out)
-        self.assertEqual(result, {"aaa\n", "AAA\n", "aaa\n"})
+        eval("uniq resources/dir1/test5.txt", out)
+        self.assertEqual(list(out), ["aaa\n", "AAA\n", "aaa\n"])
 
-    def test_uniq_i(self):
+    def test_uniq_ignore_case(self):
         out = deque()
-        eval("uniq -i resources/dir1/uniq_test_file.txt", out)
-        result = set(out)
-        self.assertEqual(result, {"aaa\n"})
+        eval("uniq -i resources/dir1/test5.txt", out)
+        self.assertEqual(list(out), ["aaa\n"])
+
+    def test_uniq_stdin(self):
+        pass
+
+    def test_uniq_stdin_ignore_case(self):
+        pass
 
     def test_uniq_empty_file(self):
         out = deque()
         eval("uniq resources/dir1/empty_file.txt", out)
-        result = set(out)
-        self.assertEqual(len(result), 0)
+        self.assertEqual(len(out), 0)
 
-    def test_uniq_wrong_flag(self):
-        self.assertRaises(ValueError, eval, "uniq -r resources/dir1/uniq_test_file.txt", deque())
+    def test_uniq_empty_file_ignore_case(self):
+        out = deque()
+        eval("uniq -i resources/dir1/empty_file.txt", out)
+        self.assertEqual(len(out), 0)
 
-    def test_uniq_file_not_found(self):
+    def test_uniq_zero_args_invalid(self):
+        self.assertRaises(ValueError, eval, "uniq", deque())
+
+    def test_uniq_one_arg_no_stdin(self):
+        self.assertRaises(ValueError, eval, "uniq -i", deque())
+
+    def test_uniq_one_arg_file_not_found(self):
         self.assertRaises(FileNotFoundError, eval, "uniq resources/file.txt", deque())
 
-    def test_unsafe_ls(self):
+    def test_uniq_two_args_wrong_flags(self):
+        self.assertRaises(ValueError, eval, "uniq arg0 arg1", deque())
+
+    def test_uniq_two_args_file_not_found(self):
+        self.assertRaises(FileNotFoundError, eval, "uniq -i resources/file.txt", deque())
+
+    def test_uniq_three_args_invalid(self):
+        self.assertRaises(ValueError, eval, "uniq arg0 arg1 arg2", deque())
+
+    def test_unsafe_decorator_ls(self):
         out = deque()
         eval("_ls resources/dir0", out)
         self.assertEqual(len(out), 0)
