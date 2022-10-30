@@ -10,6 +10,13 @@ class Find(Application):
         if len(args) < 2 or len(args) > 3:
             raise ValueError("wrong number of command line arguments")
 
+        path, pattern = Find.get_path_and_pattern(args)
+
+        for relative_path in glob.glob(os.path.join(path, "**", pattern), recursive=True):
+            out.append(relative_path + "\n")
+
+    @staticmethod
+    def get_path_and_pattern(args: list) -> tuple:
         if len(args) == 2:
             if args[0] != "-name":
                 raise ValueError("wrong flags")
@@ -21,5 +28,4 @@ class Find(Application):
 
             path, pattern = args[0], args[2]
 
-        for relative_path in glob.glob(os.path.join(path, "**", pattern), recursive=True):
-            out.append(relative_path + "\n")
+        return path, pattern

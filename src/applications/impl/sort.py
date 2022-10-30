@@ -8,6 +8,13 @@ class Sort(Application):
         if len(args) > 2:
             raise ValueError("wrong number of arguments")
 
+        reverse, lines = Sort.get_reverse_and_lines(args, input_)
+
+        for line in sorted(lines, reverse=reverse):
+            out.append(line)
+
+    @staticmethod
+    def get_reverse_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
             if not input_:
                 raise ValueError("stdin not provided")
@@ -29,5 +36,4 @@ class Sort(Application):
             with open(args[1]) as file:
                 reverse, lines = True, file.readlines()
 
-        for line in sorted(lines, reverse=reverse):
-            out.append(line)
+        return reverse, lines
