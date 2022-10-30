@@ -52,8 +52,9 @@ class TestShell(unittest.TestCase):
 
     def test_find_pattern(self):
         out = deque()
-        eval("find -name empty*", out)
-        self.assertEqual(set(out), {"resources/empty_dir\n", "resources/dir1/empty_file.txt\n"})
+        eval("find -name resources/empty*", out)
+        self.assertEqual(out.popleft(), "resources/empty_dir\n")
+        self.assertEqual(len(out), 0)
 
     def test_find_path(self):
         out = deque()
@@ -87,13 +88,18 @@ class TestShell(unittest.TestCase):
 
     def test_grep_multiple_files(self):
         out = deque()
-        eval("grep he resources/dir1/test2.txt resources/dir1/test1.txt", out)
+        eval("grep he resources/dir1/test1.txt resources/dir1/test2.txt", out)
         result = set(out)
         self.assertEqual(result, {
+            "resources/dir1/test1.txt:hello\n",
             "resources/dir1/test2.txt:hehehehe\n",
             "resources/dir1/test2.txt:hellohello\n",
-            "resources/dir1/test1.txt:hello\n"
         })
+
+    def test_grep_empty_file(self):
+        out = deque()
+        eval("grep aa resources/dir1/empty_file.txt", out)
+        self.assertEqual(len(out), 0)
 
     def test_grep_no_matches(self):
         out = deque()
@@ -102,6 +108,12 @@ class TestShell(unittest.TestCase):
 
     def test_grep_stdin(self):
         pass
+
+    def test_grep_zero_args_invalid(self):
+        self.assertRaises(ValueError, eval, "grep", deque())
+
+    def test_grep_one_arg_invalid(self):
+        self.assertRaises(ValueError, eval, "grep arg0", deque())
 
     def test_head(self):
         out = deque()
@@ -171,7 +183,7 @@ class TestShell(unittest.TestCase):
         self.assertEqual(out.popleft(), os.getcwd())
         self.assertEqual(len(out), 0)
 
-    def test_pwd_one_arg(self):
+    def test_pwd_one_arg_invalid(self):
         self.assertRaises(ValueError, eval, "pwd arg", deque())
 
     def test_sort(self):
@@ -250,7 +262,7 @@ class TestShell(unittest.TestCase):
 
     def test_unsafe_ls(self):
         out = deque()
-        eval("_ls dir0", out)
+        eval("_ls resources/dir0", out)
         self.assertEqual(len(out), 0)
 
 
