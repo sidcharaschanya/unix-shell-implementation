@@ -14,6 +14,6 @@ class Ls(Application):
         else:
             ls_directory = args[0]
 
-        for file in os.listdir(ls_directory):
-            if not file.startswith("."):
-                out.append(file + "\n")
+        for file_name in os.listdir(ls_directory):
+            if not file_name.startswith("."):
+                out.append(file_name + "\n")

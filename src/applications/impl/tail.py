@@ -12,10 +12,10 @@ class Tail(Application):
             if not input_:
                 raise ValueError("stdin not provided")
 
-            Tail.lines(10, [i + "\n" for i in input_.split("\n")], out)
+            num_lines, lines = 10, [i + "\n" for i in input_.split("\n")]
         elif len(args) == 1:
             with open(args[0]) as file:
-                Tail.lines(10, file.readlines(), out)
+                num_lines, lines = 10, file.readlines()
         elif len(args) == 2:
             if args[0] != "-n":
                 raise ValueError("wrong flags")
@@ -23,17 +23,15 @@ class Tail(Application):
             if not input_:
                 raise ValueError("stdin not provided")
 
-            Tail.lines(int(args[1]), [i + "\n" for i in input_.split("\n")], out)
+            num_lines, lines = int(args[1]), [i + "\n" for i in input_.split("\n")]
         else:
             if args[0] != "-n":
                 raise ValueError("wrong flags")
 
             with open(args[2]) as file:
-                Tail.lines(int(args[1]), file.readlines(), out)
+                num_lines, lines = int(args[1]), file.readlines()
 
-    @staticmethod
-    def lines(num_lines: int, input_lines: list, out: deque) -> None:
-        display_length = min(len(input_lines), num_lines)
+        display_length = min(len(lines), num_lines)
 
         for i in range(0, display_length):
-            out.append(input_lines[len(input_lines) - display_length + i])
+            out.append(lines[len(lines) - display_length + i])

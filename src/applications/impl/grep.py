@@ -9,28 +9,28 @@ class Grep(Application):
         if len(args) < 1:
             raise ValueError("wrong number of command line arguments")
 
-        if len(args) == 1 and input_ is None:
-            raise ValueError("wrong number of command line arguments")
+        if len(args) == 1:
+            if not input_:
+                raise ValueError("stdin not provided")
 
-        elif len(args) == 1 and input_ is not None:
-            args.append(input_)
             pattern = args[0]
-            input_data = args[1]
+            lines = [i + "\n" for i in input_.split("\n")]
 
-            for item in input_data:
-                if re.match(pattern, item):
-                    out.append(item)
+            for line in lines:
+                if re.match(pattern, line):
+                    out.append(line)
 
         else:
             pattern = args[0]
-            files = args[1:]
+            file_names = args[1:]
 
-            for file in files:
-                with open(file) as f:
-                    lines = f.readlines()
+            for file_name in file_names:
+                with open(file_name) as file:
+                    lines = file.readlines()
+
                     for line in lines:
                         if re.match(pattern, line):
-                            if len(files) > 1:
-                                out.append(f"{file}:{line}")
+                            if len(file_names) > 1:
+                                out.append(f"{file_name}:{line}")
                             else:
                                 out.append(line)
