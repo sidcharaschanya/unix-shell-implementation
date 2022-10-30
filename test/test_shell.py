@@ -106,21 +106,17 @@ class TestShell(unittest.TestCase):
         eval("grep aa resources/dir1/test1.txt", out)
         self.assertEqual(len(out), 0)
 
-    def test_grep_zero_args(self):
-        self.assertRaises(ValueError,eval,"grep",deque())
-
-    def test_grep_wrong_file(self):
-        self.assertRaises(FileNotFoundError,eval,"grep he test",deque())
-
     def test_grep_stdin(self):
         pass
+
+    def test_grep_file_not_found(self):
+        self.assertRaises(FileNotFoundError, eval, "grep he resources/file.txt", deque())
 
     def test_grep_zero_args_invalid(self):
         self.assertRaises(ValueError, eval, "grep", deque())
 
     def test_grep_one_arg_invalid(self):
         self.assertRaises(ValueError, eval, "grep arg0", deque())
-
 
     def test_head(self):
         out = deque()
@@ -209,10 +205,10 @@ class TestShell(unittest.TestCase):
         pass
 
     def test_sort_wrong_flag(self):
-        self.assertRaises(ValueError,eval,"sort -i test",deque())
+        self.assertRaises(ValueError, eval, "sort -i resources/file.txt", deque())
 
     def test_sort_file_not_found(self):
-        self.assertRaises(FileNotFoundError,eval,"sort test",deque())
+        self.assertRaises(FileNotFoundError, eval, "sort resources/file.txt", deque())
 
     def test_tail(self):
         out = deque()
@@ -273,11 +269,11 @@ class TestShell(unittest.TestCase):
         result = set(out)
         self.assertEqual(len(result), 0)
 
-    def test_uniq_wrong_file(self):
-        self.assertRaises(ValueError,eval,"uniq -r resources/dir1/uniq_test_file.txt",deque())
+    def test_uniq_wrong_flag(self):
+        self.assertRaises(ValueError, eval, "uniq -r resources/dir1/uniq_test_file.txt", deque())
 
     def test_uniq_file_not_found(self):
-        self.assertRaises(FileNotFoundError,eval,"uniq test",deque())
+        self.assertRaises(FileNotFoundError, eval, "uniq resources/file.txt", deque())
 
     def test_unsafe_ls(self):
         out = deque()
