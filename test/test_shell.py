@@ -9,7 +9,7 @@ class TestShell(unittest.TestCase):
     def test_cat(self):
         out = deque()
         eval("cat resources/dir1/test1.txt resources/dir1/test2.txt", out)
-        self.assertEqual(set(out), {"hello\n", "hehehehe\nhellohello\n"})
+        self.assertEqual(list(out), ["hello\n", "hehehehe\nhellohello\n"])
 
     def test_cat_empty_file(self):
         out = deque()
@@ -89,12 +89,12 @@ class TestShell(unittest.TestCase):
     def test_grep_multiple_files(self):
         out = deque()
         eval("grep he resources/dir1/test1.txt resources/dir1/test2.txt", out)
-        result = set(out)
-        self.assertEqual(result, {
+        result = list(out)
+        self.assertEqual(result, [
             "resources/dir1/test1.txt:hello\n",
             "resources/dir1/test2.txt:hehehehe\n",
             "resources/dir1/test2.txt:hellohello\n",
-        })
+        ])
 
     def test_grep_empty_file(self):
         out = deque()
@@ -121,12 +121,12 @@ class TestShell(unittest.TestCase):
     def test_head(self):
         out = deque()
         eval("head resources/dir1/test3.txt", out)
-        self.assertEqual(set(out), {str(i) + "\n" for i in range(9)})
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(9)])
 
     def test_head_num_lines(self):
         out = deque()
         eval("head -n 5 resources/dir1/test3.txt", out)
-        self.assertEqual(set(out), {str(i) + "\n" for i in range(5)})
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(5)])
 
     def test_head_stdin(self):
         pass
@@ -191,34 +191,54 @@ class TestShell(unittest.TestCase):
 
     def test_sort(self):
         out = deque()
-        eval("sort resources/dir1/sort_test_file.txt", out)
-        result = set(out)
-        self.assertEqual(result, {"aaa\n", "hello world\n"})
+        eval("sort resources/dir1/test4.txt", out)
+        self.assertEqual(list(out), ["aaa\n", "hello world\n"])
 
-    def test_sort_r(self):
+    def test_sort_reverse(self):
         out = deque()
-        eval("sort -r resources/dir1/sort_test_file.txt", out)
-        result = set(out)
-        self.assertEqual(result, {"hello world\n", "aaa\n"})
+        eval("sort -r resources/dir1/test4.txt", out)
+        self.assertEqual(list(out), ["hello world\n", "aaa\n"])
 
     def test_sort_stdin(self):
         pass
 
-    def test_sort_wrong_flag(self):
-        self.assertRaises(ValueError, eval, "sort -i resources/file.txt", deque())
+    def test_sort_stdin_reverse(self):
+        pass
 
-    def test_sort_file_not_found(self):
+    def test_sort_empty_file(self):
+        out = deque()
+        eval("sort resources/dir1/empty_file.txt", out)
+        self.assertEqual(len(out), 0)
+
+    def test_sort_empty_file_reverse(self):
+        out = deque()
+        eval("sort -r resources/dir1/empty_file.txt", out)
+        self.assertEqual(len(out), 0)
+
+    def test_sort_zero_args_invalid(self):
+        self.assertRaises(ValueError, eval, "sort", deque())
+
+    def test_sort_one_arg_no_stdin(self):
+        self.assertRaises(ValueError, eval, "sort -r", deque())
+
+    def test_sort_one_arg_file_not_found(self):
         self.assertRaises(FileNotFoundError, eval, "sort resources/file.txt", deque())
+
+    def test_sort_two_args_invalid(self):
+        self.assertRaises(ValueError, eval, "sort arg0 arg1", deque())
+
+    def test_sort_three_args_invalid(self):
+        self.assertRaises(ValueError, eval, "sort arg0 arg1 arg2", deque())
 
     def test_tail(self):
         out = deque()
         eval("tail resources/dir1/test3.txt", out)
-        self.assertEqual(set(out), {str(i) + "\n" for i in range(9)})
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(9)])
 
     def test_tail_num_lines(self):
         out = deque()
         eval("tail -n 5 resources/dir1/test3.txt", out)
-        self.assertEqual(set(out), {str(i) + "\n" for i in range(4, 9)})
+        self.assertEqual(list(out), [str(i) + "\n" for i in range(4, 9)])
 
     def test_tail_stdin(self):
         pass
