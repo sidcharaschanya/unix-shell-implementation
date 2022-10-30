@@ -47,13 +47,13 @@ class TestShell(unittest.TestCase):
     def test_find(self):
         out = deque()
         eval("find -name resources/dir2/file.txt", out)
-        self.assertEqual(out.popleft(), "resources/dir2/file.txt\n")
+        self.assertEqual(out.popleft(), "./resources/dir2/file.txt\n")
         self.assertEqual(len(out), 0)
 
     def test_find_pattern(self):
         out = deque()
         eval("find -name resources/empty*", out)
-        self.assertEqual(out.popleft(), "resources/empty_dir\n")
+        self.assertEqual(out.popleft(), "./resources/empty_dir\n")
         self.assertEqual(len(out), 0)
 
     def test_find_path(self):

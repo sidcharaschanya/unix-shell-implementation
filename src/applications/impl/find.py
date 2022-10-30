@@ -14,12 +14,12 @@ class Find(Application):
             if args[0] != "-name":
                 raise ValueError("wrong flags")
 
-            path_pattern = os.path.join("**", args[1])
+            path, pattern = ".", args[1]
         else:
             if args[1] != "-name":
                 raise ValueError("wrong flags")
 
-            path_pattern = os.path.join(args[0], "**", args[2])
+            path, pattern = args[0], args[2]
 
-        for relative_path in glob.glob(path_pattern, recursive=True):
+        for relative_path in glob.glob(os.path.join(path, "**", pattern), recursive=True):
             out.append(relative_path + "\n")
