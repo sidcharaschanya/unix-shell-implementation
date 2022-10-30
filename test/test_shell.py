@@ -224,8 +224,11 @@ class TestShell(unittest.TestCase):
     def test_sort_one_arg_file_not_found(self):
         self.assertRaises(FileNotFoundError, eval, "sort resources/file.txt", deque())
 
-    def test_sort_two_args_invalid(self):
+    def test_sort_two_args_wrong_flags(self):
         self.assertRaises(ValueError, eval, "sort arg0 arg1", deque())
+
+    def test_sort_two_args_file_not_found(self):
+        self.assertRaises(FileNotFoundError, eval, "sort -r resources/file.txt", deque())
 
     def test_sort_three_args_invalid(self):
         self.assertRaises(ValueError, eval, "sort arg0 arg1 arg2", deque())
