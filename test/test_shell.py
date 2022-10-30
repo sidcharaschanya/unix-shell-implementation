@@ -52,9 +52,8 @@ class TestShell(unittest.TestCase):
 
     def test_find_pattern(self):
         out = deque()
-        eval("find -name *.py", out)
-        self.assertEqual(out.popleft(), "test_shell.py\n")
-        self.assertEqual(len(out), 0)
+        eval("find -name empty*", out)
+        self.assertEqual(set(out), {"resources/empty_dir\n", "resources/dir1/empty_file.txt\n"})
 
     def test_find_path(self):
         out = deque()
