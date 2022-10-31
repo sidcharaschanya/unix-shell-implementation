@@ -36,6 +36,18 @@ class Cut(Application):
         return lines
 
     @staticmethod
+    def get_cut_bytes(cut_byte_strings: list, line: str) -> list:
+        len_line, cut_bytes = len(line), set()
+
+        for cut_byte_string in cut_byte_strings:
+            start, end = Cut.get_start_and_end(cut_byte_string, len_line)
+
+            for cut_byte in range(start - 1, min(end, len_line)):
+                cut_bytes.add(cut_byte)
+
+        return sorted(cut_bytes)
+
+    @staticmethod
     def get_start_and_end(cut_byte_string: str, len_line: int) -> tuple:
         if re.match("^[0-9]+$", cut_byte_string):
             start, end = int(cut_byte_string), int(cut_byte_string)
@@ -52,15 +64,3 @@ class Cut(Application):
             raise ValueError("invalid arguments")
 
         return start, end
-
-    @staticmethod
-    def get_cut_bytes(cut_byte_strings: list, line: str) -> list:
-        len_line, cut_bytes = len(line), set()
-
-        for cut_byte_string in cut_byte_strings:
-            start, end = Cut.get_start_and_end(cut_byte_string, len_line)
-
-            for cut_byte in range(start - 1, min(end, len_line)):
-                cut_bytes.add(cut_byte)
-
-        return sorted(cut_bytes)
