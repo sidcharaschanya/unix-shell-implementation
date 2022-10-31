@@ -32,7 +32,8 @@ def eval(cmdline: str, out: deque) -> None:
         app.exec(args, None, out)
 
 
-def run(cmdline: str, out: deque) -> None:
+def run(cmdline: str) -> None:
+    out = deque()
     eval(cmdline, out)
 
     while len(out) > 0:
@@ -46,13 +47,13 @@ def non_interactive_mode(num_args: int) -> None:
     if sys.argv[1] != "-c":
         raise ValueError(f"unexpected command line argument {sys.argv[1]}")
 
-    run(sys.argv[2], deque())
+    run(sys.argv[2])
 
 
 def interactive_mode() -> None:
     while True:
         print(os.getcwd() + "> ", end="")
-        run(input(), deque())
+        run(input())
 
 
 def main() -> None:
