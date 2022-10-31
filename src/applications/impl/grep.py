@@ -19,8 +19,7 @@ class Grep(Application):
         if not input_:
             raise ValueError("stdin not provided")
 
-        pattern = args[0]
-        lines = [i + "\n" for i in input_.split("\n")]
+        pattern, lines = args[0], [i + "\n" for i in input_.split("\n")]
 
         for line in lines:
             if re.match(pattern, line):
@@ -28,8 +27,7 @@ class Grep(Application):
 
     @staticmethod
     def two_or_more_args(args: list, out: deque) -> None:
-        pattern = args[0]
-        file_names = args[1:]
+        pattern, file_names = args[0], args[1:]
 
         for file_name in file_names:
             with open(file_name) as file:
