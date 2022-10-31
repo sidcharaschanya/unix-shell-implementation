@@ -53,17 +53,17 @@ class Cut(Application):
     @staticmethod
     def get_start_and_end(cut_byte_string: str, len_line: int) -> tuple:
         if re.match("^[0-9]+$", cut_byte_string):
-            start, end = int(cut_byte_string) - 1, int(cut_byte_string)
+            start, end = int(cut_byte_string), int(cut_byte_string)
         elif re.match("^[0-9]+-$", cut_byte_string):
-            start, end = int(cut_byte_string[:-1]) - 1, len_line
+            start, end = int(cut_byte_string[:-1]), len_line + 1
         elif re.match("^-[0-9]+$", cut_byte_string):
-            start, end = 0, int(cut_byte_string[1:])
+            start, end = 1, int(cut_byte_string[1:])
         elif re.match("^[0-9]+-[0-9]+$", cut_byte_string):
-            start, end = int(cut_byte_string.split("-")[0]) - 1, int(cut_byte_string.split("-")[1])
+            start, end = int(cut_byte_string.split("-")[0]), int(cut_byte_string.split("-")[1])
         else:
             raise ValueError("invalid arguments")
 
-        if start < 0 or end < 0:
+        if start < 1 or end < 1:
             raise ValueError("invalid arguments")
 
-        return start, min(end, len_line)
+        return start - 1, min(end, len_line)
