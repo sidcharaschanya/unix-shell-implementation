@@ -15,15 +15,12 @@ class Cut(Application):
         lines, cut_byte_strings = Cut.get_lines(args, input_), args[1].split(",")
 
         for line in lines:
-            if line.endswith("\n"):
-                line = line[:-1]
-
             cut_line = ""
 
             for cut_byte in Cut.get_cut_bytes(cut_byte_strings, line):
                 cut_line += line[cut_byte]
 
-            out.append(cut_line + "\n")
+            out.append(cut_line)
 
     @staticmethod
     def get_lines(args: list, input_: Optional[str]) -> list:
@@ -38,6 +35,18 @@ class Cut(Application):
                 lines = file.readlines()
 
         return lines
+
+    @staticmethod
+    def get_cut_bytes(cut_byte_strings: list, line: str) -> list:
+        len_line, cut_bytes = len(line), set()
+
+        for cut_byte_string in cut_byte_strings:
+            start, end = Cut.get_start_and_end(cut_byte_string, len_line)
+
+            for cut_byte in range(start - 1, min(end, len_line)):
+                cut_bytes.add(cut_byte)
+
+        return sorted(cut_bytes)
 
     @staticmethod
     def get_start_and_end(cut_byte_string: str, len_line: int) -> tuple:
@@ -56,15 +65,3 @@ class Cut(Application):
             raise ValueError("invalid arguments")
 
         return start, end
-
-    @staticmethod
-    def get_cut_bytes(cut_byte_strings: list, line: str) -> list:
-        len_line, cut_bytes = len(line), set()
-
-        for cut_byte_string in cut_byte_strings:
-            start, end = Cut.get_start_and_end(cut_byte_string, len_line)
-
-            for cut_byte in range(start - 1, min(end, len_line)):
-                cut_bytes.add(cut_byte)
-
-        return sorted(cut_bytes)
