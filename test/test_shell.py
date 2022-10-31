@@ -183,7 +183,7 @@ class TestShell(unittest.TestCase):
     def test_pwd(self):
         out = deque()
         eval("pwd", out)
-        self.assertEqual(out.popleft(), os.getcwd())
+        self.assertEqual(out.popleft(), os.getcwd() + "\n")
         self.assertEqual(len(out), 0)
 
     def test_pwd_one_arg_invalid(self):

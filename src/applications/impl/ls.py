@@ -9,11 +9,17 @@ class Ls(Application):
         if len(args) > 1:
             raise ValueError("wrong number of command line arguments")
 
+        directory_name = Ls.get_directory_name(args)
+
+        for file_name in os.listdir(directory_name):
+            if not file_name.startswith("."):
+                out.append(file_name + "\n")
+
+    @staticmethod
+    def get_directory_name(args: list) -> str:
         if len(args) == 0:
             directory_name = os.getcwd()
         else:
             directory_name = args[0]
 
-        for file_name in os.listdir(directory_name):
-            if not file_name.startswith("."):
-                out.append(file_name + "\n")
+        return directory_name
