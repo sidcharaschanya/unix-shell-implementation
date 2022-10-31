@@ -63,7 +63,4 @@ class Cut(Application):
         else:
             raise ValueError("invalid arguments")
 
-        if start < 1 or end < 1:
-            raise ValueError("invalid arguments")
-
         return start, end
