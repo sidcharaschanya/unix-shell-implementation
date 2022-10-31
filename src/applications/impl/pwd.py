@@ -9,4 +9,4 @@ class Pwd(Application):
         if len(args) > 0:
             raise ValueError("wrong number of command line arguments")
 
-        out.append(os.getcwd())
+        out.append(os.getcwd() + "\n")
