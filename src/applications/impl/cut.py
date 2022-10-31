@@ -51,6 +51,9 @@ class Cut(Application):
         else:
             raise ValueError("invalid arguments")
 
+        if start < 1 or end < 1:
+            raise ValueError("invalid arguments")
+
         return start, end
 
     @staticmethod
@@ -59,9 +62,6 @@ class Cut(Application):
 
         for cut_byte_string in cut_byte_strings:
             start, end = Cut.get_start_and_end(cut_byte_string, len_line)
-
-            if start < 1 or end < 1:
-                raise ValueError("invalid arguments")
 
             for cut_byte in range(start - 1, min(end, len_line)):
                 cut_bytes.add(cut_byte)
