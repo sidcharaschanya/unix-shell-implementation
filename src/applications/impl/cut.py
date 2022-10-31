@@ -45,7 +45,7 @@ class Cut(Application):
         for cut_byte_string in cut_byte_strings:
             start, end = Cut.get_start_and_end(cut_byte_string, len_line)
 
-            for cut_byte in range(start - 1, min(end, len_line)):
+            for cut_byte in range(start, end):
                 cut_bytes.add(cut_byte)
 
         return sorted(cut_bytes)
@@ -53,14 +53,17 @@ class Cut(Application):
     @staticmethod
     def get_start_and_end(cut_byte_string: str, len_line: int) -> tuple:
         if re.match("^[0-9]+$", cut_byte_string):
-            start, end = int(cut_byte_string), int(cut_byte_string)
+            start, end = int(cut_byte_string) - 1, int(cut_byte_string)
         elif re.match("^[0-9]+-$", cut_byte_string):
-            start, end = int(cut_byte_string[:-1]), len_line
+            start, end = int(cut_byte_string[:-1]) - 1, len_line
         elif re.match("^-[0-9]+$", cut_byte_string):
-            start, end = 1, int(cut_byte_string[1:])
+            start, end = 0, int(cut_byte_string[1:])
         elif re.match("^[0-9]+-[0-9]+$", cut_byte_string):
-            start, end = int(cut_byte_string.split("-")[0]), int(cut_byte_string.split("-")[1])
+            start, end = int(cut_byte_string.split("-")[0]) - 1, int(cut_byte_string.split("-")[1])
         else:
             raise ValueError("invalid arguments")
 
-        return start, end
+        if start < 0 or end < 0:
+            raise ValueError("invalid arguments")
+
+        return start, min(end, len_line)
