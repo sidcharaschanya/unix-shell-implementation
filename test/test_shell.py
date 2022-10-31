@@ -318,6 +318,26 @@ class TestShell(unittest.TestCase):
     def test_uniq_three_args_invalid(self):
         self.assertRaises(ValueError, eval, "uniq arg0 arg1 arg2", deque())
 
+    def test_cut_normal(self):
+        out=deque()
+        eval("cut -b 1,2,3 resources/dir1/test6.txt",out)
+        self.assertEqual(list(out),["hel\n","aaa\n","bbb\n"])
+
+    def test_cut_pattern2(self):
+        out=deque()
+        eval("cut -b 1-3,5-7 resources/dir1/test6.txt",out)
+        self.assertEqual(list(out),["helo w\n","aaa\n","bbbccc\n"])
+
+    def test_cut_pattern3(self):
+        out=deque()
+        eval("cut -b -3,6- resources/dir1/test6.txt",out)
+        self.assertEqual(list(out),["hel world\n","aaa\n","bbbcc\n"])
+
+    def test_cut_overlap(self):
+        out=deque()
+        eval("cut -b 2-,3- resources/dir1/test6.txt",out)
+        self.assertEqual(list(out),["ello world\n","aa\n","bb ccc\n"])
+
     def test_unsafe_decorator_ls(self):
         out = deque()
         eval("_ls resources/dir0", out)

@@ -27,6 +27,7 @@ class Cut(Application):
 
     @staticmethod
     def get_lines(args: list, input_: Optional[str]) -> list:
+        lines = []
         if len(args) == 2:
             if not input_:
                 raise ValueError("stdin not provided")
