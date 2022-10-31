@@ -15,15 +15,12 @@ class Cut(Application):
         lines, cut_byte_strings = Cut.get_lines(args, input_), args[1].split(",")
 
         for line in lines:
-            if line.endswith("\n"):
-                line = line[:-1]
-
             cut_line = ""
 
             for cut_byte in Cut.get_cut_bytes(cut_byte_strings, line):
                 cut_line += line[cut_byte]
 
-            out.append(cut_line + "\n")
+            out.append(cut_line)
 
     @staticmethod
     def get_lines(args: list, input_: Optional[str]) -> list:
