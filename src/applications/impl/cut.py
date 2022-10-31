@@ -16,6 +16,9 @@ class Cut(Application):
     @staticmethod
     def get_cut_bytes_string_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 2:
+            if not input_:
+                raise ValueError("stdin not provided")
+
             cut_bytes_string, lines = args[1], [i + "\n" for i in input_.split("\n")]
         else:
             with open(args[2]) as file:
