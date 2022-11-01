@@ -18,9 +18,9 @@ class Cut(Application):
             if line.endswith("\n"):
                 line = line[:-1]
 
-            cut_line = ""
+            cut_bytes, cut_line = Cut.__get_cut_bytes(cut_byte_strings, line), ""
 
-            for cut_byte in Cut.__get_cut_bytes(cut_byte_strings, line):
+            for cut_byte in cut_bytes:
                 cut_line += line[cut_byte]
 
             out.append(cut_line + "\n")
