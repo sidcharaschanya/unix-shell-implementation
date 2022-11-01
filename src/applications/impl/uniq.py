@@ -8,7 +8,7 @@ class Uniq(Application):
         if len(args) > 2:
             raise ValueError("wrong number of arguments")
 
-        ignore_case, lines = Uniq.get_ignore_case_and_lines(args, input_)
+        ignore_case, lines = Uniq.__get_ignore_case_and_lines(args, input_)
         previous_line = ""
 
         for line in lines:
@@ -21,7 +21,7 @@ class Uniq(Application):
             previous_line = line
 
     @staticmethod
-    def get_ignore_case_and_lines(args: list, input_: Optional[str]) -> tuple:
+    def __get_ignore_case_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
             if not input_:
                 raise ValueError("stdin not provided")

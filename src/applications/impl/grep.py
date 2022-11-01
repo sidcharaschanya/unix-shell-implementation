@@ -10,12 +10,12 @@ class Grep(Application):
             raise ValueError("wrong number of command line arguments")
 
         if len(args) == 1:
-            Grep.one_arg(args, input_, out)
+            Grep.__one_arg(args, input_, out)
         else:
-            Grep.two_or_more_args(args, out)
+            Grep.__two_or_more_args(args, out)
 
     @staticmethod
-    def one_arg(args: list, input_: Optional[str], out: deque) -> None:
+    def __one_arg(args: list, input_: Optional[str], out: deque) -> None:
         if not input_:
             raise ValueError("stdin not provided")
 
@@ -26,7 +26,7 @@ class Grep(Application):
                 out.append(line)
 
     @staticmethod
-    def two_or_more_args(args: list, out: deque) -> None:
+    def __two_or_more_args(args: list, out: deque) -> None:
         pattern, file_names = args[0], args[1:]
 
         for file_name in file_names:

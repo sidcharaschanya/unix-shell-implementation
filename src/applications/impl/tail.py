@@ -8,14 +8,14 @@ class Tail(Application):
         if len(args) > 3:
             raise ValueError("wrong number of command line arguments")
 
-        num_lines, lines = Tail.get_num_lines_and_lines(args, input_)
+        num_lines, lines = Tail.__get_num_lines_and_lines(args, input_)
         display_length = min(len(lines), num_lines)
 
         for i in range(0, display_length):
             out.append(lines[len(lines) - display_length + i])
 
     @staticmethod
-    def get_num_lines_and_lines(args: list, input_: Optional[str]) -> tuple:
+    def __get_num_lines_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
             if not input_:
                 raise ValueError("stdin not provided")

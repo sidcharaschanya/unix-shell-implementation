@@ -12,7 +12,7 @@ class Cut(Application):
         if args[0] != "-b":
             raise ValueError("wrong flags")
 
-        lines, cut_byte_strings = Cut.get_lines(args, input_), args[1].split(",")
+        lines, cut_byte_strings = Cut.__get_lines(args, input_), args[1].split(",")
 
         for line in lines:
             if line.endswith("\n"):
@@ -20,13 +20,13 @@ class Cut(Application):
 
             cut_line = ""
 
-            for cut_byte in Cut.get_cut_bytes(cut_byte_strings, line):
+            for cut_byte in Cut.__get_cut_bytes(cut_byte_strings, line):
                 cut_line += line[cut_byte]
 
             out.append(cut_line + "\n")
 
     @staticmethod
-    def get_lines(args: list, input_: Optional[str]) -> list:
+    def __get_lines(args: list, input_: Optional[str]) -> list:
         if len(args) == 2:
             if not input_:
                 raise ValueError("stdin not provided")
@@ -39,11 +39,11 @@ class Cut(Application):
         return lines
 
     @staticmethod
-    def get_cut_bytes(cut_byte_strings: list, line: str) -> list:
+    def __get_cut_bytes(cut_byte_strings: list, line: str) -> list:
         len_line, cut_bytes = len(line), set()
 
         for cut_byte_string in cut_byte_strings:
-            start, end = Cut.get_start_and_end(cut_byte_string, len_line)
+            start, end = Cut.__get_start_and_end(cut_byte_string, len_line)
 
             for cut_byte in range(start, end):
                 cut_bytes.add(cut_byte)
@@ -51,7 +51,7 @@ class Cut(Application):
         return sorted(cut_bytes)
 
     @staticmethod
-    def get_start_and_end(cut_byte_string: str, len_line: int) -> tuple:
+    def __get_start_and_end(cut_byte_string: str, len_line: int) -> tuple:
         if re.match("^[0-9]+$", cut_byte_string):
             start, end = int(cut_byte_string), int(cut_byte_string)
         elif re.match("^[0-9]+-$", cut_byte_string):
