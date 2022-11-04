@@ -164,17 +164,18 @@ class TestShell(unittest.TestCase):
         os.chdir("resources/dir2")
         out = deque()
         eval("ls", out)
-        self.assertEqual(set(out), {"file.txt\n", "sub_dir\n"})
+        self.assertEqual(set(out), {"file.txt\t", "sub_dir\t", "\n"})
         os.chdir(cwd)
 
     def test_ls_path(self):
         out = deque()
         eval("ls resources/dir2", out)
-        self.assertEqual(set(out), {"file.txt\n", "sub_dir\n"})
+        self.assertEqual(set(out), {"file.txt\t", "sub_dir\t", "\n"})
 
     def test_ls_empty_dir(self):
         out = deque()
         eval("ls resources/empty_dir", out)
+        self.assertEqual(out.popleft(), "\n")
         self.assertEqual(len(out), 0)
 
     def test_ls_two_args_invalid(self):

@@ -13,7 +13,9 @@ class Ls(Application):
 
         for file_name in os.listdir(directory_name):
             if not file_name.startswith("."):
-                out.append(file_name + "\n")
+                out.append(file_name + "\t")
+
+        out.append("\n")
 
     @staticmethod
     def __get_directory_name(args: list) -> str:
