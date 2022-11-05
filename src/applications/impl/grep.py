@@ -16,7 +16,7 @@ class Grep(Application):
 
     @staticmethod
     def __one_arg(args: list, input_: Optional[str], out: deque) -> None:
-        if not input_:
+        if input_ is None:
             raise ValueError("stdin not provided")
 
         pattern, lines = args[0], [i + "\n" for i in input_.split("\n")]

@@ -23,7 +23,7 @@ class Uniq(Application):
     @staticmethod
     def __get_ignore_case_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
-            if not input_:
+            if input_ is None:
                 raise ValueError("stdin not provided")
 
             ignore_case, lines = False, [i + "\n" for i in input_.split("\n")]
@@ -32,7 +32,7 @@ class Uniq(Application):
                 with open(args[0]) as file:
                     ignore_case, lines = False, file.readlines()
             else:
-                if not input_:
+                if input_ is None:
                     raise ValueError("stdin not provided")
 
                 ignore_case, lines = True, [i + "\n" for i in input_.split("\n")]

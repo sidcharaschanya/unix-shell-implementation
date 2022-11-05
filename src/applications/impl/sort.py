@@ -16,7 +16,7 @@ class Sort(Application):
     @staticmethod
     def __get_reverse_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
-            if not input_:
+            if input_ is None:
                 raise ValueError("stdin not provided")
 
             reverse, lines = False, [i + "\n" for i in input_.split("\n")]
@@ -25,7 +25,7 @@ class Sort(Application):
                 with open(args[0]) as file:
                     reverse, lines = False, file.readlines()
             else:
-                if not input_:
+                if input_ is None:
                     raise ValueError("stdin not provided")
 
                 reverse, lines = True, [i + "\n" for i in input_.split("\n")]

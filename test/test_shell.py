@@ -6,23 +6,6 @@ import os
 
 
 class TestShell(unittest.TestCase):
-    def test_cat(self):
-        out = deque()
-        eval("cat resources/dir1/test1.txt resources/dir1/test2.txt", out)
-        self.assertEqual(list(out), ["hello\n", "hehehehe\nhellohello\n"])
-
-    def test_cat_empty_file(self):
-        out = deque()
-        eval("cat resources/dir1/empty_file.txt", out)
-        self.assertEqual(out.popleft(), "")
-        self.assertEqual(len(out), 0)
-
-    def cat_stdin(self):
-        pass
-
-    def test_cat_zero_args_invalid(self):
-        self.assertRaises(ValueError, eval, "cat", deque())
-
     def test_cd(self):
         cwd = os.getcwd()
         eval("cd resources/dir1", deque())
@@ -338,11 +321,6 @@ class TestShell(unittest.TestCase):
         out = deque()
         eval("cut -b 2-,3- resources/dir1/test6.txt", out)
         self.assertEqual(list(out), ["ello world\n", "aa\n", "bb ccc\n"])
-
-    def test_unsafe_decorator_ls(self):
-        out = deque()
-        eval("_ls resources/dir0", out)
-        self.assertEqual(len(out), 0)
 
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ class Tail(Application):
     @staticmethod
     def __get_num_lines_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
-            if not input_:
+            if input_ is None:
                 raise ValueError("stdin not provided")
 
             num_lines, lines = 10, [i + "\n" for i in input_.split("\n")]
@@ -28,7 +28,7 @@ class Tail(Application):
             if args[0] != "-n":
                 raise ValueError("wrong flags")
 
-            if not input_:
+            if input_ is None:
                 raise ValueError("stdin not provided")
 
             num_lines, lines = int(args[1]), [i + "\n" for i in input_.split("\n")]

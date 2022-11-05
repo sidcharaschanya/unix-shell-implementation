@@ -28,7 +28,7 @@ class Cut(Application):
     @staticmethod
     def __get_lines(args: list, input_: Optional[str]) -> list:
         if len(args) == 2:
-            if not input_:
+            if input_ is None:
                 raise ValueError("stdin not provided")
 
             lines = [i + "\n" for i in input_.split("\n")]
