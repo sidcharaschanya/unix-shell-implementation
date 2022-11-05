@@ -11,14 +11,14 @@ import os
 class TestUnsafeDecorator(unittest.TestCase):
     def setUp(self) -> None:
         self.out = deque()
-        os.mkdir("res")
+        os.mkdir("resources")
 
     def tearDown(self) -> None:
-        shutil.rmtree("res")
+        shutil.rmtree("resources")
 
     @given(st.text(min_size=1))
     def test_unsafe_decorator_ls(self, directory_name):
-        UnsafeDecorator(Ls()).exec([os.path.join("res", directory_name)], None, self.out)
+        UnsafeDecorator(Ls()).exec([os.path.join("resources", directory_name)], None, self.out)
         self.assertEqual(len(self.out), 0)
 
 
