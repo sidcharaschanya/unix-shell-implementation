@@ -11,4 +11,4 @@ class UnsafeDecorator(Application):
         try:
             self.__app.exec(args, input_, out)
         except Exception as exception:
-            print(exception)
+            out.append(f"{exception}\n")

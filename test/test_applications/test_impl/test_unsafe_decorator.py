@@ -10,8 +10,6 @@ import os
 class TestUnsafeDecorator(unittest.TestCase):
     @given(st.text(min_size=1))
     def test_unsafe_decorator_ls(self, directory_name):
-        out = deque()
         UnsafeDecorator(Ls()).exec([
             os.path.join("resources", directory_name)
         ], None, deque())
-        self.assertEqual(len(out), 0)

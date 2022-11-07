@@ -32,7 +32,7 @@ class ApplicationFactory:
 
     @staticmethod
     def by_name(name: str) -> Application:
-        if name[0] == "_":
+        if len(name) != 0 and name[0] == "_":
             return UnsafeDecorator(ApplicationFactory.__apps[name[1:]])
 
         return ApplicationFactory.__apps[name]
