@@ -2,98 +2,9 @@ import unittest
 
 from shell import eval
 from collections import deque
-import os
 
 
 class TestShell(unittest.TestCase):
-    def test_sort(self):
-        out = deque()
-        eval("sort res/dir1/test4.txt", out)
-        self.assertEqual(list(out), ["aaa\n", "hello world\n"])
-
-    def test_sort_reverse(self):
-        out = deque()
-        eval("sort -r res/dir1/test4.txt", out)
-        self.assertEqual(list(out), ["hello world\n", "aaa\n"])
-
-    def test_sort_stdin(self):
-        pass
-
-    def test_sort_stdin_reverse(self):
-        pass
-
-    def test_sort_empty_file(self):
-        out = deque()
-        eval("sort res/dir1/empty_file.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_sort_empty_file_reverse(self):
-        out = deque()
-        eval("sort -r res/dir1/empty_file.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_sort_zero_args_invalid(self):
-        self.assertRaises(ValueError, eval, "sort", deque())
-
-    def test_sort_one_arg_no_stdin(self):
-        self.assertRaises(ValueError, eval, "sort -r", deque())
-
-    def test_sort_one_arg_file_not_found(self):
-        self.assertRaises(FileNotFoundError, eval, "sort res/file.txt", deque())
-
-    def test_sort_two_args_wrong_flags(self):
-        self.assertRaises(ValueError, eval, "sort arg0 arg1", deque())
-
-    def test_sort_two_args_file_not_found(self):
-        self.assertRaises(FileNotFoundError, eval, "sort -r res/file.txt", deque())
-
-    def test_sort_three_args_invalid(self):
-        self.assertRaises(ValueError, eval, "sort arg0 arg1 arg2", deque())
-
-    def test_uniq(self):
-        out = deque()
-        eval("uniq res/dir1/test5.txt", out)
-        self.assertEqual(list(out), ["aaa\n", "AAA\n", "aaa\n"])
-
-    def test_uniq_ignore_case(self):
-        out = deque()
-        eval("uniq -i res/dir1/test5.txt", out)
-        self.assertEqual(list(out), ["aaa\n"])
-
-    def test_uniq_stdin(self):
-        pass
-
-    def test_uniq_stdin_ignore_case(self):
-        pass
-
-    def test_uniq_empty_file(self):
-        out = deque()
-        eval("uniq res/dir1/empty_file.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_uniq_empty_file_ignore_case(self):
-        out = deque()
-        eval("uniq -i res/dir1/empty_file.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_uniq_zero_args_invalid(self):
-        self.assertRaises(ValueError, eval, "uniq", deque())
-
-    def test_uniq_one_arg_no_stdin(self):
-        self.assertRaises(ValueError, eval, "uniq -i", deque())
-
-    def test_uniq_one_arg_file_not_found(self):
-        self.assertRaises(FileNotFoundError, eval, "uniq res/file.txt", deque())
-
-    def test_uniq_two_args_wrong_flags(self):
-        self.assertRaises(ValueError, eval, "uniq arg0 arg1", deque())
-
-    def test_uniq_two_args_file_not_found(self):
-        self.assertRaises(FileNotFoundError, eval, "uniq -i res/file.txt", deque())
-
-    def test_uniq_three_args_invalid(self):
-        self.assertRaises(ValueError, eval, "uniq arg0 arg1 arg2", deque())
-
     def test_cut_normal(self):
         out = deque()
         eval("cut -b 1,2,3 res/dir1/test6.txt", out)
