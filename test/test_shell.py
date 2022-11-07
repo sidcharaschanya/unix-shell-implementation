@@ -6,37 +6,6 @@ import os
 
 
 class TestShell(unittest.TestCase):
-    def test_ls(self):
-        cwd = os.getcwd()
-        os.chdir("res/dir2")
-        out = deque()
-        eval("ls", out)
-        self.assertEqual(set(out), {"file.txt\t", "sub_dir\t", "\n"})
-        os.chdir(cwd)
-
-    def test_ls_path(self):
-        out = deque()
-        eval("ls res/dir2", out)
-        self.assertEqual(set(out), {"file.txt\t", "sub_dir\t", "\n"})
-
-    def test_ls_empty_dir(self):
-        out = deque()
-        eval("ls res/empty_dir", out)
-        self.assertEqual(out.popleft(), "\n")
-        self.assertEqual(len(out), 0)
-
-    def test_ls_two_args_invalid(self):
-        self.assertRaises(ValueError, eval, "ls arg0 arg1", deque())
-
-    def test_pwd(self):
-        out = deque()
-        eval("pwd", out)
-        self.assertEqual(out.popleft(), os.getcwd() + "\n")
-        self.assertEqual(len(out), 0)
-
-    def test_pwd_one_arg_invalid(self):
-        self.assertRaises(ValueError, eval, "pwd arg", deque())
-
     def test_sort(self):
         out = deque()
         eval("sort res/dir1/test4.txt", out)

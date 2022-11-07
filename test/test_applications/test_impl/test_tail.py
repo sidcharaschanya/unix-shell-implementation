@@ -7,7 +7,7 @@ import shutil
 import os
 
 
-class MyTestCase(unittest.TestCase):
+class TestTail(unittest.TestCase):
     def setUp(self) -> None:
         self.out = deque()
         self.temp_dir = "resources"
