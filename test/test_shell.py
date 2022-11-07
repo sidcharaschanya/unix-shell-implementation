@@ -6,47 +6,6 @@ import os
 
 
 class TestShell(unittest.TestCase):
-    def test_head(self):
-        out = deque()
-        eval("head res/dir1/test3.txt", out)
-        self.assertEqual(list(out), [str(i) + "\n" for i in range(9)])
-
-    def test_head_num_lines(self):
-        out = deque()
-        eval("head -n 5 res/dir1/test3.txt", out)
-        self.assertEqual(list(out), [str(i) + "\n" for i in range(5)])
-
-    def test_head_stdin(self):
-        pass
-
-    def test_head_stdin_num_lines(self):
-        pass
-
-    def test_head_empty_file(self):
-        out = deque()
-        eval("head res/dir1/empty_file.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_head_zero_lines(self):
-        out = deque()
-        eval("head -n 0 res/dir1/test3.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_head_zero_args_invalid(self):
-        self.assertRaises(ValueError, eval, "head", deque())
-
-    def test_head_two_args_wrong_flags(self):
-        self.assertRaises(ValueError, eval, "head arg0 arg1", deque())
-
-    def test_head_two_args_no_stdin(self):
-        self.assertRaises(ValueError, eval, "head -n arg1", deque())
-
-    def test_head_three_args_invalid(self):
-        self.assertRaises(ValueError, eval, "head arg0 arg1 arg2", deque())
-
-    def test_head_four_args_invalid(self):
-        self.assertRaises(ValueError, eval, "head arg0 arg1 arg2 arg3", deque())
-
     def test_ls(self):
         cwd = os.getcwd()
         os.chdir("res/dir2")
@@ -122,47 +81,6 @@ class TestShell(unittest.TestCase):
     def test_sort_three_args_invalid(self):
         self.assertRaises(ValueError, eval, "sort arg0 arg1 arg2", deque())
 
-    def test_tail(self):
-        out = deque()
-        eval("tail res/dir1/test3.txt", out)
-        self.assertEqual(list(out), [str(i) + "\n" for i in range(9)])
-
-    def test_tail_num_lines(self):
-        out = deque()
-        eval("tail -n 5 res/dir1/test3.txt", out)
-        self.assertEqual(list(out), [str(i) + "\n" for i in range(4, 9)])
-
-    def test_tail_stdin(self):
-        pass
-
-    def test_tail_stdin_num_lines(self):
-        pass
-
-    def test_tail_empty_file(self):
-        out = deque()
-        eval("tail res/dir1/empty_file.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_tail_zero_lines(self):
-        out = deque()
-        eval("tail -n 0 res/dir1/test3.txt", out)
-        self.assertEqual(len(out), 0)
-
-    def test_tail_zero_args_invalid(self):
-        self.assertRaises(ValueError, eval, "tail", deque())
-
-    def test_tail_two_args_wrong_flags(self):
-        self.assertRaises(ValueError, eval, "tail arg0 arg1", deque())
-
-    def test_tail_two_args_no_stdin(self):
-        self.assertRaises(ValueError, eval, "tail -n arg1", deque())
-
-    def test_tail_three_args_invalid(self):
-        self.assertRaises(ValueError, eval, "tail arg0 arg1 arg2", deque())
-
-    def test_tail_four_args_invalid(self):
-        self.assertRaises(ValueError, eval, "tail arg0 arg1 arg2 arg3", deque())
-
     def test_uniq(self):
         out = deque()
         eval("uniq res/dir1/test5.txt", out)
@@ -226,7 +144,3 @@ class TestShell(unittest.TestCase):
         out = deque()
         eval("cut -b 2-,3- res/dir1/test6.txt", out)
         self.assertEqual(list(out), ["ello world\n", "aa\n", "bb ccc\n"])
-
-
-if __name__ == "__main__":
-    unittest.main()

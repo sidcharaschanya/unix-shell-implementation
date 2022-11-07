@@ -39,4 +39,7 @@ class Tail(Application):
             with open(args[2]) as file:
                 num_lines, lines = int(args[1]), file.readlines()
 
+        if num_lines < 0:
+            raise ValueError("invalid arguments")
+
         return num_lines, lines

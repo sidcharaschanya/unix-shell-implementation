@@ -10,7 +10,8 @@ import os
 class TestCat(unittest.TestCase):
     def setUp(self) -> None:
         self.out = deque()
-        os.mkdir("resources")
+        self.temp_dir = "resources"
+        os.mkdir(self.temp_dir)
         self.paths = dict()
 
         self.files = {
@@ -20,12 +21,12 @@ class TestCat(unittest.TestCase):
         }
 
         for file_name, file_content in self.files.items():
-            with open(os.path.join("resources", file_name), "w") as file:
+            with open(os.path.join(self.temp_dir, file_name), "w") as file:
                 file.write(file_content)
                 self.paths[file_name] = file.name
 
     def tearDown(self) -> None:
-        shutil.rmtree("resources")
+        shutil.rmtree(self.temp_dir)
 
     def test_cat(self):
         Cat().exec([self.paths["test1.txt"], self.paths["test2.txt"]], None, self.out)
@@ -45,7 +46,3 @@ class TestCat(unittest.TestCase):
     def test_cat_zero_args_invalid(self):
         with self.assertRaises(ValueError):
             Cat().exec([], None, self.out)
-
-
-if __name__ == '__main__':
-    unittest.main()

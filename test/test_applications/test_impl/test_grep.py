@@ -10,7 +10,8 @@ import os
 class TestGrep(unittest.TestCase):
     def setUp(self) -> None:
         self.out = deque()
-        os.mkdir("resources")
+        self.temp_dir = "resources"
+        os.mkdir(self.temp_dir)
         self.paths = dict()
 
         self.files = {
@@ -20,22 +21,22 @@ class TestGrep(unittest.TestCase):
         }
 
         for file_name, file_content in self.files.items():
-            with open(os.path.join("resources", file_name), "w") as file:
+            with open(os.path.join(self.temp_dir, file_name), "w") as file:
                 file.write(file_content)
                 self.paths[file_name] = file.name
 
     def tearDown(self) -> None:
-        shutil.rmtree("resources")
+        shutil.rmtree(self.temp_dir)
 
     def test_grep(self):
-        Grep().exec(["he", os.path.join("resources", "test1.txt")], None, self.out)
+        Grep().exec(["he", os.path.join(self.temp_dir, "test1.txt")], None, self.out)
         self.assertEqual(self.out.popleft(), "hello\n")
         self.assertEqual(len(self.out), 0)
 
     def test_grep_multiple_files(self):
         Grep().exec([
-            "he", os.path.join("resources", "test1.txt"),
-            os.path.join("resources", "test2.txt")
+            "he", os.path.join(self.temp_dir, "test1.txt"),
+            os.path.join(self.temp_dir, "test2.txt")
         ], None, self.out)
         self.assertEqual(list(self.out), [
             "resources/test1.txt:hello\n",
@@ -45,11 +46,11 @@ class TestGrep(unittest.TestCase):
 
     @given(st.text())
     def test_grep_empty_file(self, pattern):
-        Grep().exec([pattern, os.path.join("resources", "empty_file.txt")], None, self.out)
+        Grep().exec([pattern, os.path.join(self.temp_dir, "empty_file.txt")], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     def test_grep_no_matches(self):
-        Grep().exec(["aa", os.path.join("resources", "test1.txt")], None, self.out)
+        Grep().exec(["aa", os.path.join(self.temp_dir, "test1.txt")], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     def test_grep_stdin(self):
@@ -58,7 +59,7 @@ class TestGrep(unittest.TestCase):
 
     def test_grep_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            Grep().exec(["he", os.path.join("resources", "file.txt")], None, self.out)
+            Grep().exec(["he", os.path.join(self.temp_dir, "file.txt")], None, self.out)
 
     def test_grep_zero_args_invalid(self):
         with self.assertRaises(ValueError):
@@ -67,7 +68,3 @@ class TestGrep(unittest.TestCase):
     def test_grep_one_arg_invalid(self):
         with self.assertRaises(ValueError):
             Grep().exec(["arg0"], None, self.out)
-
-
-if __name__ == '__main__':
-    unittest.main()
