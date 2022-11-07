@@ -60,7 +60,9 @@ class TestSort(unittest.TestCase):
 
     def test_sort_one_arg_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            Sort().exec([os.path.join(self.temp_dir, "file.txt")], None, self.out)
+            Sort().exec([
+                os.path.join(self.temp_dir, "file.txt")
+            ], None, self.out)
 
     def test_sort_two_args_wrong_flags(self):
         with self.assertRaises(ValueError):
@@ -68,7 +70,9 @@ class TestSort(unittest.TestCase):
 
     def test_sort_two_args_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            Sort().exec(["-r", os.path.join(self.temp_dir, "file.txt")], None, self.out)
+            Sort().exec([
+                "-r", os.path.join(self.temp_dir, "file.txt")
+            ], None, self.out)
 
     def test_sort_three_args_invalid(self):
         with self.assertRaises(ValueError):

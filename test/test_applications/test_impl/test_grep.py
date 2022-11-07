@@ -29,13 +29,16 @@ class TestGrep(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def test_grep(self):
-        Grep().exec(["he", os.path.join(self.temp_dir, "test1.txt")], None, self.out)
+        Grep().exec([
+            "he", os.path.join(self.temp_dir, "test1.txt")
+        ], None, self.out)
         self.assertEqual(self.out.popleft(), "hello\n")
         self.assertEqual(len(self.out), 0)
 
     def test_grep_multiple_files(self):
         Grep().exec([
-            "he", os.path.join(self.temp_dir, "test1.txt"),
+            "he",
+            os.path.join(self.temp_dir, "test1.txt"),
             os.path.join(self.temp_dir, "test2.txt")
         ], None, self.out)
         self.assertEqual(list(self.out), [
@@ -46,11 +49,15 @@ class TestGrep(unittest.TestCase):
 
     @given(st.text())
     def test_grep_empty_file(self, pattern):
-        Grep().exec([pattern, os.path.join(self.temp_dir, "empty_file.txt")], None, self.out)
+        Grep().exec([
+            pattern, os.path.join(self.temp_dir, "empty_file.txt")
+        ], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     def test_grep_no_matches(self):
-        Grep().exec(["aa", os.path.join(self.temp_dir, "test1.txt")], None, self.out)
+        Grep().exec([
+            "aa", os.path.join(self.temp_dir, "test1.txt")
+        ], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     def test_grep_stdin(self):
@@ -59,7 +66,9 @@ class TestGrep(unittest.TestCase):
 
     def test_grep_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            Grep().exec(["he", os.path.join(self.temp_dir, "file.txt")], None, self.out)
+            Grep().exec([
+                "he", os.path.join(self.temp_dir, "file.txt")
+            ], None, self.out)
 
     def test_grep_zero_args_invalid(self):
         with self.assertRaises(ValueError):

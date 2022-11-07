@@ -12,7 +12,12 @@ class Find(Application):
 
         path, pattern = Find.__get_path_and_pattern(args)
 
-        for relative_path in glob.glob(os.path.join(path, "**", pattern), recursive=True):
+        relative_paths = glob.glob(
+            os.path.join(path, "**", pattern),
+            recursive=True
+        )
+
+        for relative_path in relative_paths:
             out.append(relative_path + "\n")
 
     @staticmethod

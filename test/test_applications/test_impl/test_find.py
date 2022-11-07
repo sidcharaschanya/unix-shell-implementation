@@ -28,12 +28,20 @@ class TestFind(unittest.TestCase):
 
     def test_find(self):
         Find().exec(["-name", self.paths["test1.txt"]], None, self.out)
-        self.assertEqual(self.out.popleft(), os.path.join(".", self.paths["test1.txt"]) + "\n")
+        self.assertEqual(
+            self.out.popleft(),
+            os.path.join(".", self.paths["test1.txt"]) + "\n"
+        )
         self.assertEqual(len(self.out), 0)
 
     def test_find_pattern(self):
-        Find().exec(["-name", os.path.join(self.temp_dir, "dir*")], None, self.out)
-        self.assertEqual(self.out.popleft(), os.path.join(".", self.temp_dir, "dir1") + "\n")
+        Find().exec([
+            "-name", os.path.join(self.temp_dir, "dir*")
+        ], None, self.out)
+        self.assertEqual(
+            self.out.popleft(),
+            os.path.join(".", self.temp_dir, "dir1") + "\n"
+        )
         self.assertEqual(len(self.out), 0)
 
     def test_find_path(self):
@@ -44,7 +52,9 @@ class TestFind(unittest.TestCase):
         })
 
     def test_find_empty_dir(self):
-        Find().exec([os.path.join(self.temp_dir, "dir1", "empty_dir"), "-name", "*"], None, self.out)
+        Find().exec([
+            os.path.join(self.temp_dir, "dir1", "empty_dir"), "-name", "*"
+        ], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     def test_find_no_matches(self):

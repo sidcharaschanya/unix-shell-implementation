@@ -12,13 +12,15 @@ class Cut(Application):
         if args[0] != "-b":
             raise ValueError("wrong flags")
 
-        lines, cut_byte_strings = Cut.__get_lines(args, input_), args[1].split(",")
+        lines = Cut.__get_lines(args, input_)
+        cut_byte_strings = args[1].split(",")
 
         for line in lines:
             if line.endswith("\n"):
                 line = line[:-1]
 
-            cut_bytes, cut_line = Cut.__get_cut_bytes(cut_byte_strings, line), ""
+            cut_bytes = Cut.__get_cut_bytes(cut_byte_strings, line)
+            cut_line = ""
 
             for cut_byte in cut_bytes:
                 cut_line += line[cut_byte]
@@ -59,7 +61,8 @@ class Cut(Application):
         elif re.match("^-[0-9]+$", cut_byte_string):
             start, end = 1, int(cut_byte_string[1:])
         elif re.match("^[0-9]+-[0-9]+$", cut_byte_string):
-            start, end = int(cut_byte_string.split("-")[0]), int(cut_byte_string.split("-")[1])
+            start = int(cut_byte_string.split("-")[0])
+            end = int(cut_byte_string.split("-")[1])
         else:
             raise ValueError("invalid arguments")
 

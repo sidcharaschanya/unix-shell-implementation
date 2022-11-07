@@ -33,8 +33,12 @@ class TestTail(unittest.TestCase):
 
     @given(st.integers(min_value=0, max_value=9))
     def test_tail_num_lines(self, num_lines):
-        Tail().exec(["-n", str(num_lines), self.paths["test1.txt"]], None, self.out)
-        self.assertEqual(list(self.out), [str(i) + "\n" for i in range(9 - num_lines, 9)])
+        Tail().exec([
+            "-n", str(num_lines), self.paths["test1.txt"]
+        ], None, self.out)
+        self.assertEqual(list(self.out), [
+            str(i) + "\n" for i in range(9 - num_lines, 9)
+        ])
         self.out.clear()
 
     def test_tail_stdin(self):
@@ -43,13 +47,19 @@ class TestTail(unittest.TestCase):
 
     @given(st.integers(min_value=0, max_value=9))
     def test_tail_stdin_num_lines(self, num_lines):
-        Tail().exec(["-n", str(num_lines)], self.files["test1.txt"][:-1], self.out)
-        self.assertEqual(list(self.out), [str(i) + "\n" for i in range(9 - num_lines, 9)])
+        Tail().exec([
+            "-n", str(num_lines)
+        ], self.files["test1.txt"][:-1], self.out)
+        self.assertEqual(list(self.out), [
+            str(i) + "\n" for i in range(9 - num_lines, 9)
+        ])
         self.out.clear()
 
     @given(st.integers(min_value=0))
     def test_tail_empty_file(self, num_lines):
-        Tail().exec(["-n", str(num_lines), self.paths["empty_file.txt"]], None, self.out)
+        Tail().exec([
+            "-n", str(num_lines), self.paths["empty_file.txt"]
+        ], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     @given(st.text())
@@ -60,7 +70,9 @@ class TestTail(unittest.TestCase):
     @given(st.integers(max_value=-1))
     def test_tail_negative_num_lines(self, num_lines):
         with self.assertRaises(ValueError):
-            Tail().exec(["-n", str(num_lines), self.paths["test1.txt"]], None, self.out)
+            Tail().exec([
+                "-n", str(num_lines), self.paths["test1.txt"]
+            ], None, self.out)
 
     def test_tail_zero_args_invalid(self):
         with self.assertRaises(ValueError):

@@ -33,8 +33,12 @@ class TestHead(unittest.TestCase):
 
     @given(st.integers(min_value=0, max_value=9))
     def test_head_num_lines(self, num_lines):
-        Head().exec(["-n", str(num_lines), self.paths["test1.txt"]], None, self.out)
-        self.assertEqual(list(self.out), [str(i) + "\n" for i in range(num_lines)])
+        Head().exec([
+            "-n", str(num_lines), self.paths["test1.txt"]
+        ], None, self.out)
+        self.assertEqual(list(self.out), [
+            str(i) + "\n" for i in range(num_lines)
+        ])
         self.out.clear()
 
     def test_head_stdin(self):
@@ -43,13 +47,19 @@ class TestHead(unittest.TestCase):
 
     @given(st.integers(min_value=0, max_value=9))
     def test_head_stdin_num_lines(self, num_lines):
-        Head().exec(["-n", str(num_lines)], self.files["test1.txt"][:-1], self.out)
-        self.assertEqual(list(self.out), [str(i) + "\n" for i in range(num_lines)])
+        Head().exec([
+            "-n", str(num_lines)
+        ], self.files["test1.txt"][:-1], self.out)
+        self.assertEqual(list(self.out), [
+            str(i) + "\n" for i in range(num_lines)
+        ])
         self.out.clear()
 
     @given(st.integers(min_value=0))
     def test_head_empty_file(self, num_lines):
-        Head().exec(["-n", str(num_lines), self.paths["empty_file.txt"]], None, self.out)
+        Head().exec([
+            "-n", str(num_lines), self.paths["empty_file.txt"]
+        ], None, self.out)
         self.assertEqual(len(self.out), 0)
 
     @given(st.text())
@@ -60,7 +70,9 @@ class TestHead(unittest.TestCase):
     @given(st.integers(max_value=-1))
     def test_head_negative_num_lines(self, num_lines):
         with self.assertRaises(ValueError):
-            Head().exec(["-n", str(num_lines), self.paths["test1.txt"]], None, self.out)
+            Head().exec([
+                "-n", str(num_lines), self.paths["test1.txt"]
+            ], None, self.out)
 
     def test_head_zero_args_invalid(self):
         with self.assertRaises(ValueError):

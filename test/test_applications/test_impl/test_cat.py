@@ -29,7 +29,9 @@ class TestCat(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def test_cat(self):
-        Cat().exec([self.paths["test1.txt"], self.paths["test2.txt"]], None, self.out)
+        Cat().exec([
+            self.paths["test1.txt"], self.paths["test2.txt"]
+        ], None, self.out)
         self.assertEqual(list(self.out), ["hello\n", "hehehehe\nhellohello\n"])
 
     def test_cat_empty_file(self):

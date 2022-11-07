@@ -31,7 +31,8 @@ class Tail(Application):
             if input_ is None:
                 raise ValueError("stdin not provided")
 
-            num_lines, lines = int(args[1]), [i + "\n" for i in input_.split("\n")]
+            num_lines = int(args[1])
+            lines = [i + "\n" for i in input_.split("\n")]
         else:
             if args[0] != "-n":
                 raise ValueError("wrong flags")

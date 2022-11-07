@@ -14,7 +14,7 @@ class TestUniq(unittest.TestCase):
         self.paths = dict()
 
         self.files = {
-            "test1.txt": "aaa\nAAA\naaa\n",
+            "test1.txt": "aaa\naaa\nAAA\naaa\n",
             "empty_file.txt": ""
         }
 
@@ -60,7 +60,9 @@ class TestUniq(unittest.TestCase):
 
     def test_uniq_one_arg_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            Uniq().exec([os.path.join(self.temp_dir, "file.txt")], None, self.out)
+            Uniq().exec([
+                os.path.join(self.temp_dir, "file.txt")
+            ], None, self.out)
 
     def test_uniq_two_args_wrong_flags(self):
         with self.assertRaises(ValueError):
@@ -68,7 +70,9 @@ class TestUniq(unittest.TestCase):
 
     def test_uniq_two_args_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
-            Uniq().exec(["-i", os.path.join(self.temp_dir, "file.txt")], None, self.out)
+            Uniq().exec([
+                "-i", os.path.join(self.temp_dir, "file.txt")
+            ], None, self.out)
 
     def test_uniq_three_args_invalid(self):
         with self.assertRaises(ValueError):
