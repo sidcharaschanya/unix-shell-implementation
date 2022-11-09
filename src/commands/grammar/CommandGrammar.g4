@@ -1,17 +1,11 @@
-grammar CommandGrammar;
+parser grammar CommandGrammar ;
+options { tokenVocab = CommandGrammarLexer ; }
 
-// Parser
+command : pipe | command SEQ command | call ;
+pipe : call PIPE call | pipe PIPE call ;
+call : (NON_KW | quoted)* ;
 
-command : pipe | command ';' command | call ;
-pipe : call '|' call | pipe '|' call;
-call : (NON_KEYWORD | quoted)* ;
-
-quoted : SINGLE_QUOTED | DOUBLE_QUOTED | BACKQUOTED ;
-
-// Lexer
-
-NON_KEYWORD : ~[\n'"`;|]+ ;
-SINGLE_QUOTED : '\'' ~[\n']+ '\'' ;
-BACKQUOTED : '`' ~[\n`]+ '`' ;
-fragment DQ_CONTENT : ~[\n"`]+ ;
-DOUBLE_QUOTED : '"' (BACKQUOTED | DQ_CONTENT)* '"' ;
+quoted : single_quoted | double_quoted | backquoted ;
+single_quoted : SQ SQ_CONTENT? SQ ;
+backquoted : BQ (single_quoted | double_quoted | BQ_CONTENT)* BQ ;
+double_quoted : DQ (backquoted | DQ_CONTENT)* DQ;
