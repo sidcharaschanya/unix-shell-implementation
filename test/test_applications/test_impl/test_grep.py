@@ -42,9 +42,9 @@ class TestGrep(unittest.TestCase):
             os.path.join(self.temp_dir, "test2.txt")
         ], None, self.out)
         self.assertEqual(list(self.out), [
-            "resources/test1.txt:hello\n",
-            "resources/test2.txt:hehehehe\n",
-            "resources/test2.txt:hellohello\n",
+            f"{self.paths['test1.txt']}:hello\n",
+            f"{self.paths['test2.txt']}:hehehehe\n",
+            f"{self.paths['test2.txt']}:hellohello\n",
         ])
 
     @given(st.text())
