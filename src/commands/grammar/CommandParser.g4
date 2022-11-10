@@ -1,5 +1,5 @@
-parser grammar CommandGrammar;
-options {tokenVocab = CommandGrammarLexer;}
+parser grammar CommandParser;
+options {tokenVocab = CommandLexer;}
 
 command: pipe | command SEQ command | call;
 pipe: call PIPE call | pipe PIPE call;

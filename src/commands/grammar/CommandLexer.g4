@@ -1,4 +1,4 @@
-lexer grammar CommandGrammarLexer;
+lexer grammar CommandLexer;
 tokens {SQ, BQ, DQ}
 
 SEQ: ';';
