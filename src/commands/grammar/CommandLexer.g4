@@ -7,7 +7,10 @@ fragment DQ_CHAR: '"';
 
 SEQ: ';';
 PIPE: '|';
-NON_KW: ~[\n'"`;|]+;
+WS: [\t ]+;
+UNQUOTED: ~[\t '"`\n;|<>]+;
+LT: '<';
+GT: '>';
 
 SQ_START: SQ_CHAR -> type(SQ), pushMode(SINGLE_QUOTED);
 BQ_START: BQ_CHAR -> type(BQ), pushMode(BACKQUOTED);
