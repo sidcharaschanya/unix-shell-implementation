@@ -13,10 +13,10 @@ argument: (quoted | UNQUOTED)+;
 
 redirection: LT WS? argument | GT WS? argument;
 
-quoted: single_quoted | double_quoted | backquoted;
+quoted: single_quoted | double_quoted | back_quoted;
 
 single_quoted: SQ SQ_CONTENT SQ;
 
-backquoted: BQ (single_quoted | double_quoted | BQ_CONTENT)+ BQ;
+back_quoted: BQ BQ_CONTENT BQ;
 
-double_quoted: DQ (backquoted | DQ_CONTENT)* DQ;
+double_quoted: DQ (back_quoted | DQ_CONTENT)* DQ;
