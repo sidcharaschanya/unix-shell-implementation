@@ -1,13 +1,17 @@
 lexer grammar CommandLexer;
 tokens {SQ, BQ, DQ}
 
+fragment SQ_CHAR: '\'';
+fragment BQ_CHAR: '`';
+fragment DQ_CHAR: '"';
+
 SEQ: ';';
 PIPE: '|';
 NON_KW: ~[\n'"`;|]+;
 
-SQ_CHAR: '\'' -> type(SQ), pushMode(SINGLE_QUOTED);
-BQ_CHAR: '`' -> type(BQ), pushMode(BACKQUOTED);
-DQ_CHAR: '"' -> type(DQ), pushMode(DOUBLE_QUOTED);
+SQ_START: SQ_CHAR -> type(SQ), pushMode(SINGLE_QUOTED);
+BQ_START: BQ_CHAR -> type(BQ), pushMode(BACKQUOTED);
+DQ_START: DQ_CHAR -> type(DQ), pushMode(DOUBLE_QUOTED);
 
 mode SINGLE_QUOTED;
 SQ_CONTENT: ~[\n']+;
