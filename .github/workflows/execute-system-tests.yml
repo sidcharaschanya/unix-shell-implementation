@@ -1,0 +1,22 @@
+name: Execute System Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  execute_system_tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build the Docker image (comp0010-system-test)
+      run: docker build -t comp0010-system-test .
+      
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+        
+    - name: Execute system tests
+      run: python system_test/tests.py -v
