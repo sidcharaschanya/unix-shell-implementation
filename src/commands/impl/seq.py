@@ -1,7 +1,6 @@
 from ..command import Command
 from collections import deque
 from typing import Optional
-from ..visitors.evaluator import Evaluator
 
 
 class Seq(Command):
@@ -9,5 +8,5 @@ class Seq(Command):
         self.left = left
         self.right = right
 
-    def eval(self, e: Evaluator, input_: Optional[str], out: deque) -> None:
-        e.visit_seq(self, input_, out)
+    def eval(self, evaluator, input_: Optional[str], out: deque) -> None:
+        evaluator.visit_seq(self, input_, out)
