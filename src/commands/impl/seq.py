@@ -9,4 +9,4 @@ class Seq(Command):
         self.right = right
 
     def eval(self, evaluator, input_: Optional[str], out: deque) -> None:
-        evaluator.visit_seq(self, input_, out)
+        evaluator.visit_seq(self, out)

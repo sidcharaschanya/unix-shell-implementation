@@ -9,4 +9,4 @@ class Pipe(Command):
         self.right = right
 
     def eval(self, evaluator, input_: Optional[str], out: deque) -> None:
-        evaluator.visit_pipe(self, input_, out)
+        evaluator.visit_pipe(self, out)

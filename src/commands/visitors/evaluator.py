@@ -5,8 +5,11 @@ from typing import Optional
 
 
 class Evaluator:
-    def visit_pipe(self, pipe: Pipe, input_: Optional[str], out: deque) -> None:
-        pass
+    def visit_pipe(self, pipe: Pipe, out: deque) -> None:
+        temp_out = deque()
+        pipe.left.eval(self, None, temp_out)
+        pipe.right.eval(self, "".join(temp_out), out)
 
-    def visit_seq(self, seq: Seq, input_: Optional[str], out: deque) -> None:
-        pass
+    def visit_seq(self, seq: Seq, out: deque) -> None:
+        seq.left.eval(self, None, out)
+        seq.right.eval(self, None, out)
