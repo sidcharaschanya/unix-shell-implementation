@@ -5,5 +5,9 @@ from typing import Optional
 
 class Command(ABC):
     @abstractmethod
-    def eval(self, evaluator, input_: Optional[str], out: deque) -> None:
+    def accept(self, command_visitor) -> None:
+        pass
+
+    @abstractmethod
+    def eval(self, input_: Optional[str], out: deque) -> None:
         pass
