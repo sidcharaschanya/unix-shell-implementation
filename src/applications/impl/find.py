@@ -8,7 +8,7 @@ import os
 class Find(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) < 2 or len(args) > 3:
-            raise ValueError("wrong number of command line arguments")
+            raise ValueError("Find: wrong number of command line arguments")
 
         path, pattern = Find.__get_path_and_pattern(args)
 
@@ -24,12 +24,12 @@ class Find(Application):
     def __get_path_and_pattern(args: list) -> tuple:
         if len(args) == 2:
             if args[0] != "-name":
-                raise ValueError("wrong flags")
+                raise ValueError("Find: wrong flags")
 
             path, pattern = ".", args[1]
         else:
             if args[1] != "-name":
-                raise ValueError("wrong flags")
+                raise ValueError("Find: wrong flags")
 
             path, pattern = args[0], args[2]
 

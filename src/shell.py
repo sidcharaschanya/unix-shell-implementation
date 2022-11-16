@@ -42,10 +42,10 @@ def run(cmdline: str) -> None:
 
 def non_interactive_mode(num_args: int) -> None:
     if num_args != 2:
-        raise ValueError("wrong number of command line arguments")
+        raise ValueError("shell: wrong number of command line arguments")
 
     if sys.argv[1] != "-c":
-        raise ValueError(f"unexpected command line argument {sys.argv[1]}")
+        raise ValueError(f"shell: unexpected command line argument {sys.argv[1]}")
 
     run(sys.argv[2])
 

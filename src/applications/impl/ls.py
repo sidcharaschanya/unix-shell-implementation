@@ -7,7 +7,7 @@ import os
 class Ls(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) > 1:
-            raise ValueError("wrong number of command line arguments")
+            raise ValueError("Ls: wrong number of command line arguments")
 
         directory_name = Ls.__get_directory_name(args)
 

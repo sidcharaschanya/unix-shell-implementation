@@ -7,7 +7,7 @@ class Cat(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) == 0:
             if input_ is None:
-                raise ValueError("stdin not provided")
+                raise ValueError("Cat: stdin not provided")
 
             out.append(input_)
         else:

@@ -7,10 +7,10 @@ import re
 class Cut(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) < 2 or len(args) > 3:
-            raise ValueError("wrong number of command line arguments")
+            raise ValueError("Cut: wrong number of command line arguments")
 
         if args[0] != "-b":
-            raise ValueError("wrong flags")
+            raise ValueError("Cut: wrong flags")
 
         lines = Cut.__get_lines(args, input_)
         cut_byte_strings = args[1].split(",")
@@ -31,7 +31,7 @@ class Cut(Application):
     def __get_lines(args: list, input_: Optional[str]) -> list:
         if len(args) == 2:
             if input_ is None:
-                raise ValueError("stdin not provided")
+                raise ValueError("Cut: stdin not provided")
 
             lines = [i + "\n" for i in input_.split("\n")]
         else:
@@ -64,9 +64,9 @@ class Cut(Application):
             start = int(cut_byte_string.split("-")[0])
             end = int(cut_byte_string.split("-")[1])
         else:
-            raise ValueError("invalid arguments")
+            raise ValueError("Cut: invalid arguments")
 
         if start < 1 or end < 1:
-            raise ValueError("invalid arguments")
+            raise ValueError("Cut: invalid arguments")
 
         return start - 1, min(end, len_line)

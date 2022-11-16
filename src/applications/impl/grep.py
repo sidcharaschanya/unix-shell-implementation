@@ -7,7 +7,7 @@ import re
 class Grep(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) == 0:
-            raise ValueError("wrong number of command line arguments")
+            raise ValueError("Grep: wrong number of command line arguments")
 
         if len(args) == 1:
             Grep.__one_arg(args, input_, out)
@@ -17,7 +17,7 @@ class Grep(Application):
     @staticmethod
     def __one_arg(args: list, input_: Optional[str], out: deque) -> None:
         if input_ is None:
-            raise ValueError("stdin not provided")
+            raise ValueError("Grep: stdin not provided")
 
         pattern, lines = args[0], [i + "\n" for i in input_.split("\n")]
 
