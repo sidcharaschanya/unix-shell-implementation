@@ -8,8 +8,6 @@ class Seq(Command):
         self.left = left
         self.right = right
 
-    def accept(self, command_visitor) -> None:
-        command_visitor.visit_seq(self)
-
     def eval(self, input_: Optional[str], out: deque) -> None:
-        pass
+        self.left.eval(input_, out)
+        self.right.eval(None, out)

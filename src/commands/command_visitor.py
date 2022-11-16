@@ -1,0 +1,2 @@
+class CommandVisitor:
+    pass

@@ -1,15 +1,15 @@
+from .call import Call
 from ..command import Command
 from collections import deque
 from typing import Optional
 
 
 class Pipe(Command):
-    def __init__(self, left: Command, right: Command) -> None:
+    def __init__(self, left: Command, right: Call) -> None:
         self.left = left
         self.right = right
 
-    def accept(self, command_visitor) -> None:
-        command_visitor.visit_pipe(self)
-
     def eval(self, input_: Optional[str], out: deque) -> None:
-        pass
+        temp_out = deque()
+        self.left.eval(input_, temp_out)
+        self.right.eval("".join(temp_out), out)
