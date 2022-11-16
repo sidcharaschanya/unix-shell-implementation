@@ -1,5 +1,5 @@
-from ..command import Command
 from collections import deque
+from ..command import Command
 from typing import Optional
 
 
