@@ -12,11 +12,14 @@ class Uniq(Application):
         previous_line = ""
 
         for line in lines:
+            if line.endswith("\n"):
+                line = line[:-1]
+
             if ignr_case:
                 if line.casefold() != previous_line.casefold():
-                    out.append(line)
+                    out.append(line + "\n")
             elif line != previous_line:
-                out.append(line)
+                out.append(line + "\n")
 
             previous_line = line
 

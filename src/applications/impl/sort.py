@@ -11,7 +11,7 @@ class Sort(Application):
         reverse, lines = Sort.__get_reverse_and_lines(args, input_)
 
         for line in sorted(lines, reverse=reverse):
-            out.append(line)
+            out.append(line if line.endswith("\n") else line + "\n")
 
     @staticmethod
     def __get_reverse_and_lines(args: list, input_: Optional[str]) -> tuple:
