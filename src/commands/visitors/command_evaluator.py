@@ -4,7 +4,7 @@ from ..impl.seq import Seq
 from typing import Optional
 
 
-class Evaluator:
+class CommandEvaluator:
     def visit_pipe(self, pipe: Pipe, out: deque) -> None:
         temp_out = deque()
         pipe.left.eval(self, None, temp_out)
