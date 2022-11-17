@@ -14,7 +14,7 @@ class TestSort(unittest.TestCase):
         self.paths = dict()
 
         self.files = {
-            "test1.txt": "hello world\naaa\n",
+            "test1.txt": "hello world\naaa",
             "empty_file.txt": ""
         }
 
@@ -35,11 +35,11 @@ class TestSort(unittest.TestCase):
         self.assertEqual(list(self.out), ["hello world\n", "aaa\n"])
 
     def test_sort_stdin(self):
-        Sort().exec([], self.files["test1.txt"][:-1], self.out)
+        Sort().exec([], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), ["aaa\n", "hello world\n"])
 
     def test_sort_stdin_reverse(self):
-        Sort().exec(["-r"], self.files["test1.txt"][:-1], self.out)
+        Sort().exec(["-r"], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), ["hello world\n", "aaa\n"])
 
     def test_sort_empty_file(self):

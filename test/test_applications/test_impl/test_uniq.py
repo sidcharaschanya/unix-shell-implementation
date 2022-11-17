@@ -14,7 +14,7 @@ class TestUniq(unittest.TestCase):
         self.paths = dict()
 
         self.files = {
-            "test1.txt": "aaa\naaa\nAAA\naaa\n",
+            "test1.txt": "aaa\naaa\nAAA\naaa",
             "empty_file.txt": ""
         }
 
@@ -35,11 +35,11 @@ class TestUniq(unittest.TestCase):
         self.assertEqual(list(self.out), ["aaa\n"])
 
     def test_uniq_stdin(self):
-        Uniq().exec([], self.files["test1.txt"][:-1], self.out)
+        Uniq().exec([], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), ["aaa\n", "AAA\n", "aaa\n"])
 
     def test_uniq_stdin_ignore_case(self):
-        Uniq().exec(["-i"], self.files["test1.txt"][:-1], self.out)
+        Uniq().exec(["-i"], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), ["aaa\n"])
 
     def test_uniq_empty_file(self):
