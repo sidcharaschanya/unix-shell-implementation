@@ -1,10 +1,10 @@
 import unittest
 
-from applications.impl.sort import Sort
-from collections import deque
 from applications.exceptions.no_stdin_error import NoStdinError
 from applications.exceptions.num_args_error import NumArgsError
 from applications.exceptions.wrong_flags_error import WrongFlagsError
+from applications.impl.sort import Sort
+from collections import deque
 import shutil
 import os
 
