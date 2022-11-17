@@ -1,6 +1,8 @@
 parser grammar CommandParser;
 options {tokenVocab = CommandLexer;}
 
+cmdline: command EOF;
+
 command: pipe | command SEQ command | call;
 
 pipe: call PIPE call | pipe PIPE call;
@@ -13,10 +15,10 @@ argument: (quoted | UNQUOTED)+;
 
 redirection: LT WS? argument | GT WS? argument;
 
-quoted: single_quoted | double_quoted | back_quoted;
+quoted: singleQuoted | doubleQuoted | backQuoted;
 
-single_quoted: SQ SQ_CONTENT SQ;
+singleQuoted: SQ SQ_CONTENT SQ;
 
-back_quoted: BQ BQ_CONTENT BQ;
+backQuoted: BQ BQ_CONTENT BQ;
 
-double_quoted: DQ (back_quoted | DQ_CONTENT)* DQ;
+doubleQuoted: DQ (backQuoted | DQ_CONTENT)* DQ;
