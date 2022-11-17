@@ -2,6 +2,9 @@ import unittest
 
 from applications.impl.sort import Sort
 from collections import deque
+from applications.exceptions.no_stdin_error import NoStdinError
+from applications.exceptions.num_args_error import NumArgsError
+from applications.exceptions.wrong_flags_error import WrongFlagsError
 import shutil
 import os
 
@@ -50,30 +53,30 @@ class TestSort(unittest.TestCase):
         Sort().exec(["-r", self.paths["empty_file.txt"]], None, self.out)
         self.assertEqual(len(self.out), 0)
 
-    def test_sort_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_sort_zero_args_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Sort().exec([], None, self.out)
 
-    def test_sort_one_arg_no_stdin(self):
-        with self.assertRaises(ValueError):
+    def test_sort_one_arg_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Sort().exec(["-r"], None, self.out)
 
-    def test_sort_one_arg_file_not_found(self):
+    def test_sort_one_arg_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
             Sort().exec([
                 os.path.join(self.temp_dir, "file.txt")
             ], None, self.out)
 
-    def test_sort_two_args_wrong_flags(self):
-        with self.assertRaises(ValueError):
+    def test_sort_two_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Sort().exec(["arg0", "arg1"], None, self.out)
 
-    def test_sort_two_args_file_not_found(self):
+    def test_sort_two_args_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
             Sort().exec([
                 "-r", os.path.join(self.temp_dir, "file.txt")
             ], None, self.out)
 
-    def test_sort_three_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_sort_three_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Sort().exec(["arg0", "arg1", "arg2"], None, self.out)

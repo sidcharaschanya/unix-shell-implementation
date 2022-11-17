@@ -1,5 +1,9 @@
 import unittest
 
+from applications.exceptions.invalid_args_error import InvalidArgsError
+from applications.exceptions.no_stdin_error import NoStdinError
+from applications.exceptions.num_args_error import NumArgsError
+from applications.exceptions.wrong_flags_error import WrongFlagsError
 from applications.impl.cut import Cut
 from collections import deque
 from hypothesis import given, strategies as st
@@ -67,34 +71,34 @@ class TestCut(unittest.TestCase):
         ], None, self.out)
         self.assertEqual(len(self.out), 0)
 
-    def test_cut_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_cut_zero_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Cut().exec([], None, self.out)
 
-    def test_cut_two_args_wrong_flags(self):
-        with self.assertRaises(ValueError):
+    def test_cut_two_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Cut().exec(["arg0", "arg1"], None, self.out)
 
-    def test_cut_two_args_no_stdin(self):
-        with self.assertRaises(ValueError):
+    def test_cut_two_args_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Cut().exec(["-b", "arg1"], None, self.out)
 
-    def test_cut_two_args_wrong_format(self):
-        with self.assertRaises(ValueError):
+    def test_cut_two_args_invalid_args_error_format(self):
+        with self.assertRaises(InvalidArgsError):
             Cut().exec(["-b", "-2-"], self.files["test1.txt"], self.out)
 
-    def test_cut_two_args_zero_cut_byte(self):
-        with self.assertRaises(ValueError):
+    def test_cut_two_args_invalid_args_error_value(self):
+        with self.assertRaises(InvalidArgsError):
             Cut().exec(["-b", "0"], self.files["test1.txt"], self.out)
 
-    def test_cut_three_args_wrong_flags(self):
-        with self.assertRaises(ValueError):
+    def test_cut_three_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Cut().exec(["arg0", "arg1", "arg2"], None, self.out)
 
-    def test_cut_three_args_wrong_format(self):
-        with self.assertRaises(ValueError):
+    def test_cut_three_args_invalid_args_error_format(self):
+        with self.assertRaises(InvalidArgsError):
             Cut().exec(["-b", "-2-", self.paths["test1.txt"]], None, self.out)
 
-    def test_cut_three_args_zero_cut_byte(self):
-        with self.assertRaises(ValueError):
+    def test_cut_three_args_invalid_args_error_value(self):
+        with self.assertRaises(InvalidArgsError):
             Cut().exec(["-b", "0", self.paths["test1.txt"]], None, self.out)

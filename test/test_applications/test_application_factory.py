@@ -46,7 +46,7 @@ class TestApplicationFactory(unittest.TestCase):
         )
 
     @given(st.text())
-    def test_application_factory_invalid(self, name):
+    def test_application_factory_key_error(self, name):
         assume(name not in TestApplicationFactory.apps.keys())
         assume(name not in [
             f"_{app}" for app in TestApplicationFactory.apps.keys()

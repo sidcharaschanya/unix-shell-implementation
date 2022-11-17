@@ -1,5 +1,9 @@
 import unittest
 
+from applications.exceptions.invalid_args_error import InvalidArgsError
+from applications.exceptions.no_stdin_error import NoStdinError
+from applications.exceptions.num_args_error import NumArgsError
+from applications.exceptions.wrong_flags_error import WrongFlagsError
 from applications.impl.tail import Tail
 from collections import deque
 from hypothesis import given, strategies as st
@@ -69,27 +73,27 @@ class TestTail(unittest.TestCase):
 
     @given(st.integers(max_value=-1))
     def test_tail_negative_num_lines(self, num_lines):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(InvalidArgsError):
             Tail().exec([
                 "-n", str(num_lines), self.paths["test1.txt"]
             ], None, self.out)
 
-    def test_tail_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_tail_zero_args_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Tail().exec([], None, self.out)
 
-    def test_tail_two_args_wrong_flags(self):
-        with self.assertRaises(ValueError):
+    def test_tail_two_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Tail().exec(["arg0", "arg1"], None, self.out)
 
-    def test_tail_two_args_no_stdin(self):
-        with self.assertRaises(ValueError):
+    def test_tail_two_args_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Tail().exec(["-n", "arg1"], None, self.out)
 
-    def test_tail_three_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_tail_three_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Tail().exec(["arg0", "arg1", "arg2"], None, self.out)
 
-    def test_tail_four_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_tail_four_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Tail().exec(["arg0", "arg1", "arg2", "arg3"], None, self.out)

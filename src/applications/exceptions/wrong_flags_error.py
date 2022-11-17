@@ -1,0 +1,2 @@
+class WrongFlagsError(Exception):
+    pass

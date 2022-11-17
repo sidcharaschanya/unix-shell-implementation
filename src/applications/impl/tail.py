@@ -1,12 +1,16 @@
 from ..application import Application
 from collections import deque
+from ..exceptions.invalid_args_error import InvalidArgsError
+from ..exceptions.no_stdin_error import NoStdinError
+from ..exceptions.num_args_error import NumArgsError
+from ..exceptions.wrong_flags_error import WrongFlagsError
 from typing import Optional
 
 
 class Tail(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) > 3:
-            raise ValueError("Tail: wrong number of command line arguments")
+            raise NumArgsError("Tail: wrong number of command line arguments")
 
         num_lines, lines = Tail.__get_num_lines_and_lines(args, input_)
         display_length = min(len(lines), num_lines)
@@ -18,7 +22,7 @@ class Tail(Application):
     def __get_num_lines_and_lines(args: list, input_: Optional[str]) -> tuple:
         if len(args) == 0:
             if input_ is None:
-                raise ValueError("Tail: stdin not provided")
+                raise NoStdinError("Tail: stdin not provided")
 
             num_lines, lines = 10, [i + "\n" for i in input_.split("\n")]
         elif len(args) == 1:
@@ -26,21 +30,21 @@ class Tail(Application):
                 num_lines, lines = 10, file.readlines()
         elif len(args) == 2:
             if args[0] != "-n":
-                raise ValueError("Tail: wrong flags")
+                raise WrongFlagsError("Tail: wrong flags")
 
             if input_ is None:
-                raise ValueError("Tail: stdin not provided")
+                raise NoStdinError("Tail: stdin not provided")
 
             num_lines = int(args[1])
             lines = [i + "\n" for i in input_.split("\n")]
         else:
             if args[0] != "-n":
-                raise ValueError("Tail: wrong flags")
+                raise WrongFlagsError("Tail: wrong flags")
 
             with open(args[2]) as file:
                 num_lines, lines = int(args[1]), file.readlines()
 
         if num_lines < 0:
-            raise ValueError("Tail: invalid arguments")
+            raise InvalidArgsError("Tail: invalid arguments")
 
         return num_lines, lines

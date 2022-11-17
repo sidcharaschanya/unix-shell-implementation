@@ -1,5 +1,7 @@
 import unittest
 
+from applications.exceptions.no_stdin_error import NoStdinError
+from applications.exceptions.num_args_error import NumArgsError
 from applications.impl.grep import Grep
 from collections import deque
 from hypothesis import given, strategies as st
@@ -64,16 +66,16 @@ class TestGrep(unittest.TestCase):
         Grep().exec(["he"], self.files["test2.txt"], self.out)
         self.assertEqual(list(self.out), ["hehehehe\n", "hellohello\n"])
 
-    def test_grep_file_not_found(self):
+    def test_grep_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
             Grep().exec([
                 "he", os.path.join(self.temp_dir, "file.txt")
             ], None, self.out)
 
-    def test_grep_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_grep_zero_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Grep().exec([], None, self.out)
 
-    def test_grep_one_arg_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_grep_one_arg_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Grep().exec(["arg0"], None, self.out)

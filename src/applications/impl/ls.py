@@ -1,5 +1,6 @@
 from ..application import Application
 from collections import deque
+from ..exceptions.num_args_error import NumArgsError
 from typing import Optional
 import os
 
@@ -7,7 +8,7 @@ import os
 class Ls(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) > 1:
-            raise ValueError("Ls: wrong number of command line arguments")
+            raise NumArgsError("Ls: wrong number of command line arguments")
 
         directory_name = Ls.__get_directory_name(args)
 

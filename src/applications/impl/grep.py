@@ -1,5 +1,7 @@
 from ..application import Application
 from collections import deque
+from ..exceptions.no_stdin_error import NoStdinError
+from ..exceptions.num_args_error import NumArgsError
 from typing import Optional
 import re
 
@@ -7,7 +9,7 @@ import re
 class Grep(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) == 0:
-            raise ValueError("Grep: wrong number of command line arguments")
+            raise NumArgsError("Grep: wrong number of command line arguments")
 
         if len(args) == 1:
             Grep.__one_arg(args, input_, out)
@@ -17,7 +19,7 @@ class Grep(Application):
     @staticmethod
     def __one_arg(args: list, input_: Optional[str], out: deque) -> None:
         if input_ is None:
-            raise ValueError("Grep: stdin not provided")
+            raise NoStdinError("Grep: stdin not provided")
 
         pattern, lines = args[0], [i + "\n" for i in input_.split("\n")]
 

@@ -1,0 +1,2 @@
+class NoStdinError(Exception):
+    pass

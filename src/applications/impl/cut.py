@@ -1,5 +1,9 @@
 from ..application import Application
 from collections import deque
+from ..exceptions.invalid_args_error import InvalidArgsError
+from ..exceptions.no_stdin_error import NoStdinError
+from ..exceptions.num_args_error import NumArgsError
+from ..exceptions.wrong_flags_error import WrongFlagsError
 from typing import Optional
 import re
 
@@ -7,10 +11,10 @@ import re
 class Cut(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) < 2 or len(args) > 3:
-            raise ValueError("Cut: wrong number of command line arguments")
+            raise NumArgsError("Cut: wrong number of command line arguments")
 
         if args[0] != "-b":
-            raise ValueError("Cut: wrong flags")
+            raise WrongFlagsError("Cut: wrong flags")
 
         lines = Cut.__get_lines(args, input_)
         cut_byte_strings = args[1].split(",")
@@ -31,7 +35,7 @@ class Cut(Application):
     def __get_lines(args: list, input_: Optional[str]) -> list:
         if len(args) == 2:
             if input_ is None:
-                raise ValueError("Cut: stdin not provided")
+                raise NoStdinError("Cut: stdin not provided")
 
             lines = [i + "\n" for i in input_.split("\n")]
         else:
@@ -64,9 +68,9 @@ class Cut(Application):
             start = int(cut_byte_string.split("-")[0])
             end = int(cut_byte_string.split("-")[1])
         else:
-            raise ValueError("Cut: invalid arguments")
+            raise InvalidArgsError("Cut: invalid arguments")
 
         if start < 1 or end < 1:
-            raise ValueError("Cut: invalid arguments")
+            raise InvalidArgsError("Cut: invalid arguments")
 
         return start - 1, min(end, len_line)

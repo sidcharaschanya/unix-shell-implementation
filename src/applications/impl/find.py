@@ -1,5 +1,7 @@
 from ..application import Application
 from collections import deque
+from ..exceptions.num_args_error import NumArgsError
+from ..exceptions.wrong_flags_error import WrongFlagsError
 from typing import Optional
 import glob
 import os
@@ -8,7 +10,7 @@ import os
 class Find(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
         if len(args) < 2 or len(args) > 3:
-            raise ValueError("Find: wrong number of command line arguments")
+            raise NumArgsError("Find: wrong number of command line arguments")
 
         path, pattern = Find.__get_path_and_pattern(args)
 
@@ -24,12 +26,12 @@ class Find(Application):
     def __get_path_and_pattern(args: list) -> tuple:
         if len(args) == 2:
             if args[0] != "-name":
-                raise ValueError("Find: wrong flags")
+                raise WrongFlagsError("Find: wrong flags")
 
             path, pattern = ".", args[1]
         else:
             if args[1] != "-name":
-                raise ValueError("Find: wrong flags")
+                raise WrongFlagsError("Find: wrong flags")
 
             path, pattern = args[0], args[2]
 
