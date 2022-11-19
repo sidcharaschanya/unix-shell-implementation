@@ -7,7 +7,7 @@ command: pipe #pipeCommand | left=command SEQ right=command #seq | call #callCom
 
 pipe: left=call PIPE right=call #singlePipe | left=pipe PIPE right=call #nestedPipe;
 
-call: WS? (redirections+=redirection WS)* app=argument (WS atoms+=atom)* WS?;
+call: WS? (redirections+=redirection WS)* argument (WS atoms+=atom)* WS?;
 
 atom: redirection | argument;
 

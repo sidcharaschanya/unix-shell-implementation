@@ -428,7 +428,6 @@ class CommandParser ( Parser ):
             self.parser = parser
             self._redirection = None # RedirectionContext
             self.redirections = list() # of RedirectionContexts
-            self.app = None # ArgumentContext
             self._atom = None # AtomContext
             self.atoms = list() # of AtomContexts
 
@@ -497,7 +496,7 @@ class CommandParser ( Parser ):
                 _la = self._input.LA(1)
 
             self.state = 68
-            localctx.app = self.argument()
+            self.argument()
             self.state = 73
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,6,self._ctx)
