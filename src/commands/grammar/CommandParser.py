@@ -78,17 +78,17 @@ class CommandParser ( Parser ):
     RULE_call = 3
     RULE_atom = 4
     RULE_argument = 5
-    RULE_argumentContent = 6
+    RULE_argumentElement = 6
     RULE_redirection = 7
     RULE_quoted = 8
     RULE_singleQuoted = 9
     RULE_backQuoted = 10
     RULE_doubleQuoted = 11
-    RULE_doubleQuotedContent = 12
+    RULE_doubleQuotedElement = 12
 
     ruleNames =  [ "cmdline", "command", "pipe", "call", "atom", "argument", 
-                   "argumentContent", "redirection", "quoted", "singleQuoted", 
-                   "backQuoted", "doubleQuoted", "doubleQuotedContent" ]
+                   "argumentElement", "redirection", "quoted", "singleQuoted", 
+                   "backQuoted", "doubleQuoted", "doubleQuotedElement" ]
 
     EOF = Token.EOF
     SQ=1
@@ -181,7 +181,24 @@ class CommandParser ( Parser ):
             super().copyFrom(ctx)
 
 
-    class NonSeqContext(CommandContext):
+    class CallCommandContext(CommandContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.CommandContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def call(self):
+            return self.getTypedRuleContext(CommandParser.CallContext,0)
+
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCallCommand" ):
+                return visitor.visitCallCommand(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class PipeCommandContext(CommandContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.CommandContext
             super().__init__(parser)
@@ -190,13 +207,10 @@ class CommandParser ( Parser ):
         def pipe(self):
             return self.getTypedRuleContext(CommandParser.PipeContext,0)
 
-        def call(self):
-            return self.getTypedRuleContext(CommandParser.CallContext,0)
-
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitNonSeq" ):
-                return visitor.visitNonSeq(self)
+            if hasattr( visitor, "visitPipeCommand" ):
+                return visitor.visitPipeCommand(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -239,7 +253,7 @@ class CommandParser ( Parser ):
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
             if la_ == 1:
-                localctx = CommandParser.NonSeqContext(self, localctx)
+                localctx = CommandParser.PipeCommandContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
 
@@ -248,7 +262,7 @@ class CommandParser ( Parser ):
                 pass
 
             elif la_ == 2:
-                localctx = CommandParser.NonSeqContext(self, localctx)
+                localctx = CommandParser.CallCommandContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 33
@@ -578,14 +592,14 @@ class CommandParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-            self._argumentContent = None # ArgumentContentContext
-            self.contents = list() # of ArgumentContentContexts
+            self._argumentElement = None # ArgumentElementContext
+            self.elements = list() # of ArgumentElementContexts
 
-        def argumentContent(self, i:int=None):
+        def argumentElement(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandParser.ArgumentContentContext)
+                return self.getTypedRuleContexts(CommandParser.ArgumentElementContext)
             else:
-                return self.getTypedRuleContext(CommandParser.ArgumentContentContext,i)
+                return self.getTypedRuleContext(CommandParser.ArgumentElementContext,i)
 
 
         def getRuleIndex(self):
@@ -612,8 +626,8 @@ class CommandParser ( Parser ):
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
                     self.state = 83
-                    localctx._argumentContent = self.argumentContent()
-                    localctx.contents.append(localctx._argumentContent)
+                    localctx._argumentElement = self.argumentElement()
+                    localctx.elements.append(localctx._argumentElement)
 
                 else:
                     raise NoViableAltException(self)
@@ -630,7 +644,7 @@ class CommandParser ( Parser ):
         return localctx
 
 
-    class ArgumentContentContext(ParserRuleContext):
+    class ArgumentElementContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -639,7 +653,7 @@ class CommandParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return CommandParser.RULE_argumentContent
+            return CommandParser.RULE_argumentElement
 
      
         def copyFrom(self, ctx:ParserRuleContext):
@@ -647,9 +661,9 @@ class CommandParser ( Parser ):
 
 
 
-    class QuotedArgContext(ArgumentContentContext):
+    class QuotedArgElemContext(ArgumentElementContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.ArgumentContentContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.ArgumentElementContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
@@ -658,15 +672,15 @@ class CommandParser ( Parser ):
 
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitQuotedArg" ):
-                return visitor.visitQuotedArg(self)
+            if hasattr( visitor, "visitQuotedArgElem" ):
+                return visitor.visitQuotedArgElem(self)
             else:
                 return visitor.visitChildren(self)
 
 
-    class UnquotedContext(ArgumentContentContext):
+    class UnquotedContext(ArgumentElementContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.ArgumentContentContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.ArgumentElementContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
@@ -681,16 +695,16 @@ class CommandParser ( Parser ):
 
 
 
-    def argumentContent(self):
+    def argumentElement(self):
 
-        localctx = CommandParser.ArgumentContentContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 12, self.RULE_argumentContent)
+        localctx = CommandParser.ArgumentElementContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 12, self.RULE_argumentElement)
         try:
             self.state = 90
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [1, 2, 3]:
-                localctx = CommandParser.QuotedArgContext(self, localctx)
+                localctx = CommandParser.QuotedArgElemContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 88
                 self.quoted()
@@ -996,8 +1010,8 @@ class CommandParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-            self._doubleQuotedContent = None # DoubleQuotedContentContext
-            self.contents = list() # of DoubleQuotedContentContexts
+            self._doubleQuotedElement = None # DoubleQuotedElementContext
+            self.elements = list() # of DoubleQuotedElementContexts
 
         def DQ(self, i:int=None):
             if i is None:
@@ -1005,11 +1019,11 @@ class CommandParser ( Parser ):
             else:
                 return self.getToken(CommandParser.DQ, i)
 
-        def doubleQuotedContent(self, i:int=None):
+        def doubleQuotedElement(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(CommandParser.DoubleQuotedContentContext)
+                return self.getTypedRuleContexts(CommandParser.DoubleQuotedElementContext)
             else:
-                return self.getTypedRuleContext(CommandParser.DoubleQuotedContentContext,i)
+                return self.getTypedRuleContext(CommandParser.DoubleQuotedElementContext,i)
 
 
         def getRuleIndex(self):
@@ -1038,8 +1052,8 @@ class CommandParser ( Parser ):
             _la = self._input.LA(1)
             while _la==2 or _la==12:
                 self.state = 118
-                localctx._doubleQuotedContent = self.doubleQuotedContent()
-                localctx.contents.append(localctx._doubleQuotedContent)
+                localctx._doubleQuotedElement = self.doubleQuotedElement()
+                localctx.elements.append(localctx._doubleQuotedElement)
                 self.state = 123
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
@@ -1055,7 +1069,7 @@ class CommandParser ( Parser ):
         return localctx
 
 
-    class DoubleQuotedContentContext(ParserRuleContext):
+    class DoubleQuotedElementContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -1064,7 +1078,7 @@ class CommandParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return CommandParser.RULE_doubleQuotedContent
+            return CommandParser.RULE_doubleQuotedElement
 
      
         def copyFrom(self, ctx:ParserRuleContext):
@@ -1072,9 +1086,9 @@ class CommandParser ( Parser ):
 
 
 
-    class DqContentContext(DoubleQuotedContentContext):
+    class DqContentContext(DoubleQuotedElementContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.DoubleQuotedContentContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.DoubleQuotedElementContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
@@ -1088,9 +1102,9 @@ class CommandParser ( Parser ):
                 return visitor.visitChildren(self)
 
 
-    class BqInDqContext(DoubleQuotedContentContext):
+    class BqDqElemContext(DoubleQuotedElementContext):
 
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.DoubleQuotedContentContext
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.DoubleQuotedElementContext
             super().__init__(parser)
             self.copyFrom(ctx)
 
@@ -1099,23 +1113,23 @@ class CommandParser ( Parser ):
 
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitBqInDq" ):
-                return visitor.visitBqInDq(self)
+            if hasattr( visitor, "visitBqDqElem" ):
+                return visitor.visitBqDqElem(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
-    def doubleQuotedContent(self):
+    def doubleQuotedElement(self):
 
-        localctx = CommandParser.DoubleQuotedContentContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 24, self.RULE_doubleQuotedContent)
+        localctx = CommandParser.DoubleQuotedElementContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 24, self.RULE_doubleQuotedElement)
         try:
             self.state = 128
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [2]:
-                localctx = CommandParser.BqInDqContext(self, localctx)
+                localctx = CommandParser.BqDqElemContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 126
                 self.backQuoted()

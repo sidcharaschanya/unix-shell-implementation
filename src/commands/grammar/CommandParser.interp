@@ -35,13 +35,13 @@ pipe
 call
 atom
 argument
-argumentContent
+argumentElement
 redirection
 quoted
 singleQuoted
 backQuoted
 doubleQuoted
-doubleQuotedContent
+doubleQuotedElement
 
 
 atn:

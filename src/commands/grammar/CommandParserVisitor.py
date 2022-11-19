@@ -14,8 +14,13 @@ class CommandParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by CommandParser#nonSeq.
-    def visitNonSeq(self, ctx:CommandParser.NonSeqContext):
+    # Visit a parse tree produced by CommandParser#callCommand.
+    def visitCallCommand(self, ctx:CommandParser.CallCommandContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by CommandParser#pipeCommand.
+    def visitPipeCommand(self, ctx:CommandParser.PipeCommandContext):
         return self.visitChildren(ctx)
 
 
@@ -49,8 +54,8 @@ class CommandParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by CommandParser#quotedArg.
-    def visitQuotedArg(self, ctx:CommandParser.QuotedArgContext):
+    # Visit a parse tree produced by CommandParser#quotedArgElem.
+    def visitQuotedArgElem(self, ctx:CommandParser.QuotedArgElemContext):
         return self.visitChildren(ctx)
 
 
@@ -89,8 +94,8 @@ class CommandParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by CommandParser#bqInDq.
-    def visitBqInDq(self, ctx:CommandParser.BqInDqContext):
+    # Visit a parse tree produced by CommandParser#bqDqElem.
+    def visitBqDqElem(self, ctx:CommandParser.BqDqElemContext):
         return self.visitChildren(ctx)
 
 

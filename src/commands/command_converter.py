@@ -34,7 +34,7 @@ class CommandConverter(CommandParserVisitor):
         pass
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        return "".join(self.visit(content) for content in ctx.contents)
+        return "".join(self.visit(element) for element in ctx.elements)
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.UNQUOTED().getText()
@@ -52,7 +52,7 @@ class CommandConverter(CommandParserVisitor):
         pass
 
     def visitDoubleQuoted(self, ctx: CommandParser.DoubleQuotedContext):
-        return "".join(self.visit(content) for content in ctx.contents)
+        return "".join(self.visit(element) for element in ctx.elements)
 
     def visitDqContent(self, ctx: CommandParser.DqContentContext):
         return ctx.DQ_CONTENT().getText()
