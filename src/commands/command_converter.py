@@ -15,7 +15,8 @@ class CommandConverter(CommandParserVisitor):
         common_token_stream = CommonTokenStream(lexer)
         parser = CommandParser(common_token_stream)
         tree = parser.cmdline()
-        return tree.accept(cls())
+        command = tree.accept(cls())
+        return command
 
     def visitCmdline(self, ctx: CommandParser.CmdlineContext):
         return self.visit(ctx.command())
