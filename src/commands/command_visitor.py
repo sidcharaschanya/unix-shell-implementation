@@ -1,10 +1,12 @@
 from antlr4 import *
+from collections import deque
 from .command import Command
 from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
 from .grammar.CommandParserVisitor import CommandParserVisitor
 from .impl.pipe import Pipe
 from .impl.seq import Seq
+import re
 
 
 class CommandVisitor(CommandParserVisitor):
@@ -34,7 +36,7 @@ class CommandVisitor(CommandParserVisitor):
         pass
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        return "".join(self.visit(element) for element in ctx.elements)
+        pass
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.UNQUOTED().getText()
@@ -42,11 +44,19 @@ class CommandVisitor(CommandParserVisitor):
     def visitRedirection(self, ctx: CommandParser.RedirectionContext):
         pass
 
+    def visitQuoted(self, ctx: CommandParser.QuotedContext):
+        if ctx.backQuoted() is not None:
+            return re.sub("[\t ]+", "\n", self.visit(ctx.backQuoted())).strip()
+
+        return self.visitChildren(ctx)
+
     def visitSingleQuoted(self, ctx: CommandParser.SingleQuotedContext):
         return ctx.SQ_CONTENT().getText()
 
     def visitBackQuoted(self, ctx: CommandParser.BackQuotedContext):
-        pass
+        temp_out = deque()
+        CommandVisitor.convert(ctx.BQ_CONTENT().getText()).eval(None, temp_out)
+        return "".join(temp_out).replace("\n", " ")
 
     def visitDoubleQuoted(self, ctx: CommandParser.DoubleQuotedContext):
         return "".join(self.visit(element) for element in ctx.elements)
