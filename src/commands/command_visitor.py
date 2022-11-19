@@ -8,14 +8,14 @@ from .impl.seq import Seq
 
 
 class CommandVisitor(CommandParserVisitor):
-    @staticmethod
-    def convert(cmdline: str) -> Command:
+    @classmethod
+    def convert(cls, cmdline: str) -> Command:
         input_stream = InputStream(cmdline)
         lexer = CommandLexer(input_stream)
         common_token_stream = CommonTokenStream(lexer)
         parser = CommandParser(common_token_stream)
         tree = parser.cmdline()
-        command = tree.accept(CommandVisitor())
+        command = tree.accept(cls())
         return command
 
     def visitCmdline(self, ctx: CommandParser.CmdlineContext):
