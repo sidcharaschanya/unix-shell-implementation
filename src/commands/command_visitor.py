@@ -7,7 +7,7 @@ from .impl.pipe import Pipe
 from .impl.seq import Seq
 
 
-class CommandConverter(CommandParserVisitor):
+class CommandVisitor(CommandParserVisitor):
     @classmethod
     def convert(cls, cmdline: str) -> Command:
         input_stream = InputStream(cmdline)
@@ -39,10 +39,7 @@ class CommandConverter(CommandParserVisitor):
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.UNQUOTED().getText()
 
-    def visitInRedirection(self, ctx: CommandParser.InRedirectionContext):
-        pass
-
-    def visitOutRedirection(self, ctx: CommandParser.OutRedirectionContext):
+    def visitRedirection(self, ctx: CommandParser.RedirectionContext):
         pass
 
     def visitSingleQuoted(self, ctx: CommandParser.SingleQuotedContext):

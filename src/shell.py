@@ -2,14 +2,13 @@
 from collections import deque
 # from glob import glob
 # from applications.application_factory import ApplicationFactory
-from commands.command_converter import CommandConverter
+from commands.command_visitor import CommandVisitor
 import os
 import sys
 
 
 def eval(cmdline: str, out: deque) -> None:
-    command = CommandConverter.convert(cmdline)
-    command.eval(None, out)
+    CommandVisitor.convert(cmdline).eval(None, out)
     # raw_commands = []
     #
     # for m in re.finditer("([^\"';]+|\"[^\"]*\"|'[^']*')", cmdline):
