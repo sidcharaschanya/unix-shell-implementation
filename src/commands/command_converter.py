@@ -1,10 +1,22 @@
+from antlr4 import *
+from .command import Command
+from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
 from .grammar.CommandParserVisitor import CommandParserVisitor
 from .impl.pipe import Pipe
 from .impl.seq import Seq
 
 
-class CommandVisitor(CommandParserVisitor):
+class CommandConverter(CommandParserVisitor):
+    @classmethod
+    def convert(cls, cmdline: str) -> Command:
+        input_stream = InputStream(cmdline)
+        lexer = CommandLexer(input_stream)
+        common_token_stream = CommonTokenStream(lexer)
+        parser = CommandParser(common_token_stream)
+        tree = parser.cmdline()
+        return tree.accept(cls())
+
     def visitCmdline(self, ctx: CommandParser.CmdlineContext):
         return self.visit(ctx.command())
 
