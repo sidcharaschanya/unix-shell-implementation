@@ -23,4 +23,4 @@ jobs:
         run: docker run --rm shell /bin/bash -c "cd /comp0010 && flake8 --exclude system_test,src/commands/grammar"
 
       - name: Execute test coverage
-        run: docker run --rm shell /bin/bash -c "cd /comp0010 && coverage run --omit="src/commands/grammar/*" --branch -m nose2 test && coverage report -m"
+        run: docker run --rm shell /bin/bash -c "cd /comp0010 && coverage run --omit='src/commands/grammar/*' --branch -m nose2 test && coverage report -m"
