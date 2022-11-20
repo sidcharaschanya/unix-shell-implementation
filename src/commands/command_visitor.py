@@ -1,4 +1,4 @@
-from antlr4 import *
+from antlr4 import InputStream, CommonTokenStream
 from collections import deque
 from .command import Command
 import glob
