@@ -22,26 +22,23 @@ class CommandVisitor(CommandParserVisitor):
         return command
 
     @staticmethod
-    def __get_glob_indexes(visited_elements: list, elements: list) -> set:
+    def __get_glob_indexes(elems: list, visited_elems: list) -> set:
         glob_indexes, arg_count = set(), 0
 
-        for visited_element, element in zip(visited_elements, elements):
-            if hasattr(element, "UNQUOTED") and "*" in visited_element:
+        for elem, visited_elem in zip(elems, visited_elems):
+            if hasattr(elem, "UNQUOTED") and "*" in visited_elem:
                 glob_indexes.add(arg_count)
             else:
-                arg_count += visited_element.count("\n")
+                arg_count += visited_elem.count("\n")
 
         return glob_indexes
 
     @staticmethod
-    def __get_glob_args(visited_elements: list, elements: list) -> list:
-        args, glob_args = "".join(visited_elements).split("\n"), list()
+    def __get_glob_args(elems: list, visited_elems: list) -> list:
+        glob_indexes = CommandVisitor.__get_glob_indexes(elems, visited_elems)
+        args, glob_args = "".join(visited_elems).split("\n"), list()
 
         for index, arg in enumerate(args):
-            glob_indexes = CommandVisitor.__get_glob_indexes(
-                visited_elements, elements
-            )
-
             if index in glob_indexes:
                 glob_arg = glob(arg)
 
@@ -70,9 +67,8 @@ class CommandVisitor(CommandParserVisitor):
         pass
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        return CommandVisitor.__get_glob_args(
-            [self.visit(element) for element in ctx.elements], ctx.elements
-        )
+        visited_elements = [self.visit(element) for element in ctx.elements]
+        return CommandVisitor.__get_glob_args(ctx.elements, visited_elements)
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.getText()
