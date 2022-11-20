@@ -21,33 +21,6 @@ class CommandVisitor(CommandParserVisitor):
         command = tree.accept(cls())
         return command
 
-    def visitCmdline(self, ctx: CommandParser.CmdlineContext):
-        return self.visit(ctx.command())
-
-    def visitSeq(self, ctx: CommandParser.SeqContext):
-        return Seq(self.visit(ctx.left), self.visit(ctx.right))
-
-    def visitSinglePipe(self, ctx: CommandParser.SinglePipeContext):
-        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
-
-    def visitNestedPipe(self, ctx: CommandParser.NestedPipeContext):
-        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
-
-    def visitCall(self, ctx: CommandParser.CallContext):
-        pass
-
-    @staticmethod
-    def __get_glob_indexes(visited_elements: list, elements: list) -> list:
-        glob_indexes, argument_count = list(), 0
-
-        for visited_element, element in zip(visited_elements, elements):
-            if hasattr(element, "UNQUOTED") and "*" in visited_element:
-                glob_indexes.append(argument_count)
-            else:
-                argument_count += visited_element.count("\n")
-
-        return glob_indexes
-
     @staticmethod
     def __get_glob_arguments(arguments: list, glob_indexes: list) -> list:
         glob_arguments = list()
@@ -64,6 +37,33 @@ class CommandVisitor(CommandParserVisitor):
                 glob_arguments.append(argument)
 
         return glob_arguments
+
+    @staticmethod
+    def __get_glob_indexes(visited_elements: list, elements: list) -> list:
+        glob_indexes, argument_count = list(), 0
+
+        for visited_element, element in zip(visited_elements, elements):
+            if hasattr(element, "UNQUOTED") and "*" in visited_element:
+                glob_indexes.append(argument_count)
+            else:
+                argument_count += visited_element.count("\n")
+
+        return glob_indexes
+
+    def visitCmdline(self, ctx: CommandParser.CmdlineContext):
+        return self.visit(ctx.command())
+
+    def visitSeq(self, ctx: CommandParser.SeqContext):
+        return Seq(self.visit(ctx.left), self.visit(ctx.right))
+
+    def visitSinglePipe(self, ctx: CommandParser.SinglePipeContext):
+        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
+
+    def visitNestedPipe(self, ctx: CommandParser.NestedPipeContext):
+        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
+
+    def visitCall(self, ctx: CommandParser.CallContext):
+        pass
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
         visited_elements = [self.visit(element) for element in ctx.elements]
