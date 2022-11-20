@@ -22,7 +22,7 @@ class CommandVisitor(CommandParserVisitor):
         return command
 
     @staticmethod
-    def __get_glob_arguments(arguments: list, glob_indexes: list) -> list:
+    def __get_glob_arguments(arguments: list, glob_indexes: set) -> list:
         glob_arguments = list()
 
         for index, argument in enumerate(arguments):
@@ -39,12 +39,12 @@ class CommandVisitor(CommandParserVisitor):
         return glob_arguments
 
     @staticmethod
-    def __get_glob_indexes(visited_elements: list, elements: list) -> list:
-        glob_indexes, argument_count = list(), 0
+    def __get_glob_indexes(visited_elements: list, elements: list) -> set:
+        glob_indexes, argument_count = set(), 0
 
         for visited_element, element in zip(visited_elements, elements):
             if hasattr(element, "UNQUOTED") and "*" in visited_element:
-                glob_indexes.append(argument_count)
+                glob_indexes.add(argument_count)
             else:
                 argument_count += visited_element.count("\n")
 
