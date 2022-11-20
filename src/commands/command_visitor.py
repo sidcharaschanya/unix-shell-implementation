@@ -22,33 +22,37 @@ class CommandVisitor(CommandParserVisitor):
         return command
 
     @staticmethod
-    def __get_glob_arguments(arguments: list, glob_indexes: set) -> list:
-        glob_arguments = list()
-
-        for index, argument in enumerate(arguments):
-            if index in glob_indexes:
-                glob_argument = glob.glob(argument)
-
-                if len(glob_argument) == 0:
-                    glob_arguments.append(argument)
-                else:
-                    glob_arguments.extend(glob_argument)
-            else:
-                glob_arguments.append(argument)
-
-        return glob_arguments
-
-    @staticmethod
     def __get_glob_indexes(visited_elements: list, elements: list) -> set:
-        glob_indexes, argument_count = set(), 0
+        glob_indexes, arg_count = set(), 0
 
         for visited_element, element in zip(visited_elements, elements):
             if hasattr(element, "UNQUOTED") and "*" in visited_element:
-                glob_indexes.add(argument_count)
+                glob_indexes.add(arg_count)
             else:
-                argument_count += visited_element.count("\n")
+                arg_count += visited_element.count("\n")
 
         return glob_indexes
+
+    @staticmethod
+    def __get_glob_args(visited_elements: list, elements: list) -> list:
+        args, glob_args = "".join(visited_elements).split("\n"), list()
+
+        for index, arg in enumerate(args):
+            glob_indexes = CommandVisitor.__get_glob_indexes(
+                visited_elements, elements
+            )
+
+            if index in glob_indexes:
+                glob_arg = glob.glob(arg)
+
+                if len(glob_arg) == 0:
+                    glob_args.append(arg)
+                else:
+                    glob_args.extend(glob_arg)
+            else:
+                glob_args.append(arg)
+
+        return glob_args
 
     def visitCmdline(self, ctx: CommandParser.CmdlineContext):
         return self.visit(ctx.command())
@@ -66,11 +70,9 @@ class CommandVisitor(CommandParserVisitor):
         pass
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        visited_elements = [self.visit(element) for element in ctx.elements]
-
-        return CommandVisitor.__get_glob_arguments(
-            "".join(visited_elements).split("\n"),
-            CommandVisitor.__get_glob_indexes(visited_elements, ctx.elements)
+        return CommandVisitor.__get_glob_args(
+            [self.visit(element) for element in ctx.elements],
+            ctx.elements
         )
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
