@@ -71,8 +71,7 @@ class CommandVisitor(CommandParserVisitor):
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
         return CommandVisitor.__get_glob_args(
-            [self.visit(element) for element in ctx.elements],
-            ctx.elements
+            [self.visit(element) for element in ctx.elements], ctx.elements
         )
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
