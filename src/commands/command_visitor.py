@@ -1,7 +1,7 @@
 from antlr4 import InputStream, CommonTokenStream
 from collections import deque
 from .command import Command
-import glob
+from glob import glob
 from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
 from .grammar.CommandParserVisitor import CommandParserVisitor
@@ -43,7 +43,7 @@ class CommandVisitor(CommandParserVisitor):
             )
 
             if index in glob_indexes:
-                glob_arg = glob.glob(arg)
+                glob_arg = glob(arg)
 
                 if len(glob_arg) == 0:
                     glob_args.append(arg)
