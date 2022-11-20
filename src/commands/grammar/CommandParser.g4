@@ -15,7 +15,7 @@ argument: elements+=argumentElement+;
 
 argumentElement: quoted #quotedArgElem | UNQUOTED #unquoted ;
 
-redirection: op=LT WS? argument | op=GT WS? argument;
+redirection: op=LT WS? argument #inRedirection | op=GT WS? argument #outRedirection;
 
 quoted: singleQuoted | doubleQuoted | backQuoted;
 

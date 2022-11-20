@@ -39,14 +39,17 @@ class CommandVisitor(CommandParserVisitor):
         pass
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
-        return ctx.UNQUOTED().getText()
+        return ctx.getText()
 
-    def visitRedirection(self, ctx: CommandParser.RedirectionContext):
+    def visitInRedirection(self, ctx: CommandParser.InRedirectionContext):
+        pass
+
+    def visitOutRedirection(self, ctx: CommandParser.OutRedirectionContext):
         pass
 
     def visitQuoted(self, ctx: CommandParser.QuotedContext):
         if ctx.backQuoted() is not None:
-            return re.sub("[\t ]+", "\n", self.visit(ctx.backQuoted())).strip()
+            return re.sub("[\t ]+", "\n", self.visit(ctx.backQuoted()).strip())
 
         return self.visitChildren(ctx)
 
