@@ -1,6 +1,7 @@
 from antlr4 import *
 from collections import deque
 from .command import Command
+import glob
 from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
 from .grammar.CommandParserVisitor import CommandParserVisitor
@@ -35,8 +36,42 @@ class CommandVisitor(CommandParserVisitor):
     def visitCall(self, ctx: CommandParser.CallContext):
         pass
 
+    @staticmethod
+    def __get_glob_indexes(visited_elements: list, elements: list) -> list:
+        glob_indexes, argument_count = list(), 0
+
+        for visited_element, element in zip(visited_elements, elements):
+            if hasattr(element, "UNQUOTED") and "*" in visited_element:
+                glob_indexes.append(argument_count)
+            else:
+                argument_count += visited_element.count("\n")
+
+        return glob_indexes
+
+    @staticmethod
+    def __get_glob_arguments(arguments: list, glob_indexes: list) -> list:
+        glob_arguments = list()
+
+        for index, argument in enumerate(arguments):
+            if index in glob_indexes:
+                glob_argument = glob.glob(argument)
+
+                if len(glob_argument) == 0:
+                    glob_arguments.append(argument)
+                else:
+                    glob_arguments.extend(glob_argument)
+            else:
+                glob_arguments.append(argument)
+
+        return glob_arguments
+
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        pass
+        visited_elements = [self.visit(element) for element in ctx.elements]
+
+        return CommandVisitor.__get_glob_arguments(
+            "".join(visited_elements).split("\n"),
+            CommandVisitor.__get_glob_indexes(visited_elements, ctx.elements)
+        )
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.getText()
