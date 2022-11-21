@@ -1,6 +1,8 @@
 from antlr4 import InputStream, CommonTokenStream
 from collections import deque
 from .command import Command
+from .exceptions.in_redirect_error import InRedirectError
+from .exceptions.out_redirect_error import OutRedirectError
 from glob import glob
 from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
@@ -22,12 +24,51 @@ class CommandVisitor(CommandParserVisitor):
         command = tree.accept(cls())
         return command
 
-    def __split_and_glob(self, elems: list) -> list:
-        visited_elems = [self.visit(elem) for elem in elems]
+    def visitCmdline(self, ctx: CommandParser.CmdlineContext):
+        return self.visit(ctx.command())
+
+    def visitSeq(self, ctx: CommandParser.SeqContext):
+        return Seq(self.visit(ctx.left), self.visit(ctx.right))
+
+    def visitSinglePipe(self, ctx: CommandParser.SinglePipeContext):
+        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
+
+    def visitNestedPipe(self, ctx: CommandParser.NestedPipeContext):
+        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
+
+    def __new_io_files(self, redirect, i_file: str, o_file: str) -> tuple:
+        if redirect.op.text == "<":
+            if i_file is None:
+                return self.visit(redirect), o_file
+            else:
+                raise InRedirectError("several input redirection files")
+        else:
+            if o_file is None:
+                return i_file, self.visit(redirect)
+            else:
+                raise OutRedirectError("several output redirection files")
+
+    def visitCall(self, ctx: CommandParser.CallContext):
+        i_file, o_file, arguments = None, None, self.visit(ctx.argument())
+
+        for redirect in ctx.redirections:
+            i_file, o_file = self.__new_io_files(redirect, i_file, o_file)
+
+        for atom in ctx.atoms:
+            if atom.redirection() is not None:
+                redirect = atom.redirection()
+                i_file, o_file = self.__new_io_files(redirect, i_file, o_file)
+            else:
+                arguments.extend(self.visit(atom.argument()))
+
+        return Call(arguments[0], arguments[1:], i_file, o_file)
+
+    def visitArgument(self, ctx: CommandParser.ArgumentContext):
+        visited_elems = [self.visit(elem) for elem in ctx.elements]
         split_elems = "".join(visited_elems).split("\n")
         glob_indexes, glob_index, glob_elems = set(), 0, list()
 
-        for elem, visited_elem in zip(elems, visited_elems):
+        for elem, visited_elem in zip(ctx.elements, visited_elems):
             if hasattr(elem, "UNQUOTED") and "*" in visited_elem:
                 glob_indexes.add(glob_index)
             else:
@@ -46,63 +87,11 @@ class CommandVisitor(CommandParserVisitor):
 
         return glob_elems
 
-    def visitCmdline(self, ctx: CommandParser.CmdlineContext):
-        return self.visit(ctx.command())
-
-    def visitSeq(self, ctx: CommandParser.SeqContext):
-        return Seq(self.visit(ctx.left), self.visit(ctx.right))
-
-    def visitSinglePipe(self, ctx: CommandParser.SinglePipeContext):
-        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
-
-    def visitNestedPipe(self, ctx: CommandParser.NestedPipeContext):
-        return Pipe(self.visit(ctx.left), self.visit(ctx.right))
-
-    def visitCall(self, ctx: CommandParser.CallContext):
-        in_r = None
-        out_r = None
-        arguments = self.visit(ctx.argument())
-        atoms = ctx.atoms
-        for r in ctx.redirections:
-            if r.LT() is not None:
-                if in_r is None:
-                    in_r = self.visit(r)
-                else:
-                    raise ValueError("input redirection already exists")
-
-            if r.GT() is not None:
-                if out_r is None:
-                    out_r = self.visit(r)
-                else:
-                    raise ValueError("output redirection already exists")
-
-        for atom in atoms:
-            if atom.argument() is not None:
-                arguments.extend(self.visit(atom))
-            if atom.redirection() is not None:
-                r = atom.redirection()
-                if r.LT() is not None:
-                    if in_r is None:
-                        in_r = self.visit(r)
-                    else:
-                        raise ValueError("input redirection already exists")
-
-                if r.GT() is not None:
-                    if out_r is None:
-                        out_r = self.visit(r)
-                    else:
-                        raise ValueError("output redirection already exists")
-
-        return Call(arguments[0], arguments[1:], in_r, out_r)
-
-    def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        return self.__split_and_glob(ctx.elements)
-
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.getText()
 
     def visitRedirection(self, ctx: CommandParser.RedirectionContext):
-        return self.visit(ctx.argument())[0]
+        return "".join(self.visit(ctx.argument()))
 
     def visitQuoted(self, ctx: CommandParser.QuotedContext):
         if ctx.backQuoted() is not None:

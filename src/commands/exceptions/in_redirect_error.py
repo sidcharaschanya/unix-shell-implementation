@@ -1,0 +1,2 @@
+class InRedirectError(Exception):
+    pass
