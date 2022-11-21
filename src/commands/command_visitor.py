@@ -1,8 +1,7 @@
 from antlr4 import InputStream, CommonTokenStream
 from collections import deque
 from .command import Command
-from .exceptions.in_redirect_error import InRedirectError
-from .exceptions.out_redirect_error import OutRedirectError
+from .exceptions.redirection_error import RedirectionError
 from glob import glob
 from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
@@ -41,12 +40,12 @@ class CommandVisitor(CommandParserVisitor):
             if i_file is None:
                 return self.visit(redirect), o_file
             else:
-                raise InRedirectError("several input redirection files")
+                raise RedirectionError("several input redirection files")
         else:
             if o_file is None:
                 return i_file, self.visit(redirect)
             else:
-                raise OutRedirectError("several output redirection files")
+                raise RedirectionError("several output redirection files")
 
     def visitCall(self, ctx: CommandParser.CallContext):
         i_file, o_file, arguments = None, None, self.visit(ctx.argument())
@@ -91,7 +90,12 @@ class CommandVisitor(CommandParserVisitor):
         return ctx.getText()
 
     def visitRedirection(self, ctx: CommandParser.RedirectionContext):
-        return "".join(self.visit(ctx.argument()))
+        visited_argument = self.visit(ctx.argument())
+
+        if len(visited_argument) != 1:
+            raise RedirectionError("several redirection files")
+
+        return visited_argument[0]
 
     def visitQuoted(self, ctx: CommandParser.QuotedContext):
         if ctx.backQuoted() is not None:

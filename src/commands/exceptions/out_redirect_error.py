@@ -1,2 +1,0 @@
-class OutRedirectError(Exception):
-    pass
