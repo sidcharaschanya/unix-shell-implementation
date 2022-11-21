@@ -732,59 +732,30 @@ class CommandParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+            self.op = None # Token
 
+        def argument(self):
+            return self.getTypedRuleContext(CommandParser.ArgumentContext,0)
+
+
+        def LT(self):
+            return self.getToken(CommandParser.LT, 0)
+
+        def WS(self):
+            return self.getToken(CommandParser.WS, 0)
+
+        def GT(self):
+            return self.getToken(CommandParser.GT, 0)
 
         def getRuleIndex(self):
             return CommandParser.RULE_redirection
 
-     
-        def copyFrom(self, ctx:ParserRuleContext):
-            super().copyFrom(ctx)
-
-
-
-    class OutRedirectionContext(RedirectionContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.RedirectionContext
-            super().__init__(parser)
-            self.op = None # Token
-            self.copyFrom(ctx)
-
-        def argument(self):
-            return self.getTypedRuleContext(CommandParser.ArgumentContext,0)
-
-        def GT(self):
-            return self.getToken(CommandParser.GT, 0)
-        def WS(self):
-            return self.getToken(CommandParser.WS, 0)
-
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitOutRedirection" ):
-                return visitor.visitOutRedirection(self)
+            if hasattr( visitor, "visitRedirection" ):
+                return visitor.visitRedirection(self)
             else:
                 return visitor.visitChildren(self)
 
-
-    class InRedirectionContext(RedirectionContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a CommandParser.RedirectionContext
-            super().__init__(parser)
-            self.op = None # Token
-            self.copyFrom(ctx)
-
-        def argument(self):
-            return self.getTypedRuleContext(CommandParser.ArgumentContext,0)
-
-        def LT(self):
-            return self.getToken(CommandParser.LT, 0)
-        def WS(self):
-            return self.getToken(CommandParser.WS, 0)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitInRedirection" ):
-                return visitor.visitInRedirection(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -798,7 +769,6 @@ class CommandParser ( Parser ):
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [8]:
-                localctx = CommandParser.InRedirectionContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 92
                 localctx.op = self.match(CommandParser.LT)
@@ -814,7 +784,6 @@ class CommandParser ( Parser ):
                 self.argument()
                 pass
             elif token in [9]:
-                localctx = CommandParser.OutRedirectionContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 97
                 localctx.op = self.match(CommandParser.GT)

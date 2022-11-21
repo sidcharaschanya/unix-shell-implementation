@@ -64,13 +64,8 @@ class CommandParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by CommandParser#inRedirection.
-    def visitInRedirection(self, ctx:CommandParser.InRedirectionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by CommandParser#outRedirection.
-    def visitOutRedirection(self, ctx:CommandParser.OutRedirectionContext):
+    # Visit a parse tree produced by CommandParser#redirection.
+    def visitRedirection(self, ctx:CommandParser.RedirectionContext):
         return self.visitChildren(ctx)
 
 

@@ -66,11 +66,8 @@ class CommandVisitor(CommandParserVisitor):
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.getText()
 
-    def visitInRedirection(self, ctx: CommandParser.InRedirectionContext):
-        pass
-
-    def visitOutRedirection(self, ctx: CommandParser.OutRedirectionContext):
-        pass
+    def visitRedirection(self, ctx: CommandParser.RedirectionContext):
+        return self.visit(ctx.argument())
 
     def visitQuoted(self, ctx: CommandParser.QuotedContext):
         if ctx.backQuoted() is not None:
