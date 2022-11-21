@@ -21,35 +21,29 @@ class CommandVisitor(CommandParserVisitor):
         command = tree.accept(cls())
         return command
 
-    @staticmethod
-    def __get_glob_indexes(elems: list, visited_elems: list) -> set:
-        glob_indexes, arg_count = set(), 0
+    def __split_and_glob(self, elems: list) -> list:
+        visited_elems = [self.visit(elem) for elem in elems]
+        split_elems = "".join(visited_elems).split("\n")
+        glob_indexes, glob_index, glob_elems = set(), 0, list()
 
         for elem, visited_elem in zip(elems, visited_elems):
             if hasattr(elem, "UNQUOTED") and "*" in visited_elem:
-                glob_indexes.add(arg_count)
+                glob_indexes.add(glob_index)
             else:
-                arg_count += visited_elem.count("\n")
+                glob_index += visited_elem.count("\n")
 
-        return glob_indexes
-
-    @staticmethod
-    def __get_glob_args(elems: list, visited_elems: list) -> list:
-        glob_indexes = CommandVisitor.__get_glob_indexes(elems, visited_elems)
-        args, glob_args = "".join(visited_elems).split("\n"), list()
-
-        for index, arg in enumerate(args):
+        for index, split_elem in enumerate(split_elems):
             if index in glob_indexes:
-                glob_arg = glob(arg)
+                glob_elem = glob(split_elem)
 
-                if len(glob_arg) == 0:
-                    glob_args.append(arg)
+                if len(glob_elem) == 0:
+                    glob_elems.append(split_elem)
                 else:
-                    glob_args.extend(glob_arg)
+                    glob_elems.extend(glob_elem)
             else:
-                glob_args.append(arg)
+                glob_elems.append(split_elem)
 
-        return glob_args
+        return glob_elems
 
     def visitCmdline(self, ctx: CommandParser.CmdlineContext):
         return self.visit(ctx.command())
@@ -67,8 +61,7 @@ class CommandVisitor(CommandParserVisitor):
         pass
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
-        visited_elements = [self.visit(element) for element in ctx.elements]
-        return CommandVisitor.__get_glob_args(ctx.elements, visited_elements)
+        return self.__split_and_glob(ctx.elements)
 
     def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
         return ctx.getText()
