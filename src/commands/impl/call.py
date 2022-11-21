@@ -21,18 +21,19 @@ class Call(Command):
         ])
 
     def eval(self, input_: Optional[str], out: deque) -> None:
+        my_input = input_
         if self.in_file_name is not None:
             with open(self.in_file_name) as in_file:
-                input_ = "".join(in_file.readlines())
+                my_input = "".join(in_file.readlines())
 
         if self.out_file_name is None:
             ApplicationFactory.by_name(self.app).exec(
-                self.args, input_, out
+                self.args, my_input, out
             )
         else:
             temp_out = deque()
             ApplicationFactory.by_name(self.app).exec(
-                self.args, input_, temp_out
+                self.args, my_input, temp_out
             )
-            with open(self.out_file_name) as out_file:
+            with open(self.out_file_name, "w") as out_file:
                 out_file.write("".join(temp_out))

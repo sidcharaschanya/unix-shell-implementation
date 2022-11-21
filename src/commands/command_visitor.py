@@ -59,42 +59,41 @@ class CommandVisitor(CommandParserVisitor):
         return Pipe(self.visit(ctx.left), self.visit(ctx.right))
 
     def visitCall(self, ctx: CommandParser.CallContext):
-        in_r=None
-        out_r=None
-        arguments=self.visit(ctx.argument())
-        atoms=ctx.atoms
-        for redirection in ctx.redirections:
-            if redirection.op.getText() == '<':
-                if in_r is not None:
-                    in_r=self.visit(redirection)
+        in_r = None
+        out_r = None
+        arguments = self.visit(ctx.argument())
+        atoms = ctx.atoms
+        for r in ctx.redirections:
+            if r.LT() is not None:
+                if in_r is None:
+                    in_r = self.visit(r)
                 else:
                     raise ValueError("input redirection already exists")
 
-            if redirection.op.getText() == '>':
-                if out_r is not None:
-                    out_r=self.visit(redirection)
+            if r.GT() is not None:
+                if out_r is None:
+                    out_r = self.visit(r)
                 else:
                     raise ValueError("output redirection already exists")
 
         for atom in atoms:
             if atom.argument() is not None:
                 arguments.extend(self.visit(atom))
-            else:
-                redirection=self.visit(atom)
-                if redirection.op.getText() == '<':
-                    if in_r is not None:
-                        in_r = self.visit(redirection)
+            if atom.redirection() is not None:
+                r = atom.redirection()
+                if r.LT() is not None:
+                    if in_r is None:
+                        in_r = self.visit(r)
                     else:
                         raise ValueError("input redirection already exists")
 
-                if redirection.op.getText() == '>':
-                    if out_r is not None:
-                        out_r = self.visit(redirection)
+                if r.GT() is not None:
+                    if out_r is None:
+                        out_r = self.visit(r)
                     else:
                         raise ValueError("output redirection already exists")
 
-        return Call(arguments[0],arguments[1:],in_r,out_r)
-
+        return Call(arguments[0], arguments[1:], in_r, out_r)
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
         return self.__split_and_glob(ctx.elements)
@@ -103,7 +102,7 @@ class CommandVisitor(CommandParserVisitor):
         return ctx.getText()
 
     def visitRedirection(self, ctx: CommandParser.RedirectionContext):
-        return self.visit(ctx.argument())
+        return self.visit(ctx.argument())[0]
 
     def visitQuoted(self, ctx: CommandParser.QuotedContext):
         if ctx.backQuoted() is not None:
