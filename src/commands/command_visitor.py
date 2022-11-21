@@ -5,6 +5,7 @@ from glob import glob
 from .grammar.CommandLexer import CommandLexer
 from .grammar.CommandParser import CommandParser
 from .grammar.CommandParserVisitor import CommandParserVisitor
+from .impl.call import Call
 from .impl.pipe import Pipe
 from .impl.seq import Seq
 import re
@@ -58,7 +59,42 @@ class CommandVisitor(CommandParserVisitor):
         return Pipe(self.visit(ctx.left), self.visit(ctx.right))
 
     def visitCall(self, ctx: CommandParser.CallContext):
-        pass
+        in_r=None
+        out_r=None
+        arguments=self.visit(ctx.argument())
+        atoms=ctx.atoms
+        for redirection in ctx.redirections:
+            if redirection.op.getText() == '<':
+                if in_r is not None:
+                    in_r=self.visit(redirection)
+                else:
+                    raise ValueError("input redirection already exists")
+
+            if redirection.op.getText() == '>':
+                if out_r is not None:
+                    out_r=self.visit(redirection)
+                else:
+                    raise ValueError("output redirection already exists")
+
+        for atom in atoms:
+            if atom.argument() is not None:
+                arguments.extend(self.visit(atom))
+            else:
+                redirection=self.visit(atom)
+                if redirection.op.getText() == '<':
+                    if in_r is not None:
+                        in_r = self.visit(redirection)
+                    else:
+                        raise ValueError("input redirection already exists")
+
+                if redirection.op.getText() == '>':
+                    if out_r is not None:
+                        out_r = self.visit(redirection)
+                    else:
+                        raise ValueError("output redirection already exists")
+
+        return Call(arguments[0],arguments[1:],in_r,out_r)
+
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
         return self.__split_and_glob(ctx.elements)
