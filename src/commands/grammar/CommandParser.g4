@@ -19,10 +19,10 @@ redirection: op=LT WS? argument | op=GT WS? argument;
 
 quoted: singleQuoted | doubleQuoted | backQuoted;
 
-singleQuoted: SQ SQ_CONTENT SQ;
+singleQuoted: SQ_START SQ_CONTENT SQ_END;
 
-backQuoted: BQ BQ_CONTENT BQ;
+backQuoted: BQ_START BQ_CONTENT BQ_END;
 
-doubleQuoted: DQ elements+=doubleQuotedElement* DQ;
+doubleQuoted: DQ_START elements+=doubleQuotedElement* DQ_END;
 
 doubleQuotedElement: backQuoted #bqDqElem | DQ_CONTENT #dqContent;
