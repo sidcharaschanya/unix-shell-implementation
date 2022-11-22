@@ -115,4 +115,4 @@ class CommandVisitor(CommandParserVisitor):
         return "".join(self.visit(element) for element in ctx.elements)
 
     def visitDqContent(self, ctx: CommandParser.DqContentContext):
-        return ctx.DQ_CONTENT().getText()
+        return ctx.getText()
