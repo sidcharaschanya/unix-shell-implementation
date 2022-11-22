@@ -64,14 +64,14 @@ class CommandVisitor(CommandParserVisitor):
 
     def visitArgument(self, ctx: CommandParser.ArgumentContext):
         visited_elems = [self.visit(elem) for elem in ctx.elements]
-        split_elems = "".join(visited_elems).split("\n")
-        is_globs, arg_index, glob_elems = [False] * len(split_elems), 0, list()
+        split_elems, glob_elems = "".join(visited_elems).split("\n"), list()
+        is_globs, split_elem_index = [False] * len(split_elems), 0
 
         for elem, visited_elem in zip(ctx.elements, visited_elems):
             if hasattr(elem, "UNQUOTED") and "*" in visited_elem:
-                is_globs[arg_index] = True
+                is_globs[split_elem_index] = True
             else:
-                arg_index += visited_elem.count("\n")
+                split_elem_index += visited_elem.count("\n")
 
         for is_glob, split_elem in zip(is_globs, split_elems):
             if is_glob:
