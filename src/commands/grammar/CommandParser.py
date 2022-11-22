@@ -10,49 +10,48 @@ else:
 
 def serializedATN():
     return [
-        4,1,12,131,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
-        6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,1,0,3,0,
-        28,8,0,1,0,1,0,1,1,1,1,1,1,3,1,35,8,1,1,1,1,1,1,1,5,1,40,8,1,10,
-        1,12,1,43,9,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,5,2,53,8,2,10,2,12,
-        2,56,9,2,1,3,3,3,59,8,3,1,3,1,3,1,3,5,3,64,8,3,10,3,12,3,67,9,3,
-        1,3,1,3,1,3,5,3,72,8,3,10,3,12,3,75,9,3,1,3,3,3,78,8,3,1,4,1,4,3,
-        4,82,8,4,1,5,4,5,85,8,5,11,5,12,5,86,1,6,1,6,3,6,91,8,6,1,7,1,7,
-        3,7,95,8,7,1,7,1,7,1,7,3,7,100,8,7,1,7,3,7,103,8,7,1,8,1,8,1,8,3,
-        8,108,8,8,1,9,1,9,1,9,1,9,1,10,1,10,1,10,1,10,1,11,1,11,5,11,120,
-        8,11,10,11,12,11,123,9,11,1,11,1,11,1,12,1,12,3,12,129,8,12,1,12,
-        0,2,2,4,13,0,2,4,6,8,10,12,14,16,18,20,22,24,0,0,135,0,27,1,0,0,
-        0,2,34,1,0,0,0,4,44,1,0,0,0,6,58,1,0,0,0,8,81,1,0,0,0,10,84,1,0,
-        0,0,12,90,1,0,0,0,14,102,1,0,0,0,16,107,1,0,0,0,18,109,1,0,0,0,20,
-        113,1,0,0,0,22,117,1,0,0,0,24,128,1,0,0,0,26,28,3,2,1,0,27,26,1,
-        0,0,0,27,28,1,0,0,0,28,29,1,0,0,0,29,30,5,0,0,1,30,1,1,0,0,0,31,
-        32,6,1,-1,0,32,35,3,4,2,0,33,35,3,6,3,0,34,31,1,0,0,0,34,33,1,0,
-        0,0,35,41,1,0,0,0,36,37,10,2,0,0,37,38,5,4,0,0,38,40,3,2,1,3,39,
-        36,1,0,0,0,40,43,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,3,1,0,0,
-        0,43,41,1,0,0,0,44,45,6,2,-1,0,45,46,3,6,3,0,46,47,5,5,0,0,47,48,
-        3,6,3,0,48,54,1,0,0,0,49,50,10,1,0,0,50,51,5,5,0,0,51,53,3,6,3,0,
-        52,49,1,0,0,0,53,56,1,0,0,0,54,52,1,0,0,0,54,55,1,0,0,0,55,5,1,0,
-        0,0,56,54,1,0,0,0,57,59,5,6,0,0,58,57,1,0,0,0,58,59,1,0,0,0,59,65,
-        1,0,0,0,60,61,3,14,7,0,61,62,5,6,0,0,62,64,1,0,0,0,63,60,1,0,0,0,
-        64,67,1,0,0,0,65,63,1,0,0,0,65,66,1,0,0,0,66,68,1,0,0,0,67,65,1,
-        0,0,0,68,73,3,10,5,0,69,70,5,6,0,0,70,72,3,8,4,0,71,69,1,0,0,0,72,
-        75,1,0,0,0,73,71,1,0,0,0,73,74,1,0,0,0,74,77,1,0,0,0,75,73,1,0,0,
-        0,76,78,5,6,0,0,77,76,1,0,0,0,77,78,1,0,0,0,78,7,1,0,0,0,79,82,3,
-        14,7,0,80,82,3,10,5,0,81,79,1,0,0,0,81,80,1,0,0,0,82,9,1,0,0,0,83,
-        85,3,12,6,0,84,83,1,0,0,0,85,86,1,0,0,0,86,84,1,0,0,0,86,87,1,0,
-        0,0,87,11,1,0,0,0,88,91,3,16,8,0,89,91,5,7,0,0,90,88,1,0,0,0,90,
-        89,1,0,0,0,91,13,1,0,0,0,92,94,5,8,0,0,93,95,5,6,0,0,94,93,1,0,0,
-        0,94,95,1,0,0,0,95,96,1,0,0,0,96,103,3,10,5,0,97,99,5,9,0,0,98,100,
-        5,6,0,0,99,98,1,0,0,0,99,100,1,0,0,0,100,101,1,0,0,0,101,103,3,10,
-        5,0,102,92,1,0,0,0,102,97,1,0,0,0,103,15,1,0,0,0,104,108,3,18,9,
-        0,105,108,3,22,11,0,106,108,3,20,10,0,107,104,1,0,0,0,107,105,1,
-        0,0,0,107,106,1,0,0,0,108,17,1,0,0,0,109,110,5,1,0,0,110,111,5,10,
-        0,0,111,112,5,1,0,0,112,19,1,0,0,0,113,114,5,2,0,0,114,115,5,11,
-        0,0,115,116,5,2,0,0,116,21,1,0,0,0,117,121,5,3,0,0,118,120,3,24,
-        12,0,119,118,1,0,0,0,120,123,1,0,0,0,121,119,1,0,0,0,121,122,1,0,
-        0,0,122,124,1,0,0,0,123,121,1,0,0,0,124,125,5,3,0,0,125,23,1,0,0,
-        0,126,129,3,20,10,0,127,129,5,12,0,0,128,126,1,0,0,0,128,127,1,0,
-        0,0,129,25,1,0,0,0,17,27,34,41,54,58,65,73,77,81,86,90,94,99,102,
-        107,121,128
+        4,1,12,129,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,1,0,1,0,
+        1,0,1,1,1,1,1,1,3,1,33,8,1,1,1,1,1,1,1,5,1,38,8,1,10,1,12,1,41,9,
+        1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,5,2,51,8,2,10,2,12,2,54,9,2,1,
+        3,3,3,57,8,3,1,3,1,3,1,3,5,3,62,8,3,10,3,12,3,65,9,3,1,3,1,3,1,3,
+        5,3,70,8,3,10,3,12,3,73,9,3,1,3,3,3,76,8,3,1,4,1,4,3,4,80,8,4,1,
+        5,4,5,83,8,5,11,5,12,5,84,1,6,1,6,3,6,89,8,6,1,7,1,7,3,7,93,8,7,
+        1,7,1,7,1,7,3,7,98,8,7,1,7,3,7,101,8,7,1,8,1,8,1,8,3,8,106,8,8,1,
+        9,1,9,1,9,1,9,1,10,1,10,1,10,1,10,1,11,1,11,5,11,118,8,11,10,11,
+        12,11,121,9,11,1,11,1,11,1,12,1,12,3,12,127,8,12,1,12,0,2,2,4,13,
+        0,2,4,6,8,10,12,14,16,18,20,22,24,0,0,132,0,26,1,0,0,0,2,32,1,0,
+        0,0,4,42,1,0,0,0,6,56,1,0,0,0,8,79,1,0,0,0,10,82,1,0,0,0,12,88,1,
+        0,0,0,14,100,1,0,0,0,16,105,1,0,0,0,18,107,1,0,0,0,20,111,1,0,0,
+        0,22,115,1,0,0,0,24,126,1,0,0,0,26,27,3,2,1,0,27,28,5,0,0,1,28,1,
+        1,0,0,0,29,30,6,1,-1,0,30,33,3,4,2,0,31,33,3,6,3,0,32,29,1,0,0,0,
+        32,31,1,0,0,0,33,39,1,0,0,0,34,35,10,2,0,0,35,36,5,4,0,0,36,38,3,
+        2,1,3,37,34,1,0,0,0,38,41,1,0,0,0,39,37,1,0,0,0,39,40,1,0,0,0,40,
+        3,1,0,0,0,41,39,1,0,0,0,42,43,6,2,-1,0,43,44,3,6,3,0,44,45,5,5,0,
+        0,45,46,3,6,3,0,46,52,1,0,0,0,47,48,10,1,0,0,48,49,5,5,0,0,49,51,
+        3,6,3,0,50,47,1,0,0,0,51,54,1,0,0,0,52,50,1,0,0,0,52,53,1,0,0,0,
+        53,5,1,0,0,0,54,52,1,0,0,0,55,57,5,6,0,0,56,55,1,0,0,0,56,57,1,0,
+        0,0,57,63,1,0,0,0,58,59,3,14,7,0,59,60,5,6,0,0,60,62,1,0,0,0,61,
+        58,1,0,0,0,62,65,1,0,0,0,63,61,1,0,0,0,63,64,1,0,0,0,64,66,1,0,0,
+        0,65,63,1,0,0,0,66,71,3,10,5,0,67,68,5,6,0,0,68,70,3,8,4,0,69,67,
+        1,0,0,0,70,73,1,0,0,0,71,69,1,0,0,0,71,72,1,0,0,0,72,75,1,0,0,0,
+        73,71,1,0,0,0,74,76,5,6,0,0,75,74,1,0,0,0,75,76,1,0,0,0,76,7,1,0,
+        0,0,77,80,3,14,7,0,78,80,3,10,5,0,79,77,1,0,0,0,79,78,1,0,0,0,80,
+        9,1,0,0,0,81,83,3,12,6,0,82,81,1,0,0,0,83,84,1,0,0,0,84,82,1,0,0,
+        0,84,85,1,0,0,0,85,11,1,0,0,0,86,89,3,16,8,0,87,89,5,7,0,0,88,86,
+        1,0,0,0,88,87,1,0,0,0,89,13,1,0,0,0,90,92,5,8,0,0,91,93,5,6,0,0,
+        92,91,1,0,0,0,92,93,1,0,0,0,93,94,1,0,0,0,94,101,3,10,5,0,95,97,
+        5,9,0,0,96,98,5,6,0,0,97,96,1,0,0,0,97,98,1,0,0,0,98,99,1,0,0,0,
+        99,101,3,10,5,0,100,90,1,0,0,0,100,95,1,0,0,0,101,15,1,0,0,0,102,
+        106,3,18,9,0,103,106,3,22,11,0,104,106,3,20,10,0,105,102,1,0,0,0,
+        105,103,1,0,0,0,105,104,1,0,0,0,106,17,1,0,0,0,107,108,5,1,0,0,108,
+        109,5,10,0,0,109,110,5,1,0,0,110,19,1,0,0,0,111,112,5,2,0,0,112,
+        113,5,11,0,0,113,114,5,2,0,0,114,21,1,0,0,0,115,119,5,3,0,0,116,
+        118,3,24,12,0,117,116,1,0,0,0,118,121,1,0,0,0,119,117,1,0,0,0,119,
+        120,1,0,0,0,120,122,1,0,0,0,121,119,1,0,0,0,122,123,5,3,0,0,123,
+        23,1,0,0,0,124,127,3,20,10,0,125,127,5,12,0,0,126,124,1,0,0,0,126,
+        125,1,0,0,0,127,25,1,0,0,0,16,32,39,52,56,63,71,75,79,84,88,92,97,
+        100,105,119,126
     ]
 
 class CommandParser ( Parser ):
@@ -120,12 +119,12 @@ class CommandParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def EOF(self):
-            return self.getToken(CommandParser.EOF, 0)
-
         def command(self):
             return self.getTypedRuleContext(CommandParser.CommandContext,0)
 
+
+        def EOF(self):
+            return self.getToken(CommandParser.EOF, 0)
 
         def getRuleIndex(self):
             return CommandParser.RULE_cmdline
@@ -143,18 +142,11 @@ class CommandParser ( Parser ):
 
         localctx = CommandParser.CmdlineContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_cmdline)
-        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
+            self.state = 26
+            self.command(0)
             self.state = 27
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            if ((_la) & ~0x3f) == 0 and ((1 << _la) & 974) != 0:
-                self.state = 26
-                self.command(0)
-
-
-            self.state = 29
             self.match(CommandParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
@@ -249,15 +241,15 @@ class CommandParser ( Parser ):
         self.enterRecursionRule(localctx, 2, self.RULE_command, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 34
+            self.state = 32
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,0,self._ctx)
             if la_ == 1:
                 localctx = CommandParser.PipeCommandContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
 
-                self.state = 32
+                self.state = 30
                 self.pipe(0)
                 pass
 
@@ -265,15 +257,15 @@ class CommandParser ( Parser ):
                 localctx = CommandParser.CallCommandContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 33
+                self.state = 31
                 self.call()
                 pass
 
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 41
+            self.state = 39
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,1,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     if self._parseListeners is not None:
@@ -282,17 +274,17 @@ class CommandParser ( Parser ):
                     localctx = CommandParser.SeqContext(self, CommandParser.CommandContext(self, _parentctx, _parentState))
                     localctx.left = _prevctx
                     self.pushNewRecursionContext(localctx, _startState, self.RULE_command)
-                    self.state = 36
+                    self.state = 34
                     if not self.precpred(self._ctx, 2):
                         from antlr4.error.Errors import FailedPredicateException
                         raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                    self.state = 37
+                    self.state = 35
                     self.match(CommandParser.SEQ)
-                    self.state = 38
+                    self.state = 36
                     localctx.right = self.command(3) 
-                self.state = 43
+                self.state = 41
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,1,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -381,16 +373,16 @@ class CommandParser ( Parser ):
             self._ctx = localctx
             _prevctx = localctx
 
-            self.state = 45
+            self.state = 43
             localctx.left = self.call()
-            self.state = 46
+            self.state = 44
             self.match(CommandParser.PIPE)
-            self.state = 47
+            self.state = 45
             localctx.right = self.call()
             self._ctx.stop = self._input.LT(-1)
-            self.state = 54
+            self.state = 52
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     if self._parseListeners is not None:
@@ -399,17 +391,17 @@ class CommandParser ( Parser ):
                     localctx = CommandParser.NestedPipeContext(self, CommandParser.PipeContext(self, _parentctx, _parentState))
                     localctx.left = _prevctx
                     self.pushNewRecursionContext(localctx, _startState, self.RULE_pipe)
-                    self.state = 49
+                    self.state = 47
                     if not self.precpred(self._ctx, 1):
                         from antlr4.error.Errors import FailedPredicateException
                         raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
-                    self.state = 50
+                    self.state = 48
                     self.match(CommandParser.PIPE)
-                    self.state = 51
+                    self.state = 49
                     localctx.right = self.call() 
-                self.state = 56
+                self.state = 54
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -474,48 +466,48 @@ class CommandParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 58
+            self.state = 56
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==6:
-                self.state = 57
+                self.state = 55
                 self.match(CommandParser.WS)
 
 
-            self.state = 65
+            self.state = 63
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==8 or _la==9:
-                self.state = 60
+                self.state = 58
                 localctx._redirection = self.redirection()
                 localctx.redirections.append(localctx._redirection)
-                self.state = 61
+                self.state = 59
                 self.match(CommandParser.WS)
-                self.state = 67
+                self.state = 65
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 68
+            self.state = 66
             self.argument()
-            self.state = 73
+            self.state = 71
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,6,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
-                    self.state = 69
+                    self.state = 67
                     self.match(CommandParser.WS)
-                    self.state = 70
+                    self.state = 68
                     localctx._atom = self.atom()
                     localctx.atoms.append(localctx._atom) 
-                self.state = 75
+                self.state = 73
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,6,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
 
-            self.state = 77
+            self.state = 75
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,7,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,6,self._ctx)
             if la_ == 1:
-                self.state = 76
+                self.state = 74
                 self.match(CommandParser.WS)
 
 
@@ -560,17 +552,17 @@ class CommandParser ( Parser ):
         localctx = CommandParser.AtomContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_atom)
         try:
-            self.state = 81
+            self.state = 79
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [8, 9]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 79
+                self.state = 77
                 self.redirection()
                 pass
             elif token in [1, 2, 3, 7]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 80
+                self.state = 78
                 self.argument()
                 pass
             else:
@@ -619,20 +611,20 @@ class CommandParser ( Parser ):
         self.enterRule(localctx, 10, self.RULE_argument)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 84 
+            self.state = 82 
             self._errHandler.sync(self)
             _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
-                    self.state = 83
+                    self.state = 81
                     localctx._argumentElement = self.argumentElement()
                     localctx.elements.append(localctx._argumentElement)
 
                 else:
                     raise NoViableAltException(self)
-                self.state = 86 
+                self.state = 84 
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -699,19 +691,19 @@ class CommandParser ( Parser ):
         localctx = CommandParser.ArgumentElementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_argumentElement)
         try:
-            self.state = 90
+            self.state = 88
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [1, 2, 3]:
                 localctx = CommandParser.QuotedArgElemContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 88
+                self.state = 86
                 self.quoted()
                 pass
             elif token in [7]:
                 localctx = CommandParser.UnquotedContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 89
+                self.state = 87
                 self.match(CommandParser.UNQUOTED)
                 pass
             else:
@@ -765,37 +757,37 @@ class CommandParser ( Parser ):
         self.enterRule(localctx, 14, self.RULE_redirection)
         self._la = 0 # Token type
         try:
-            self.state = 102
+            self.state = 100
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [8]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 92
+                self.state = 90
                 localctx.op = self.match(CommandParser.LT)
-                self.state = 94
+                self.state = 92
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if _la==6:
-                    self.state = 93
+                    self.state = 91
                     self.match(CommandParser.WS)
 
 
-                self.state = 96
+                self.state = 94
                 self.argument()
                 pass
             elif token in [9]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 97
+                self.state = 95
                 localctx.op = self.match(CommandParser.GT)
-                self.state = 99
+                self.state = 97
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if _la==6:
-                    self.state = 98
+                    self.state = 96
                     self.match(CommandParser.WS)
 
 
-                self.state = 101
+                self.state = 99
                 self.argument()
                 pass
             else:
@@ -846,22 +838,22 @@ class CommandParser ( Parser ):
         localctx = CommandParser.QuotedContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_quoted)
         try:
-            self.state = 107
+            self.state = 105
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [1]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 104
+                self.state = 102
                 self.singleQuoted()
                 pass
             elif token in [3]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 105
+                self.state = 103
                 self.doubleQuoted()
                 pass
             elif token in [2]:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 106
+                self.state = 104
                 self.backQuoted()
                 pass
             else:
@@ -910,11 +902,11 @@ class CommandParser ( Parser ):
         self.enterRule(localctx, 18, self.RULE_singleQuoted)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 109
+            self.state = 107
             self.match(CommandParser.SQ)
-            self.state = 110
+            self.state = 108
             self.match(CommandParser.SQ_CONTENT)
-            self.state = 111
+            self.state = 109
             self.match(CommandParser.SQ)
         except RecognitionException as re:
             localctx.exception = re
@@ -959,11 +951,11 @@ class CommandParser ( Parser ):
         self.enterRule(localctx, 20, self.RULE_backQuoted)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 113
+            self.state = 111
             self.match(CommandParser.BQ)
-            self.state = 114
+            self.state = 112
             self.match(CommandParser.BQ_CONTENT)
-            self.state = 115
+            self.state = 113
             self.match(CommandParser.BQ)
         except RecognitionException as re:
             localctx.exception = re
@@ -1015,20 +1007,20 @@ class CommandParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 117
+            self.state = 115
             self.match(CommandParser.DQ)
-            self.state = 121
+            self.state = 119
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==2 or _la==12:
-                self.state = 118
+                self.state = 116
                 localctx._doubleQuotedElement = self.doubleQuotedElement()
                 localctx.elements.append(localctx._doubleQuotedElement)
-                self.state = 123
+                self.state = 121
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 124
+            self.state = 122
             self.match(CommandParser.DQ)
         except RecognitionException as re:
             localctx.exception = re
@@ -1095,19 +1087,19 @@ class CommandParser ( Parser ):
         localctx = CommandParser.DoubleQuotedElementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 24, self.RULE_doubleQuotedElement)
         try:
-            self.state = 128
+            self.state = 126
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [2]:
                 localctx = CommandParser.BqDqElemContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 126
+                self.state = 124
                 self.backQuoted()
                 pass
             elif token in [12]:
                 localctx = CommandParser.DqContentContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 127
+                self.state = 125
                 self.match(CommandParser.DQ_CONTENT)
                 pass
             else:

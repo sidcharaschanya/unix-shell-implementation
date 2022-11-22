@@ -1,7 +1,7 @@
 parser grammar CommandParser;
 options {tokenVocab = CommandLexer;}
 
-cmdline: command? EOF;
+cmdline: command EOF;
 
 command: pipe #pipeCommand | left=command SEQ right=command #seq | call #callCommand;
 
