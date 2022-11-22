@@ -25,7 +25,7 @@ class TestCommandVisitor(unittest.TestCase):
         self.assertEqual(command, expected)
 
     def test_nested_pipe(self):
-        cmdline="echo 'Interesting String' > test.txt | cat test.txt | grep 'Interesting String'"
+        cmdline="echo 'Interesting String' | grep 'Interesting String' | grep 'Ie'"
         command=CommandVisitor.parse(cmdline)
-        expected=Pipe(Pipe(Call("echo",['Interesting String'],None,"test.txt"),Call("cat",["test.txt"],None,None)),Call("grep",["Interesting String"],None,None))
+        expected=Pipe(Pipe(Call("echo",['Interesting String'],None,None),Call("grep",["Interesting String"],None,None)),Call("grep",["Ie"],None,None))
         self.assertEqual(command, expected)
