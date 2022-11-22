@@ -37,7 +37,7 @@ class Cut(Application):
             if input_ is None:
                 raise NoStdinError("Cut: stdin not provided")
 
-            lines = [i + "\n" for i in input_.split("\n")]
+            lines = input_.splitlines(True)
         else:
             with open(args[2]) as file:
                 lines = file.readlines()

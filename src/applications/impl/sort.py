@@ -22,7 +22,7 @@ class Sort(Application):
             if input_ is None:
                 raise NoStdinError("Sort: stdin not provided")
 
-            reverse, lines = False, [i + "\n" for i in input_.split("\n")]
+            reverse, lines = False, input_.splitlines(True)
         elif len(args) == 1:
             if args[0] != "-r":
                 with open(args[0]) as file:
@@ -31,7 +31,7 @@ class Sort(Application):
                 if input_ is None:
                     raise NoStdinError("Sort: stdin not provided")
 
-                reverse, lines = True, [i + "\n" for i in input_.split("\n")]
+                reverse, lines = True, input_.splitlines(True)
         else:
             if args[0] != "-r":
                 raise WrongFlagsError("Sort: wrong flags")

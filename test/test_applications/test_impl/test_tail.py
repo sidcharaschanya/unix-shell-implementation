@@ -46,14 +46,14 @@ class TestTail(unittest.TestCase):
         self.out.clear()
 
     def test_tail_stdin(self):
-        Tail().exec([], self.files["test1.txt"][:-1], self.out)
+        Tail().exec([], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), [str(i) + "\n" for i in range(9)])
 
     @given(st.integers(min_value=0, max_value=9))
     def test_tail_stdin_num_lines(self, num_lines):
         Tail().exec([
             "-n", str(num_lines)
-        ], self.files["test1.txt"][:-1], self.out)
+        ], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), [
             str(i) + "\n" for i in range(9 - num_lines, 9)
         ])

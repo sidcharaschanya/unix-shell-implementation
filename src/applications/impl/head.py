@@ -24,7 +24,7 @@ class Head(Application):
             if input_ is None:
                 raise NoStdinError("Head: stdin not provided")
 
-            num_lines, lines = 10, [i + "\n" for i in input_.split("\n")]
+            num_lines, lines = 10, input_.splitlines(True)
         elif len(args) == 1:
             with open(args[0]) as file:
                 num_lines, lines = 10, file.readlines()
@@ -35,8 +35,7 @@ class Head(Application):
             if input_ is None:
                 raise NoStdinError("Head: stdin not provided")
 
-            num_lines = int(args[1])
-            lines = [i + "\n" for i in input_.split("\n")]
+            num_lines, lines = int(args[1]), input_.splitlines(True)
         else:
             if args[0] != "-n":
                 raise WrongFlagsError("Head: wrong flags")

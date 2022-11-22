@@ -46,14 +46,14 @@ class TestHead(unittest.TestCase):
         self.out.clear()
 
     def test_head_stdin(self):
-        Head().exec([], self.files["test1.txt"][:-1], self.out)
+        Head().exec([], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), [str(i) + "\n" for i in range(9)])
 
     @given(st.integers(min_value=0, max_value=9))
     def test_head_stdin_num_lines(self, num_lines):
         Head().exec([
             "-n", str(num_lines)
-        ], self.files["test1.txt"][:-1], self.out)
+        ], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), [
             str(i) + "\n" for i in range(num_lines)
         ])

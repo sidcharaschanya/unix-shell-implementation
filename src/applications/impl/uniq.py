@@ -32,7 +32,7 @@ class Uniq(Application):
             if input_ is None:
                 raise NoStdinError("Uniq: stdin not provided")
 
-            ignr_case, lines = False, [i + "\n" for i in input_.split("\n")]
+            ignr_case, lines = False, input_.splitlines(True)
         elif len(args) == 1:
             if args[0] != "-i":
                 with open(args[0]) as file:
@@ -41,7 +41,7 @@ class Uniq(Application):
                 if input_ is None:
                     raise NoStdinError("Uniq: stdin not provided")
 
-                ignr_case, lines = True, [i + "\n" for i in input_.split("\n")]
+                ignr_case, lines = True, input_.splitlines(True)
         else:
             if args[0] != "-i":
                 raise WrongFlagsError("Uniq: wrong flags")

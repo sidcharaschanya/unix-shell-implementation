@@ -21,7 +21,7 @@ class Grep(Application):
         if input_ is None:
             raise NoStdinError("Grep: stdin not provided")
 
-        pattern, lines = args[0], [i + "\n" for i in input_.split("\n")]
+        pattern, lines = args[0], input_.splitlines(True)
 
         for line in lines:
             if re.match(pattern, line):
