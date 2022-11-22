@@ -14,7 +14,7 @@ import re
 
 class CommandVisitor(CommandParserVisitor):
     @classmethod
-    def convert(cls, cmdline: str) -> Command:
+    def parse(cls, cmdline: str) -> Command:
         input_stream = InputStream(cmdline)
         lexer = CommandLexer(input_stream)
         common_token_stream = CommonTokenStream(lexer)
@@ -108,7 +108,7 @@ class CommandVisitor(CommandParserVisitor):
 
     def visitBackQuoted(self, ctx: CommandParser.BackQuotedContext):
         temp_out = deque()
-        CommandVisitor.convert(ctx.BQ_CONTENT().getText()).eval(None, temp_out)
+        CommandVisitor.parse(ctx.BQ_CONTENT().getText()).eval(None, temp_out)
         return "".join(temp_out).replace("\n", " ")
 
     def visitDoubleQuoted(self, ctx: CommandParser.DoubleQuotedContext):

@@ -5,7 +5,7 @@ import sys
 
 
 def eval(cmdline: str, out: deque) -> None:
-    CommandVisitor.convert(cmdline).eval(None, out)
+    CommandVisitor.parse(cmdline).eval(None, out)
 
 
 def run(cmdline: str) -> None:
