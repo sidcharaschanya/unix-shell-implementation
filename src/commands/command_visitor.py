@@ -1,6 +1,7 @@
 from antlr4 import InputStream, CommonTokenStream
 from collections import deque
 from .command import Command
+from .command_error_listener import CommandErrorListener
 from .exceptions.redirection_error import RedirectionError
 from glob import glob
 from .grammar.CommandLexer import CommandLexer
@@ -19,6 +20,8 @@ class CommandVisitor(CommandParserVisitor):
         lexer = CommandLexer(input_stream)
         common_token_stream = CommonTokenStream(lexer)
         parser = CommandParser(common_token_stream)
+        parser.removeErrorListeners()
+        parser.addErrorListener(CommandErrorListener.INSTANCE)
         tree = parser.cmdline()
         command = tree.accept(cls())
         return command

@@ -1,3 +1,4 @@
+from antlr4.error.Errors import ParseCancellationException
 from collections import deque
 from commands.command_visitor import CommandVisitor
 import os
@@ -5,7 +6,10 @@ import sys
 
 
 def eval(cmdline: str, out: deque) -> None:
-    CommandVisitor.parse(cmdline).eval(None, out)
+    try:
+        CommandVisitor.parse(cmdline).eval(None, out)
+    except ParseCancellationException as exception:
+        out.append(f"shell: {exception}\n")
 
 
 def run(cmdline: str) -> None:
