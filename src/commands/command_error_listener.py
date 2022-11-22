@@ -7,9 +7,8 @@ class CommandErrorListener(ErrorListener):
 
     # noinspection PyPep8Naming
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        raise ParseCancellationException(
-            f"syntax error: line {line}:{column} {msg}"
-        )
+        message = f"syntax error: line {line}:{column} {msg}"
+        raise ParseCancellationException(message)
 
 
 CommandErrorListener.INSTANCE = CommandErrorListener()
