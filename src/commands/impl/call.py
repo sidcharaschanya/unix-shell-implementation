@@ -1,24 +1,16 @@
 from applications.application_factory import ApplicationFactory
 from collections import deque
 from ..command import Command
+from dataclasses import dataclass
 from typing import Optional
 
 
+@dataclass
 class Call(Command):
-    def __init__(self, app, args, in_file_name, out_file_name) -> None:
-        self.app: str = app
-        self.args: list = args
-        self.in_file_name: Optional[str] = in_file_name
-        self.out_file_name: Optional[str] = out_file_name
-
-    def __eq__(self, other) -> bool:
-        return all([
-            self.__class__ == other.__class__,
-            self.app == other.app,
-            self.args == other.args,
-            self.in_file_name == other.in_file_name,
-            self.out_file_name == other.out_file_name
-        ])
+    app: str
+    args: list
+    in_file_name: Optional[str]
+    out_file_name: Optional[str]
 
     def eval(self, input_: Optional[str], out: deque) -> None:
         new_in, new_out = input_, out
