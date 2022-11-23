@@ -4,8 +4,8 @@ from typing import Optional
 
 
 class UnsafeDecorator(Application):
-    def __init__(self, application: Application) -> None:
-        self.app = application
+    def __init__(self, app: Application) -> None:
+        self.app = app
 
     def exec(self, args: list, input_: Optional[list], out: deque) -> None:
         try:
