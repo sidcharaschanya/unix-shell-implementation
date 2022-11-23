@@ -28,16 +28,16 @@ class CommandVisitor(CommandParserVisitor):
         command = tree.accept(cls())
         return command
 
-    def visitCmdline(self, ctx: CommandParser.CmdlineContext):
+    def visitCmdline(self, ctx: CommandParser.CmdlineContext) -> Command:
         return self.visit(ctx.command())
 
-    def visitSeq(self, ctx: CommandParser.SeqContext):
+    def visitSeq(self, ctx: CommandParser.SeqContext) -> Seq:
         return Seq(self.visit(ctx.left), self.visit(ctx.right))
 
-    def visitSinglePipe(self, ctx: CommandParser.SinglePipeContext):
+    def visitSinglePipe(self, ctx: CommandParser.SinglePipeContext) -> Pipe:
         return Pipe(self.visit(ctx.left), self.visit(ctx.right))
 
-    def visitNestedPipe(self, ctx: CommandParser.NestedPipeContext):
+    def visitNestedPipe(self, ctx: CommandParser.NestedPipeContext) -> Pipe:
         return Pipe(self.visit(ctx.left), self.visit(ctx.right))
 
     def __new_io_files(self, redirect, i_file: str, o_file: str) -> tuple:
@@ -52,7 +52,7 @@ class CommandVisitor(CommandParserVisitor):
             else:
                 raise RedirectionError("several output redirection files")
 
-    def visitCall(self, ctx: CommandParser.CallContext):
+    def visitCall(self, ctx: CommandParser.CallContext) -> Call:
         i_file, o_file, arguments = None, None, self.visit(ctx.argument())
 
         for redirect in ctx.redirections:
@@ -67,7 +67,7 @@ class CommandVisitor(CommandParserVisitor):
 
         return Call(arguments[0], arguments[1:], i_file, o_file)
 
-    def visitArgument(self, ctx: CommandParser.ArgumentContext):
+    def visitArgument(self, ctx: CommandParser.ArgumentContext) -> list:
         visited_elems = [self.visit(elem) for elem in ctx.elements]
         split_elems, glob_elems = "".join(visited_elems).split("\n"), list()
         is_globs, split_elem_index = [False] * len(split_elems), 0
@@ -91,10 +91,10 @@ class CommandVisitor(CommandParserVisitor):
 
         return glob_elems
 
-    def visitUnquoted(self, ctx: CommandParser.UnquotedContext):
+    def visitUnquoted(self, ctx: CommandParser.UnquotedContext) -> str:
         return ctx.getText()
 
-    def visitRedirection(self, ctx: CommandParser.RedirectionContext):
+    def visitRedirection(self, ctx: CommandParser.RedirectionContext) -> str:
         file_names = self.visit(ctx.argument())
 
         if len(file_names) != 1:
@@ -102,22 +102,22 @@ class CommandVisitor(CommandParserVisitor):
 
         return file_names[0]
 
-    def visitQuoted(self, ctx: CommandParser.QuotedContext):
+    def visitQuoted(self, ctx: CommandParser.QuotedContext) -> str:
         if ctx.backQuoted() is not None:
             return re.sub("[\t ]+", "\n", self.visit(ctx.backQuoted()).strip())
 
         return self.visitChildren(ctx)
 
-    def visitSingleQuoted(self, ctx: CommandParser.SingleQuotedContext):
+    def visitSingleQuoted(self, ctx: CommandParser.SingleQuotedContext) -> str:
         return ctx.SQ_CONTENT().getText()
 
-    def visitBackQuoted(self, ctx: CommandParser.BackQuotedContext):
+    def visitBackQuoted(self, ctx: CommandParser.BackQuotedContext) -> str:
         temp_out = deque()
         CommandVisitor.parse(ctx.BQ_CONTENT().getText()).eval(None, temp_out)
         return "".join(temp_out).replace("\n", " ")
 
-    def visitDoubleQuoted(self, ctx: CommandParser.DoubleQuotedContext):
+    def visitDoubleQuoted(self, ctx: CommandParser.DoubleQuotedContext) -> str:
         return "".join(self.visit(element) for element in ctx.elements)
 
-    def visitDqContent(self, ctx: CommandParser.DqContentContext):
+    def visitDqContent(self, ctx: CommandParser.DqContentContext) -> str:
         return ctx.getText()
