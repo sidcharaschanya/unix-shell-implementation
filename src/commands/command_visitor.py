@@ -20,8 +20,10 @@ class CommandVisitor(CommandParserVisitor):
         lexer = CommandLexer(input_stream)
         common_token_stream = CommonTokenStream(lexer)
         parser = CommandParser(common_token_stream)
+
         parser.removeErrorListeners()
         parser.addErrorListener(CommandErrorListener.INSTANCE)
+
         tree = parser.cmdline()
         command = tree.accept(cls())
         return command
