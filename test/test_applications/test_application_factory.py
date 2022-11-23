@@ -35,9 +35,8 @@ class TestApplicationFactory(unittest.TestCase):
 
     @given(st.sampled_from(list(apps.keys())))
     def test_application_factory(self, name):
-        self.assertIsInstance(
-            ApplicationFactory.by_name(name), TestApplicationFactory.apps[name]
-        )
+        app = ApplicationFactory.by_name(name)
+        self.assertIsInstance(app, TestApplicationFactory.apps[name])
 
     @given(st.sampled_from(list(apps.keys())))
     def test_application_factory_unsafe_decorator(self, name):
