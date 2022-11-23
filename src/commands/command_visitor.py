@@ -95,12 +95,12 @@ class CommandVisitor(CommandParserVisitor):
         return ctx.getText()
 
     def visitRedirection(self, ctx: CommandParser.RedirectionContext):
-        visited_argument = self.visit(ctx.argument())
+        file_names = self.visit(ctx.argument())
 
-        if len(visited_argument) != 1:
+        if len(file_names) != 1:
             raise RedirectionError("several redirection files")
 
-        return visited_argument[0]
+        return file_names[0]
 
     def visitQuoted(self, ctx: CommandParser.QuotedContext):
         if ctx.backQuoted() is not None:
