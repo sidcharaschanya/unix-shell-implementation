@@ -39,17 +39,16 @@ class TestApplicationFactory(unittest.TestCase):
             ApplicationFactory.by_name(name), TestApplicationFactory.apps[name]
         )
 
-    @given(st.sampled_from([f"_{app}" for app in apps.keys()]))
+    @given(st.sampled_from(list(apps.keys())))
     def test_application_factory_unsafe_decorator(self, name):
-        self.assertIsInstance(
-            ApplicationFactory.by_name(name), UnsafeDecorator
-        )
+        unsafe = ApplicationFactory.by_name(f"_{name}")
+        self.assertIsInstance(unsafe, UnsafeDecorator)
+        self.assertIsInstance(unsafe.app, TestApplicationFactory.apps[name])
 
     @given(st.text())
     def test_application_factory_key_error(self, name):
-        assume(name not in TestApplicationFactory.apps.keys())
-        assume(name not in [
-            f"_{app}" for app in TestApplicationFactory.apps.keys()
-        ])
+        app_keys = TestApplicationFactory.apps.keys()
+        assume(name not in app_keys)
+        assume(name not in [f"_{app_key}" for app_key in app_keys])
         with self.assertRaises(KeyError):
             ApplicationFactory.by_name(name)
