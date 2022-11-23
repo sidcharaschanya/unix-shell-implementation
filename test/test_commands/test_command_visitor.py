@@ -29,3 +29,13 @@ class TestCommandVisitor(unittest.TestCase):
         command=CommandVisitor.parse(cmdline)
         expected=Pipe(Pipe(Call("echo",['Interesting String'],None,None),Call("grep",["Interesting String"],None,None)),Call("grep",["Ie"],None,None))
         self.assertEqual(command, expected)
+
+    def test_single_quote(self):
+        cmdline = "echo 'Interesting String'"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo",['Interesting String'],None,None)
+        self.assertEqual(command,expected)
+
+
+
+
