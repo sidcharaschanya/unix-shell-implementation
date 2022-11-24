@@ -30,6 +30,12 @@ class TestCommandVisitor(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
 
+    def test_redirection(self):
+        cmdline = "echo hello > text1.txt"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello"], None,"text1.txt")
+        self.assertEqual(command, expected)
+
     def test_seq_command(self):
             cmdline="echo hello;echo hi"
             command=CommandVisitor.parse(cmdline)
