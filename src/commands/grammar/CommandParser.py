@@ -112,9 +112,6 @@ class CommandParser ( Parser ):
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
-
-
-
     class CmdlineContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -1137,6 +1134,7 @@ class CommandParser ( Parser ):
     def pipe_sempred(self, localctx:PipeContext, predIndex:int):
             if predIndex == 1:
                 return self.precpred(self._ctx, 1)
+
          
 
 

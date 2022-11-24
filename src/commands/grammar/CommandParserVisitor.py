@@ -13,7 +13,6 @@ class CommandParserVisitor(ParseTreeVisitor):
     def visitCmdline(self, ctx:CommandParser.CmdlineContext):
         return self.visitChildren(ctx)
 
-
     # Visit a parse tree produced by CommandParser#callCommand.
     def visitCallCommand(self, ctx:CommandParser.CallCommandContext):
         return self.visitChildren(ctx)
