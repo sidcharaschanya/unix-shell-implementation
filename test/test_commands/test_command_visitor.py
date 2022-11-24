@@ -64,13 +64,7 @@ class TestCommandVisitor(unittest.TestCase):
         expected = Call("echo", ['Interesting String'], None, None)
         self.assertEqual(command, expected)
 
-    def test_double_quotes_with_back_quotes_1(self):
-        cmdline = 'echo "this is space: `echo " "`"'
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ['this is space:  '], None, None)
-        self.assertEqual(command, expected)
-
-    def test_double_quotes_with_back_quotes_2(self):
+    def test_double_quotes_with_back_quotes(self):
         cmdline = 'echo "hello `echo "a"`"'
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ['hello a '], None, None)
