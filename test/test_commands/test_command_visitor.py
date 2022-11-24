@@ -8,15 +8,15 @@ from commands.impl.pipe import Pipe
 
 class TestCommandVisitor(unittest.TestCase):
     def test_redirection_output(self):
-        cmdline = "echo hello > text1.txt"
+        cmdline = "echo hello > test1.txt"
         command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ["hello"], None, "text1.txt")
+        expected = Call("echo", ["hello"], None, "test1.txt")
         self.assertEqual(command, expected)
 
     def test_redirection_input(self):
-        cmdline = "cat < text1.txt"
+        cmdline = "cat < test1.txt"
         command = CommandVisitor.parse(cmdline)
-        expected = Call("cat", [], "text1.txt", None)
+        expected = Call("cat", [], "test1.txt", None)
         self.assertEqual(command, expected)
 
     def test_seq_command(self):
@@ -26,16 +26,16 @@ class TestCommandVisitor(unittest.TestCase):
         self.assertEqual(command, expected)
 
     def test_nested_seq(self):
-        cmdline = "echo hello; echo hi; cat test.txt"
+        cmdline = "echo hello; echo hi; cat test1.txt"
         command = CommandVisitor.parse(cmdline)
         expected = Seq(Seq(Call("echo", ["hello"], None, None), Call("echo", ["hi"], None, None)),
-                       Call("cat", ["test.txt"], None, None))
+                       Call("cat", ["test1.txt"], None, None))
         self.assertEqual(command, expected)
 
     def test_pipe(self):
-        cmdline = "cat test.txt | grep 'Interesting String'"
+        cmdline = "cat test1.txt | grep 'Interesting String'"
         command = CommandVisitor.parse(cmdline)
-        expected = Pipe(Call("cat", ["test.txt"], None, None), Call("grep", ["Interesting String"], None, None))
+        expected = Pipe(Call("cat", ["test1.txt"], None, None), Call("grep", ["Interesting String"], None, None))
         self.assertEqual(command, expected)
 
     def test_nested_pipe(self):
