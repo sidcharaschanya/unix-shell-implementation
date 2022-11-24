@@ -8,9 +8,6 @@ from typing import Optional
 
 class Sort(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        if len(args) > 2:
-            raise NumArgsError("Sort: wrong number of arguments")
-
         reverse, lines = Sort.__get_reverse_and_lines(args, input_)
 
         for line in sorted(lines, reverse=reverse):
@@ -18,6 +15,9 @@ class Sort(Application):
 
     @staticmethod
     def __get_reverse_and_lines(args: list, input_: Optional[str]) -> tuple:
+        if len(args) > 2:
+            raise NumArgsError("Sort: wrong number of arguments")
+
         if len(args) == 0:
             if input_ is None:
                 raise NoStdinError("Sort: stdin not provided")

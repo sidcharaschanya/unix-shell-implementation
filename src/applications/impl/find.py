@@ -9,20 +9,20 @@ import os
 
 class Find(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        if len(args) < 2 or len(args) > 3:
-            raise NumArgsError("Find: wrong number of command line arguments")
-
         path, pattern = Find.__get_path_and_pattern(args)
 
-        relative_paths = glob(
-            os.path.join(path, "**", pattern), recursive=True
-        )
+        relative_paths = glob(os.path.join(
+            path, "**", pattern
+        ), recursive=True)
 
         for relative_path in relative_paths:
             out.append(relative_path + "\n")
 
     @staticmethod
     def __get_path_and_pattern(args: list) -> tuple:
+        if len(args) < 2 or len(args) > 3:
+            raise NumArgsError("Find: wrong number of command line arguments")
+
         if len(args) == 2:
             if args[0] != "-name":
                 raise WrongFlagsError("Find: wrong flags")

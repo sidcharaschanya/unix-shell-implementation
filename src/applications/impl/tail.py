@@ -9,9 +9,6 @@ from typing import Optional
 
 class Tail(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        if len(args) > 3:
-            raise NumArgsError("Tail: wrong number of command line arguments")
-
         num_lines, lines = Tail.__get_num_lines_and_lines(args, input_)
         display_length = min(len(lines), num_lines)
 
@@ -20,6 +17,9 @@ class Tail(Application):
 
     @staticmethod
     def __get_num_lines_and_lines(args: list, input_: Optional[str]) -> tuple:
+        if len(args) > 3:
+            raise NumArgsError("Tail: wrong number of command line arguments")
+
         if len(args) == 0:
             if input_ is None:
                 raise NoStdinError("Tail: stdin not provided")

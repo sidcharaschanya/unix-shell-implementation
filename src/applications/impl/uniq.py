@@ -8,9 +8,6 @@ from typing import Optional
 
 class Uniq(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        if len(args) > 2:
-            raise NumArgsError("Uniq: wrong number of arguments")
-
         ignr_case, lines = Uniq.__get_ignr_case_and_lines(args, input_)
         previous_line = ""
 
@@ -28,6 +25,9 @@ class Uniq(Application):
 
     @staticmethod
     def __get_ignr_case_and_lines(args: list, input_: Optional[str]) -> tuple:
+        if len(args) > 2:
+            raise NumArgsError("Uniq: wrong number of arguments")
+
         if len(args) == 0:
             if input_ is None:
                 raise NoStdinError("Uniq: stdin not provided")
