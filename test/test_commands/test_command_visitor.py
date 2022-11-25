@@ -1,9 +1,9 @@
 import unittest
 
 from commands.command_visitor import CommandVisitor
-from commands.impl.seq import Seq
 from commands.impl.call import Call
 from commands.impl.pipe import Pipe
+from commands.impl.seq import Seq
 
 
 class TestCommandVisitor(unittest.TestCase):
