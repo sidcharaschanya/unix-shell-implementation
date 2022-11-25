@@ -47,7 +47,7 @@ class Cut(Application):
         len_line, cut_indexes = len(line), set()
 
         for cut_byte in cut_bytes:
-            start, end = Cut.__get_start_and_end(cut_byte, len_line)
+            start, end = Cut.__start_and_end(cut_byte, len_line)
 
             for cut_index in range(start, end):
                 cut_indexes.add(cut_index)
@@ -55,7 +55,7 @@ class Cut(Application):
         return sorted(cut_indexes)
 
     @staticmethod
-    def __get_start_and_end(cut_byte: str, len_line: int) -> tuple:
+    def __start_and_end(cut_byte: str, len_line: int) -> tuple:
         if re.match("^[0-9]+$", cut_byte):
             start, end = int(cut_byte), int(cut_byte)
         elif re.match("^[0-9]+-$", cut_byte):

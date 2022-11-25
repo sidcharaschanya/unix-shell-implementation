@@ -17,7 +17,7 @@ class TestUniq(unittest.TestCase):
         self.paths = dict()
 
         self.files = {
-            "test1.txt": "aaa\naaa\nAAA\naaa",
+            "test1.txt": "aaa\naaa\nAAA\naaa\n",
             "empty_file.txt": ""
         }
 

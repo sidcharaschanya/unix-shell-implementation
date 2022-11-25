@@ -1,52 +1,19 @@
 from ..application import Application
+from ..application_utility import is_flag_and_lines
 from collections import deque
-from ..exceptions.no_stdin_error import NoStdinError
-from ..exceptions.num_args_error import NumArgsError
-from ..exceptions.wrong_flags_error import WrongFlagsError
 from typing import Optional
 
 
 class Uniq(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        ignr_case, lines = Uniq.__get_ignr_case_and_lines(args, input_)
+        ignore_case, lines = is_flag_and_lines(args, input_, "Uniq", "-i")
         previous_line = ""
 
         for line in lines:
-            if line.endswith("\n"):
-                line = line[:-1]
-
-            if ignr_case:
+            if ignore_case:
                 if line.casefold() != previous_line.casefold():
-                    out.append(line + "\n")
+                    out.append(line)
             elif line != previous_line:
-                out.append(line + "\n")
+                out.append(line)
 
             previous_line = line
-
-    @staticmethod
-    def __get_ignr_case_and_lines(args: list, input_: Optional[str]) -> tuple:
-        if len(args) > 2:
-            raise NumArgsError("Uniq: wrong number of arguments")
-
-        if len(args) == 0:
-            if input_ is None:
-                raise NoStdinError("Uniq: stdin not provided")
-
-            ignr_case, lines = False, input_.splitlines(True)
-        elif len(args) == 1:
-            if args[0] != "-i":
-                with open(args[0]) as file:
-                    ignr_case, lines = False, file.readlines()
-            else:
-                if input_ is None:
-                    raise NoStdinError("Uniq: stdin not provided")
-
-                ignr_case, lines = True, input_.splitlines(True)
-        else:
-            if args[0] != "-i":
-                raise WrongFlagsError("Uniq: wrong flags")
-
-            with open(args[1]) as file:
-                ignr_case, lines = True, file.readlines()
-
-        return ignr_case, lines

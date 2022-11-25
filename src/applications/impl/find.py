@@ -9,7 +9,7 @@ import os
 
 class Find(Application):
     def exec(self, args: list, input_: Optional[str], out: deque) -> None:
-        path, pattern = Find.__get_path_and_pattern(args)
+        path, pattern = Find.__path_and_pattern(args)
 
         relative_paths = glob(os.path.join(
             path, "**", pattern
@@ -19,7 +19,7 @@ class Find(Application):
             out.append(relative_path + "\n")
 
     @staticmethod
-    def __get_path_and_pattern(args: list) -> tuple:
+    def __path_and_pattern(args: list) -> tuple:
         if len(args) < 2 or len(args) > 3:
             raise NumArgsError("Find: wrong number of command line arguments")
 
