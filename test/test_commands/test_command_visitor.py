@@ -15,6 +15,12 @@ class TestCommandVisitor(unittest.TestCase):
         expected = Call("echo", ["hello"], None, "test1.txt")
         self.assertEqual(command, expected)
 
+    def test_call_with_redirections(self):
+        cmdline="< test.txt echo"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo",[],"test.txt",None)
+        self.assertEqual(command,expected)
+
     def test_redirection_input(self):
         cmdline = "cat < test1.txt"
         command = CommandVisitor.parse(cmdline)
@@ -98,7 +104,8 @@ class TestCommandVisitor(unittest.TestCase):
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
 
-    def test_call_with_redirections(self):
-        cmdline="<test.txt echo"
+    def test_globbed_argument(self):
+        cmdline="echo `echo a t*`"
         command=CommandVisitor.parse(cmdline)
-        expected=Call("echo",[],"text.txt",None)
+        expected=Call("echo",["a","test_command_visitor.py","test_impl"],None,None)
+        self.assertEqual(command,expected)
