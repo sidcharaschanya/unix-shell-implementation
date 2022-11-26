@@ -104,8 +104,8 @@ class TestCommandVisitor(unittest.TestCase):
         expected = Call("echo", [], "test.txt", None)
         self.assertEqual(command, expected)
 
-    def test_globbed_argument(self):
-        cmdline="echo `echo a b* t*`"
-        command=CommandVisitor.parse(cmdline)
-        expected=Call("echo",["a","b*","test_command_visitor.py","test_impl"],None,None)
-        self.assertEqual(command,expected)
+    def test_glob_argument(self):
+        cmdline = "echo '*'`echo a b t`*"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["*a", "b", "test_command_visitor.py", "test_impl"], None, None)
+        self.assertEqual(command, expected)

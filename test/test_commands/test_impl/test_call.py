@@ -1,10 +1,9 @@
 import unittest
+
 from collections import deque
-from commands.command_visitor import CommandVisitor
 from commands.impl.call import Call
 import os
 import shutil
-
 
 
 class TestCall(unittest.TestCase):
@@ -24,27 +23,27 @@ class TestCall(unittest.TestCase):
                 file.write(file_content)
                 self.paths[file_name] = file.name
 
+    def tearDown(self) -> None:
+        shutil.rmtree(self.temp_dir)
+
     def test_call(self):
         call = Call("echo", ["hello"], None, None)
         call.eval(None, self.out)
         self.assertEqual(self.out.popleft(), "hello\n")
 
     def test_call_with_input_redirection(self):
-        call=Call("cat",[],self.paths["test1.txt"],None)
-        call.eval(None,self.out)
-        self.assertEqual(self.out.popleft(),"hello\n")
+        call = Call("cat", [], self.paths["test1.txt"], None)
+        call.eval(None, self.out)
+        self.assertEqual(self.out.popleft(), "hello\n")
 
     def test_call_with_stdin_and_input_redirection(self):
-        call=Call("grep",["he"],self.paths["test1.txt"],None)
-        call.eval("hello world",self.out)
-        self.assertEqual(self.out.popleft(),"hello\n")
-        self.assertEqual(len(self.out),0)
+        call = Call("grep", ["he"], self.paths["test1.txt"], None)
+        call.eval("hello world", self.out)
+        self.assertEqual(self.out.popleft(), "hello\n")
+        self.assertEqual(len(self.out), 0)
 
     def test_call_with_output_redirection(self):
-        call=Call("echo",["Interesting String"],None,self.paths["test2.txt"])
-        call.eval(None,self.out)
+        call = Call("echo", ["Interesting String"], None, self.paths["test2.txt"])
+        call.eval(None, self.out)
         with open(self.paths["test2.txt"]) as f:
-            self.assertEqual(f.readline(),"Interesting String\n")
-
-    def tearDown(self) -> None:
-        shutil.rmtree(self.temp_dir)
+            self.assertEqual(f.readline(), "Interesting String\n")
