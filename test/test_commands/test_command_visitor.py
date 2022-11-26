@@ -105,7 +105,7 @@ class TestCommandVisitor(unittest.TestCase):
         self.assertEqual(command, expected)
 
     def test_globbed_argument(self):
-        cmdline="echo `echo a t*`"
+        cmdline="echo `echo a b* t*`"
         command=CommandVisitor.parse(cmdline)
-        expected=Call("echo",["a","test_command_visitor.py","test_impl"],None,None)
+        expected=Call("echo",["a","b*","test_command_visitor.py","test_impl"],None,None)
         self.assertEqual(command,expected)
