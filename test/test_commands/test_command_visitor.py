@@ -101,5 +101,11 @@ class TestCommandVisitor(unittest.TestCase):
     def test_call_with_redirections(self):
         cmdline = "<test.txt echo"
         command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", [], "text.txt", None)
+        expected = Call("echo", [], "test.txt", None)
         self.assertEqual(command, expected)
+
+    def test_globbed_argument(self):
+        cmdline="echo `echo a t*`"
+        command=CommandVisitor.parse(cmdline)
+        expected=Call("echo",["a","test_command_visitor.py","test_impl"],None,None)
+        self.assertEqual(command,expected)
