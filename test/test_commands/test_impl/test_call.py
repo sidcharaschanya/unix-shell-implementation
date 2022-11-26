@@ -10,11 +10,6 @@ class TestCall(unittest.TestCase):
         self.out = deque()
 
     def test_call(self):
-        cmdline = "echo hello"
-        CommandVisitor.parse(cmdline).eval(None, self.out)
-        self.assertEqual(self.out.popleft(), "hello\n")
-
-    def test_call_2(self):
         call = Call("echo", ["hello"], None, None)
         call.eval(None, self.out)
         self.assertEqual(self.out.popleft(), "hello\n")
