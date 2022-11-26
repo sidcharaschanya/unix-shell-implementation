@@ -34,7 +34,7 @@ class TestCall(unittest.TestCase):
         call.eval(None,self.out)
         self.assertEqual(self.out.popleft(),"hello\n")
 
-    def test_call_with_stdin(self):
+    def test_call_with_stdin_and_input_redirection(self):
         call=Call("grep",["he"],self.paths["test1.txt"],None)
         call.eval("hello world",self.out)
         self.assertEqual(self.out.popleft(),"hello\n")
