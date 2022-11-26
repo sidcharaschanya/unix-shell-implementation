@@ -1,11 +1,11 @@
 import unittest
 
+from antlr4.error.Errors import ParseCancellationException
 from commands.command_visitor import CommandVisitor
+from commands.exceptions.redirection_error import RedirectionError
 from commands.impl.call import Call
 from commands.impl.pipe import Pipe
 from commands.impl.seq import Seq
-from antlr4.error.Errors import ParseCancellationException
-from commands.exceptions.redirection_error import RedirectionError
 
 
 class TestCommandVisitor(unittest.TestCase):
@@ -14,12 +14,6 @@ class TestCommandVisitor(unittest.TestCase):
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello"], None, "test1.txt")
         self.assertEqual(command, expected)
-
-    def test_call_with_redirections(self):
-        cmdline="< test.txt echo"
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo",[],"test.txt",None)
-        self.assertEqual(command,expected)
 
     def test_redirection_input(self):
         cmdline = "cat < test1.txt"
@@ -85,27 +79,27 @@ class TestCommandVisitor(unittest.TestCase):
         self.assertEqual(command, expected)
 
     def test_wrong_command(self):
-        cmdline="echo '"
+        cmdline = "echo '"
         with self.assertRaises(ParseCancellationException):
             CommandVisitor.parse(cmdline)
 
     def test_several_redirection_files(self):
-        cmdline="echo < `echo test1.txt test2.txt`"
+        cmdline = "echo < `echo test1.txt test2.txt`"
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
 
     def test_several_input_redirection_files(self):
-        cmdline="echo < test1.txt < test2.txt"
+        cmdline = "echo < test1.txt < test2.txt"
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
 
     def test_several_output_redirection_files(self):
-        cmdline="echo 'hello' > test1.txt > test2.txt"
+        cmdline = "echo 'hello' > test1.txt > test2.txt"
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
 
-    def test_globbed_argument(self):
-        cmdline="echo `echo a t*`"
-        command=CommandVisitor.parse(cmdline)
-        expected=Call("echo",["a","test_command_visitor.py","test_impl"],None,None)
-        self.assertEqual(command,expected)
+    def test_call_with_redirections(self):
+        cmdline = "<test.txt echo"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", [], "text.txt", None)
+        self.assertEqual(command, expected)
