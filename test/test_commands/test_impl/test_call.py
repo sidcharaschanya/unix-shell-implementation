@@ -2,6 +2,7 @@ import unittest
 
 from collections import deque
 from commands.impl.call import Call
+from hypothesis import given, strategies as st
 import os
 import shutil
 
@@ -15,7 +16,7 @@ class TestCall(unittest.TestCase):
 
         self.files = {
             "test1.txt": "hello\n",
-            "test2.txt": "",
+            "test2.txt": ""
         }
 
         for file_name, file_content in self.files.items():
@@ -26,24 +27,34 @@ class TestCall(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
 
-    def test_call(self):
-        call = Call("echo", ["hello"], None, None)
-        call.eval(None, self.out)
-        self.assertEqual(self.out.popleft(), "hello\n")
-
-    def test_call_with_input_redirection(self):
-        call = Call("cat", [], self.paths["test1.txt"], None)
-        call.eval(None, self.out)
-        self.assertEqual(self.out.popleft(), "hello\n")
-
-    def test_call_with_stdin_and_input_redirection(self):
-        call = Call("grep", ["he"], self.paths["test1.txt"], None)
-        call.eval("hello world", self.out)
-        self.assertEqual(self.out.popleft(), "hello\n")
+    @given(st.text())
+    def test_call(self, text):
+        Call(
+            "echo", [text], None, None
+        ).eval(None, self.out)
+        self.assertEqual(self.out.popleft(), f"{text}\n")
         self.assertEqual(len(self.out), 0)
 
-    def test_call_with_output_redirection(self):
-        call = Call("echo", ["Interesting String"], None, self.paths["test2.txt"])
-        call.eval(None, self.out)
-        with open(self.paths["test2.txt"]) as f:
-            self.assertEqual(f.readline(), "Interesting String\n")
+    @given(st.text())
+    def test_call_stdin(self, text):
+        Call(
+            "cat", [], None, None
+        ).eval(text, self.out)
+        self.assertEqual(self.out.popleft(), text)
+        self.assertEqual(len(self.out), 0)
+
+    @given(st.text())
+    def test_call_input_redirection(self, text):
+        Call(
+            "cat", [], self.paths["test1.txt"], None
+        ).eval(text, self.out)
+        self.assertEqual(self.out.popleft(), self.files["test1.txt"])
+        self.assertEqual(len(self.out), 0)
+
+    def test_call_output_redirection(self):
+        Call(
+            "echo", ["Interesting String"], None, self.paths["test2.txt"]
+        ).eval(None, self.out)
+        self.assertEqual(len(self.out), 0)
+        with open(self.paths["test2.txt"]) as out_file:
+            self.assertEqual(out_file.readline(), "Interesting String\n")
