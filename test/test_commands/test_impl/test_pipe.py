@@ -16,7 +16,8 @@ class TestPipe(unittest.TestCase):
         self.paths = dict()
 
         self.files = {
-            "test1.txt": "hello world\n",
+            "test1.txt": "hello\n",
+            "test2.txt": ""
         }
 
         for file_name, file_content in self.files.items():
@@ -37,19 +38,19 @@ class TestPipe(unittest.TestCase):
         self.assertEqual(len(self.out), 0)
 
     @given(st.text())
-    def test_pipe_ignore_via_out_file(self, text):
+    def test_pipe_ignore_stdin_via_output_redirection(self, text):
         Pipe(
-            Call("echo", [text], None, self.paths["test1.txt"]),
+            Call("echo", [text], None, self.paths["test2.txt"]),
             Call("cat", [], None, None)
         ).eval(None, self.out)
         self.assertEqual(self.out.popleft(), "")
         self.assertEqual(len(self.out), 0)
 
     @given(st.text())
-    def test_pipe_ignore_via_in_file(self, text):
+    def test_pipe_ignore_stdin_via_input_redirection(self, text):
         Pipe(
             Call("echo", [text], None, None),
             Call("cat", [], self.paths["test1.txt"], None)
         ).eval(None, self.out)
-        self.assertEqual(self.out.popleft(), "hello world\n")
+        self.assertEqual(self.out.popleft(), self.files["test1.txt"])
         self.assertEqual(len(self.out), 0)
