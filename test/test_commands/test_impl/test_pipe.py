@@ -3,6 +3,7 @@ import unittest
 from collections import deque
 from commands.impl.call import Call
 from commands.impl.pipe import Pipe
+from hypothesis import given, strategies as st
 import os
 import shutil
 
@@ -15,8 +16,7 @@ class TestPipe(unittest.TestCase):
         self.paths = dict()
 
         self.files = {
-            "test1.txt": "hello\n",
-            "test2.txt": "helloworld\naaa"
+            "test1.txt": "hello world\n",
         }
 
         for file_name, file_content in self.files.items():
@@ -27,14 +27,29 @@ class TestPipe(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
 
-    def test_pipe(self):
-        pipe = Pipe(Call("echo", ["Interesting String"], None, None), Call("grep", ["In"], None, None))
-        pipe.eval(None, self.out)
-        self.assertEqual(self.out.popleft(), "Interesting String\n")
+    @given(st.text())
+    def test_pipe(self, text):
+        Pipe(
+            Call("echo", [text], None, None),
+            Call("cat", [], None, None)
+        ).eval(None, self.out)
+        self.assertEqual(self.out.popleft(), f"{text}\n")
+        self.assertEqual(len(self.out), 0)
 
-    def test_nested_pipe(self):
-        pipe = Pipe(
-            Pipe(Call("cat", [self.paths["test2.txt"]], None, None), Call("grep", ["he"], None, None)),
-            Call("grep", ["h"], None, None))
-        pipe.eval(None, self.out)
-        self.assertEqual(self.out.popleft(), "helloworld\n")
+    @given(st.text())
+    def test_pipe_ignore_via_out_file(self, text):
+        Pipe(
+            Call("echo", [text], None, self.paths["test1.txt"]),
+            Call("cat", [], None, None)
+        ).eval(None, self.out)
+        self.assertEqual(self.out.popleft(), "")
+        self.assertEqual(len(self.out), 0)
+
+    @given(st.text())
+    def test_pipe_ignore_via_in_file(self, text):
+        Pipe(
+            Call("echo", [text], None, None),
+            Call("cat", [], self.paths["test1.txt"], None)
+        ).eval(None, self.out)
+        self.assertEqual(self.out.popleft(), "hello world\n")
+        self.assertEqual(len(self.out), 0)
