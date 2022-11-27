@@ -49,7 +49,7 @@ class TestCommandVisitor(unittest.TestCase):
         )
         self.assertEqual(command, expected)
 
-    def test_pipe(self):
+    def test_single_pipe(self):
         cmdline = "cat test1.txt | grep Interesting"
         command = CommandVisitor.parse(cmdline)
         expected = Pipe(
@@ -88,49 +88,55 @@ class TestCommandVisitor(unittest.TestCase):
         expected = Call("cat", [], "test1.txt", None)
         self.assertEqual(command, expected)
 
-    def test_unquoted_argument(self):
-        cmdline = "echo hello"
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ["hello"], None, None)
-        self.assertEqual(command, expected)
-
-    def test_unquoted_argument_globbing(self):
+    def test_globbing(self):
         cmdline = f"echo {self.temp_dir}/*"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", [self.paths["test1.txt"]], None, None)
         self.assertEqual(command, expected)
 
-    def test_unquoted_argument_splitting_and_globbing(self):
+    def test_globbing_argument_splitting(self):
         cmdline = f"echo `echo a {self.temp_dir}/`*"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["a", self.paths["test1.txt"]], None, None)
         self.assertEqual(command, expected)
 
-    def test_single_quoted_argument(self):
+    def test_globbing_no_matches(self):
+        cmdline = f"echo {self.temp_dir}/a/*"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", [f"{self.temp_dir}/a/*"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_unquoted(self):
+        cmdline = "echo hello"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_single_quoted(self):
         cmdline = "echo 'Interesting String'"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["Interesting String"], None, None)
         self.assertEqual(command, expected)
 
-    def test_single_quoted_argument_backquoted(self):
+    def test_single_quoted_backquoted(self):
         cmdline = "echo 'hello `echo a`'"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello `echo a`"], None, None)
         self.assertEqual(command, expected)
 
-    def test_single_quoted_argument_disabled_globbing(self):
+    def test_single_quoted_disabled_globbing(self):
         cmdline = "echo 'hello*'"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello*"], None, None)
         self.assertEqual(command, expected)
 
-    def test_backquoted_argument(self):
+    def test_backquoted(self):
         cmdline = "echo `echo hello`"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello"], None, None)
         self.assertEqual(command, expected)
 
-    def test_backquoted_argument_disabled_globbing(self):
+    def test_backquoted_disabled_globbing(self):
         cmdline = "echo `echo 'hello*'`"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello*"], None, None)
@@ -142,19 +148,19 @@ class TestCommandVisitor(unittest.TestCase):
         expected = Call("echo", ["hello", "world"], None, None)
         self.assertEqual(command, expected)
 
-    def test_double_quoted_argument(self):
+    def test_double_quoted(self):
         cmdline = 'echo "Interesting String"'
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["Interesting String"], None, None)
         self.assertEqual(command, expected)
 
-    def test_double_quoted_argument_backquoted(self):
+    def test_double_quoted_backquoted(self):
         cmdline = 'echo "hello `echo a`"'
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello a "], None, None)
         self.assertEqual(command, expected)
 
-    def test_double_quoted_argument_disabled_globbing(self):
+    def test_double_quoted_disabled_globbing(self):
         cmdline = 'echo "hello*"'
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["hello*"], None, None)

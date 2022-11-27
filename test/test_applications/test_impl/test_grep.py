@@ -18,7 +18,7 @@ class TestGrep(unittest.TestCase):
 
         self.files = {
             "test1.txt": "hello\n",
-            "test2.txt": "hehehehe\nhellohello\n",
+            "test2.txt": "hehehehe\nabc\n",
             "empty_file.txt": ""
         }
 
@@ -45,8 +45,7 @@ class TestGrep(unittest.TestCase):
         ], None, self.out)
         self.assertEqual(list(self.out), [
             f"{self.paths['test1.txt']}:hello\n",
-            f"{self.paths['test2.txt']}:hehehehe\n",
-            f"{self.paths['test2.txt']}:hellohello\n",
+            f"{self.paths['test2.txt']}:hehehehe\n"
         ])
 
     @given(st.text())
@@ -64,7 +63,7 @@ class TestGrep(unittest.TestCase):
 
     def test_grep_stdin(self):
         Grep().exec(["he"], self.files["test2.txt"], self.out)
-        self.assertEqual(list(self.out), ["hehehehe\n", "hellohello\n"])
+        self.assertEqual(list(self.out), ["hehehehe\n"])
 
     def test_grep_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
