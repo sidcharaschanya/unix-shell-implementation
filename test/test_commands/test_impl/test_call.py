@@ -58,3 +58,9 @@ class TestCall(unittest.TestCase):
         self.assertEqual(len(self.out), 0)
         with open(self.paths["test2.txt"]) as out_file:
             self.assertEqual(out_file.readline(), "Interesting String\n")
+
+    def test_call_input_redirection_file_not_found_error(self):
+        with self.assertRaises(FileNotFoundError):
+            Call(
+                "cat", [], os.path.join(self.temp_dir, "file.txt"), None
+            ).eval(None, self.out)
