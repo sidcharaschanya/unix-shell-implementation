@@ -6,106 +6,176 @@ from commands.exceptions.redirection_error import RedirectionError
 from commands.impl.call import Call
 from commands.impl.pipe import Pipe
 from commands.impl.seq import Seq
+import os
+import shutil
 
 
 class TestCommandVisitor(unittest.TestCase):
-    def test_redirection_output(self):
-        cmdline = "echo hello > test1.txt"
+    def setUp(self) -> None:
+        self.temp_dir = "resources"
+        os.mkdir(self.temp_dir)
+        self.paths = dict()
+
+        self.files = {
+            "test1.txt": "",
+        }
+
+        for file_name, file_content in self.files.items():
+            with open(os.path.join(self.temp_dir, file_name), "w") as file:
+                file.write(file_content)
+                self.paths[file_name] = file.name
+
+    def tearDown(self) -> None:
+        shutil.rmtree(self.temp_dir)
+
+    def test_seq(self):
+        cmdline = "echo hello ; echo world"
         command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ["hello"], None, "test1.txt")
+        expected = Seq(
+            Call("echo", ["hello"], None, None),
+            Call("echo", ["world"], None, None)
+        )
         self.assertEqual(command, expected)
 
-    def test_redirection_input(self):
+    def test_nested_seq(self):
+        cmdline = "echo hello ; echo world ; cat test1.txt"
+        command = CommandVisitor.parse(cmdline)
+        expected = Seq(
+            Seq(
+                Call("echo", ["hello"], None, None),
+                Call("echo", ["world"], None, None)
+            ),
+            Call("cat", ["test1.txt"], None, None)
+        )
+        self.assertEqual(command, expected)
+
+    def test_pipe(self):
+        cmdline = "cat test1.txt | grep Interesting"
+        command = CommandVisitor.parse(cmdline)
+        expected = Pipe(
+            Call("cat", ["test1.txt"], None, None),
+            Call("grep", ["Interesting"], None, None)
+        )
+        self.assertEqual(command, expected)
+
+    def test_nested_pipe(self):
+        cmdline = "echo Interesting | grep Int | grep ing"
+        command = CommandVisitor.parse(cmdline)
+        expected = Pipe(
+            Pipe(
+                Call("echo", ["Interesting"], None, None),
+                Call("grep", ["Int"], None, None)
+            ),
+            Call("grep", ["ing"], None, None)
+        )
+        self.assertEqual(command, expected)
+
+    def test_input_redirection(self):
         cmdline = "cat < test1.txt"
         command = CommandVisitor.parse(cmdline)
         expected = Call("cat", [], "test1.txt", None)
         self.assertEqual(command, expected)
 
-    def test_seq_command(self):
-        cmdline = "echo hello;echo hi"
+    def test_output_redirection(self):
+        cmdline = "echo hello > test1.txt"
         command = CommandVisitor.parse(cmdline)
-        expected = Seq(Call("echo", ["hello"], None, None), Call("echo", ["hi"], None, None))
+        expected = Call("echo", ["hello"], None, "test1.txt")
         self.assertEqual(command, expected)
 
-    def test_nested_seq(self):
-        cmdline = "echo hello; echo hi; cat test1.txt"
+    def test_redirection_in_front(self):
+        cmdline = "< test1.txt cat"
         command = CommandVisitor.parse(cmdline)
-        expected = Seq(Seq(Call("echo", ["hello"], None, None), Call("echo", ["hi"], None, None)),
-                       Call("cat", ["test1.txt"], None, None))
+        expected = Call("cat", [], "test1.txt", None)
         self.assertEqual(command, expected)
 
-    def test_pipe(self):
-        cmdline = "cat test1.txt | grep 'Interesting String'"
-        command = CommandVisitor.parse(cmdline)
-        expected = Pipe(Call("cat", ["test1.txt"], None, None), Call("grep", ["Interesting String"], None, None))
-        self.assertEqual(command, expected)
-
-    def test_nested_pipe(self):
-        cmdline = "echo 'Interesting String' | grep 'Interesting String' | grep 'Ie'"
-        command = CommandVisitor.parse(cmdline)
-        expected = Pipe(
-            Pipe(Call("echo", ['Interesting String'], None, None), Call("grep", ["Interesting String"], None, None)),
-            Call("grep", ["Ie"], None, None))
-        self.assertEqual(command, expected)
-
-    def test_single_quote(self):
-        cmdline = "echo 'Interesting String'"
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ['Interesting String'], None, None)
-        self.assertEqual(command, expected)
-
-    def test_single_quote_with_back_quotes(self):
-        cmdline = "echo 'hello `echo a`'"
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ['hello `echo a`'], None, None)
-        self.assertEqual(command, expected)
-
-    def test_double_quotes(self):
-        cmdline = 'echo "Interesting String"'
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ['Interesting String'], None, None)
-        self.assertEqual(command, expected)
-
-    def test_double_quotes_with_back_quotes(self):
-        cmdline = 'echo "hello `echo "a"`"'
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ['hello a '], None, None)
-        self.assertEqual(command, expected)
-
-    def test_unquoted(self):
+    def test_unquoted_argument(self):
         cmdline = "echo hello"
         command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ['hello'], None, None)
+        expected = Call("echo", ["hello"], None, None)
         self.assertEqual(command, expected)
 
-    def test_wrong_command(self):
+    def test_unquoted_argument_globbing(self):
+        cmdline = f"echo {self.temp_dir}/*"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", [self.paths["test1.txt"]], None, None)
+        self.assertEqual(command, expected)
+
+    def test_unquoted_argument_splitting_and_globbing(self):
+        cmdline = f"echo `echo a {self.temp_dir}/`*"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["a", self.paths["test1.txt"]], None, None)
+        self.assertEqual(command, expected)
+
+    def test_single_quoted_argument(self):
+        cmdline = "echo 'Interesting String'"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["Interesting String"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_single_quoted_argument_backquoted(self):
+        cmdline = "echo 'hello `echo a`'"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello `echo a`"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_single_quoted_argument_disabled_globbing(self):
+        cmdline = "echo 'hello*'"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello*"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_backquoted_argument(self):
+        cmdline = "echo `echo hello`"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_backquoted_argument_disabled_globbing(self):
+        cmdline = "echo `echo 'hello*'`"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello*"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_backquoted_argument_splitting(self):
+        cmdline = "echo `echo hello world`"
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello", "world"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_double_quoted_argument(self):
+        cmdline = 'echo "Interesting String"'
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["Interesting String"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_double_quoted_argument_backquoted(self):
+        cmdline = 'echo "hello `echo a`"'
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello a "], None, None)
+        self.assertEqual(command, expected)
+
+    def test_double_quoted_argument_disabled_globbing(self):
+        cmdline = 'echo "hello*"'
+        command = CommandVisitor.parse(cmdline)
+        expected = Call("echo", ["hello*"], None, None)
+        self.assertEqual(command, expected)
+
+    def test_parse_cancellation_exception(self):
         cmdline = "echo '"
         with self.assertRaises(ParseCancellationException):
             CommandVisitor.parse(cmdline)
 
-    def test_several_redirection_files(self):
-        cmdline = "echo < `echo test1.txt test2.txt`"
+    def test_several_input_redirections_error(self):
+        cmdline = "cat < test1.txt < test2.txt"
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
 
-    def test_several_input_redirection_files(self):
-        cmdline = "echo < test1.txt < test2.txt"
+    def test_several_output_redirections_error(self):
+        cmdline = "echo hello > test1.txt > test2.txt"
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
 
-    def test_several_output_redirection_files(self):
-        cmdline = "echo 'hello' > test1.txt > test2.txt"
+    def test_several_redirection_files_error(self):
+        cmdline = "cat < `echo test1.txt test2.txt`"
         with self.assertRaises(RedirectionError):
             CommandVisitor.parse(cmdline)
-
-    def test_call_with_redirections(self):
-        cmdline = "<test.txt echo"
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", [], "test.txt", None)
-        self.assertEqual(command, expected)
-
-    def test_glob_argument(self):
-        cmdline = "echo '*'`echo a b t`*"
-        command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", ["*a", "b", "test_command_visitor.py", "test_impl"], None, None)
-        self.assertEqual(command, expected)
