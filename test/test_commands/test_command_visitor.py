@@ -89,21 +89,21 @@ class TestCommandVisitor(unittest.TestCase):
         self.assertEqual(command, expected)
 
     def test_globbing(self):
-        cmdline = f"echo {self.temp_dir}/*"
+        cmdline = f"echo {self.temp_dir}{os.sep}*"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", [self.paths["test1.txt"]], None, None)
         self.assertEqual(command, expected)
 
     def test_globbing_argument_splitting(self):
-        cmdline = f"echo `echo a {self.temp_dir}/`*"
+        cmdline = f"echo `echo a {self.temp_dir}{os.sep}`*"
         command = CommandVisitor.parse(cmdline)
         expected = Call("echo", ["a", self.paths["test1.txt"]], None, None)
         self.assertEqual(command, expected)
 
     def test_globbing_no_matches(self):
-        cmdline = f"echo {self.temp_dir}/a/*"
+        cmdline = f"echo {self.temp_dir}{os.sep}a*"
         command = CommandVisitor.parse(cmdline)
-        expected = Call("echo", [f"{self.temp_dir}/a/*"], None, None)
+        expected = Call("echo", [f"{self.temp_dir}{os.sep}a*"], None, None)
         self.assertEqual(command, expected)
 
     def test_unquoted(self):
