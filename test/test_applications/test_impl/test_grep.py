@@ -1,5 +1,7 @@
 import unittest
 
+from applications.exceptions.no_stdin_error import NoStdinError
+from applications.exceptions.num_args_error import NumArgsError
 from applications.impl.grep import Grep
 from collections import deque
 from hypothesis import given, strategies as st
@@ -16,7 +18,7 @@ class TestGrep(unittest.TestCase):
 
         self.files = {
             "test1.txt": "hello\n",
-            "test2.txt": "hehehehe\nhellohello\n",
+            "test2.txt": "hehehehe\nabc\n",
             "empty_file.txt": ""
         }
 
@@ -42,9 +44,8 @@ class TestGrep(unittest.TestCase):
             os.path.join(self.temp_dir, "test2.txt")
         ], None, self.out)
         self.assertEqual(list(self.out), [
-            "resources/test1.txt:hello\n",
-            "resources/test2.txt:hehehehe\n",
-            "resources/test2.txt:hellohello\n",
+            f"{self.paths['test1.txt']}:hello\n",
+            f"{self.paths['test2.txt']}:hehehehe\n"
         ])
 
     @given(st.text())
@@ -62,18 +63,18 @@ class TestGrep(unittest.TestCase):
 
     def test_grep_stdin(self):
         Grep().exec(["he"], self.files["test2.txt"], self.out)
-        self.assertEqual(list(self.out), ["hehehehe\n", "hellohello\n"])
+        self.assertEqual(list(self.out), ["hehehehe\n"])
 
-    def test_grep_file_not_found(self):
+    def test_grep_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
             Grep().exec([
                 "he", os.path.join(self.temp_dir, "file.txt")
             ], None, self.out)
 
-    def test_grep_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_grep_zero_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Grep().exec([], None, self.out)
 
-    def test_grep_one_arg_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_grep_one_arg_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Grep().exec(["arg0"], None, self.out)

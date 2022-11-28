@@ -1,5 +1,6 @@
 import unittest
 
+from applications.exceptions.num_args_error import NumArgsError
 from applications.impl.ls import Ls
 from collections import deque
 import shutil
@@ -42,6 +43,6 @@ class TestLs(unittest.TestCase):
         self.assertEqual(self.out.popleft(), "\n")
         self.assertEqual(len(self.out), 0)
 
-    def test_ls_two_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_ls_two_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Ls().exec(["arg0", "arg1"], None, self.out)

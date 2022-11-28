@@ -1,0 +1,2 @@
+class NumArgsError(Exception):
+    pass

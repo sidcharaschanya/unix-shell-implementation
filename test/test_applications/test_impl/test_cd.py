@@ -1,5 +1,6 @@
 import unittest
 
+from applications.exceptions.num_args_error import NumArgsError
 from applications.impl.cd import Cd
 from collections import deque
 import shutil
@@ -21,6 +22,6 @@ class TestCd(unittest.TestCase):
         self.assertEqual(os.getcwd(), os.path.join(cwd, self.temp_dir))
         os.chdir(cwd)
 
-    def test_cd_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_cd_zero_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Cd().exec([], None, self.out)

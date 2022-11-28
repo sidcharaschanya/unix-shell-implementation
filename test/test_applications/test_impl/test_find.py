@@ -1,5 +1,7 @@
 import unittest
 
+from applications.exceptions.num_args_error import NumArgsError
+from applications.exceptions.wrong_flags_error import WrongFlagsError
 from applications.impl.find import Find
 from collections import deque
 import shutil
@@ -61,14 +63,14 @@ class TestFind(unittest.TestCase):
         Find().exec([self.temp_dir, "-name", "*.py"], None, self.out)
         self.assertEqual(len(self.out), 0)
 
-    def test_find_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_find_zero_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Find().exec([], None, self.out)
 
-    def test_find_two_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_find_two_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Find().exec(["arg0", "arg1"], None, self.out)
 
-    def test_find_three_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_find_three_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Find().exec(["arg0", "arg1", "arg2"], None, self.out)

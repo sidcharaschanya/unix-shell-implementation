@@ -1,5 +1,6 @@
 import unittest
 
+from applications.exceptions.no_stdin_error import NoStdinError
 from applications.impl.cat import Cat
 from collections import deque
 from hypothesis import given, strategies as st
@@ -45,6 +46,6 @@ class TestCat(unittest.TestCase):
         self.assertEqual(self.out.popleft(), stdin)
         self.assertEqual(len(self.out), 0)
 
-    def test_cat_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_cat_zero_args_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Cat().exec([], None, self.out)

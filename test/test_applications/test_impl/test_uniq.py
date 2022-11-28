@@ -1,5 +1,8 @@
 import unittest
 
+from applications.exceptions.no_stdin_error import NoStdinError
+from applications.exceptions.num_args_error import NumArgsError
+from applications.exceptions.wrong_flags_error import WrongFlagsError
 from applications.impl.uniq import Uniq
 from collections import deque
 import shutil
@@ -35,11 +38,11 @@ class TestUniq(unittest.TestCase):
         self.assertEqual(list(self.out), ["aaa\n"])
 
     def test_uniq_stdin(self):
-        Uniq().exec([], self.files["test1.txt"][:-1], self.out)
+        Uniq().exec([], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), ["aaa\n", "AAA\n", "aaa\n"])
 
     def test_uniq_stdin_ignore_case(self):
-        Uniq().exec(["-i"], self.files["test1.txt"][:-1], self.out)
+        Uniq().exec(["-i"], self.files["test1.txt"], self.out)
         self.assertEqual(list(self.out), ["aaa\n"])
 
     def test_uniq_empty_file(self):
@@ -50,30 +53,30 @@ class TestUniq(unittest.TestCase):
         Uniq().exec(["-i", self.paths["empty_file.txt"]], None, self.out)
         self.assertEqual(len(self.out), 0)
 
-    def test_uniq_zero_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_uniq_zero_args_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Uniq().exec([], None, self.out)
 
-    def test_uniq_one_arg_no_stdin(self):
-        with self.assertRaises(ValueError):
+    def test_uniq_one_arg_no_stdin_error(self):
+        with self.assertRaises(NoStdinError):
             Uniq().exec(["-i"], None, self.out)
 
-    def test_uniq_one_arg_file_not_found(self):
+    def test_uniq_one_arg_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
             Uniq().exec([
                 os.path.join(self.temp_dir, "file.txt")
             ], None, self.out)
 
-    def test_uniq_two_args_wrong_flags(self):
-        with self.assertRaises(ValueError):
+    def test_uniq_two_args_wrong_flags_error(self):
+        with self.assertRaises(WrongFlagsError):
             Uniq().exec(["arg0", "arg1"], None, self.out)
 
-    def test_uniq_two_args_file_not_found(self):
+    def test_uniq_two_args_file_not_found_error(self):
         with self.assertRaises(FileNotFoundError):
             Uniq().exec([
                 "-i", os.path.join(self.temp_dir, "file.txt")
             ], None, self.out)
 
-    def test_uniq_three_args_invalid(self):
-        with self.assertRaises(ValueError):
+    def test_uniq_three_args_num_args_error(self):
+        with self.assertRaises(NumArgsError):
             Uniq().exec(["arg0", "arg1", "arg2"], None, self.out)
